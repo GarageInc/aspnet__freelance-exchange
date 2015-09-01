@@ -211,7 +211,8 @@
                         <td>
                             @if (item.Author.Id == userId)
                             {
-                                @Html.ActionLink("Удалить", "Delete", new { id = item.Id }, new { @class = "buttonb" })
+                                @Html.ActionLink("Удалить", "Delete", new {id = item.Id}, new {@class = "buttonb"})
+                                @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { @class = "buttonb" })
                             }
 
                             @Html.ActionLink("Обсуждение", "Index", "Comment", new { requestId = item.Id }, new { @class = "buttons" })

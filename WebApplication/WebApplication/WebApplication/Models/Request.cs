@@ -90,7 +90,7 @@ namespace WebApplication.Models
 
         [Display(Name = "Комментарии")]
         public virtual ICollection<Comment> Comments { get; set; }
-
+        
         [Display(Name = "Решение нужно онлайн")]
         public virtual  bool IsOnline { get; set; }
     }
@@ -112,4 +112,6 @@ namespace WebApplication.Models
         High = 3,
         Critical = 4
     }
+
+ 
 }

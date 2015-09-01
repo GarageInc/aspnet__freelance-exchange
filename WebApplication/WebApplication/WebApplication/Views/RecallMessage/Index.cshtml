@@ -39,7 +39,10 @@
 {
     <div class="text_center">
         Нет отзывов.
-        <a href="#" onclick="openAdd()">Добавить</a> первый отзыв
+        @if (this.User.Identity.IsAuthenticated)
+        {
+            <a href="#" onclick="openAdd()">Добавить первый отзыв </a>
+        }
     </div>
 }
 else
@@ -47,10 +50,13 @@ else
     <div class="margin_center">
         <div class="add_root inline" title="Add" onclick="openAdd()">
         </div>
-        <div class="drop inline root">
-            Добавить отзыв
-            <hr />
-        </div>
+        @if (this.User.Identity.IsAuthenticated)
+        {
+            <div class="drop inline root">
+                Добавить отзыв
+                <hr />
+            </div>
+        }
         @Html.Partial("_TreeList", Model)
     </div>
 }

@@ -116,8 +116,12 @@ namespace WebApplication.Controllers
             ViewBag.Requests = new SelectList(_db.Requests.Where(x => x.Author.Id == curId).Where(x => x.IsPaid == false), "Id", "Id");
             return View(payment);
         }
-
-        // GET: Payment/Edit/5
+        
+        /// <summary>
+        /// Редактирование
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<ActionResult> MyEdit(int? id)
         {
             if (id == null)
@@ -135,8 +139,7 @@ namespace WebApplication.Controllers
             ViewBag.Requests = new SelectList(_db.Requests.Where(x => x.Author.Id == curId).Where(x => x.IsPaid == false), "Id", "Id");
             return View(payment);
         }
-
-        // POST: Payment/Edit/5
+        
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]

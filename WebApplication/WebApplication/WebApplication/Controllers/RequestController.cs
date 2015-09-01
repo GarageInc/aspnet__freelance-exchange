@@ -14,26 +14,28 @@
 
     public class RequestController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
-        // поиск задач по категориям
-        [HttpPost]
+        // Вывод всех задач по выбранному критерию
         public ActionResult Index(int? category)
         {
             IEnumerable<Request> allReqs = null;
             if (category == null || category == 0)
             {
-                allReqs = db.Requests
-                    //.Where(x => x.Checked)
-                    ;
+                allReqs = _db.Requests
+                                        .Include(r => r.Category)  // добавляем категории
+                                        .Include(r => r.Lifecycle)  // добавляем жизненный цикл заявок
+                                        .Include(r => r.Author)         // добавляем данные о пользователях
+                                        .Include(r => r.Solvers);
             }
             else
-                allReqs = db.Requests.Where(x => x.CategoryId == category)
-                    //.Where(x=>x.Checked)
-                    ;
+                allReqs = _db.Requests.Where(x => x.CategoryId == category)
+                                        .Include(r => r.Category)  // добавляем категории
+                                        .Include(r => r.Lifecycle)  // добавляем жизненный цикл заявок
+                                        .Include(r => r.Author)         // добавляем данные о пользователях
+                                        .Include(r => r.Solvers);
+            List<Category> categories = _db.Categories.ToList();
 
-
-            List<Category> categories = db.Categories.ToList();
             //Добавляем в список возможность выбора всех
             categories.Insert(0, new Category { Name = "Все", Id = 0 });
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
@@ -41,7 +43,7 @@
             return View(allReqs.ToList());
         }
 
-        // GET: Request/Edit/5
+        // Редактировать
         //[Authorize]
         public async Task<ActionResult> Edit(int? id)
         {
@@ -49,11 +51,15 @@
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Request request = await db.Requests.FindAsync(id);
+            Request request = await _db.Requests.FindAsync(id);
             if (request == null)
             {
                 return HttpNotFound();
             }
+
+            // Добавляются категории и предмет
+            ViewBag.Categories = new SelectList(_db.Categories, "Id", "Name");
+            ViewBag.Subjects = new SelectList(_db.Subjects, "Id", "Name");
             return View(request);
         }
 
@@ -63,14 +69,53 @@
         [HttpPost]
         [ValidateAntiForgeryToken]
         //[Authorize]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Description,Comment,Deadline,Status,Priority")] Request request)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Description,CategoryId,SubjectId,Deadline,Priority,Price")] Request request, HttpPostedFileBase error)
         {
+            var curId = this.User.Identity.GetUserId();
+
             if (ModelState.IsValid)
             {
-                db.Entry(request).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                var requestBase = _db.Requests.Find(request.Id);
+                if (requestBase.Author.Id == curId)
+                {
+                    if (error != null)
+                    {
+                        Document doc = new Document();
+                        doc.Size = error.ContentLength;
+                        // Получаем расширение
+                        string ext = error.FileName.Substring(error.FileName.LastIndexOf('.'));
+                        doc.Type = ext;
+                        // сохраняем файл по определенному пути на сервере
+                        string path = DateTime.Now.ToString(this.User.Identity.GetUserId().GetHashCode() + "dd/MM/yyyy H:mm:ss").Replace(":", "_").Replace("/", ".") + ext;
+                        error.SaveAs(Server.MapPath("~/Files/RequestFiles/" + path));
+                        doc.Url = path;
+
+                        requestBase.Document = doc;
+                        _db.Documents.Add(doc);
+                    }
+                    
+                    requestBase.Name = request.Name;
+                    requestBase.Category = _db.Categories.Find(request.CategoryId);
+                    requestBase.CategoryId = requestBase.Category.Id;
+                    requestBase.Subject = requestBase.Subject;
+                    requestBase.SubjectId = requestBase.Subject.Id;
+                    requestBase.Deadline = request.Deadline;
+                    requestBase.Priority = request.Priority;
+                    requestBase.Description = request.Description;
+                    requestBase.Price = request.Price;
+
+                    _db.Entry(requestBase).State = EntityState.Modified;
+                    await _db.SaveChangesAsync();
+                    return RedirectToAction("MyIndex");
+                }
+                else
+                {
+                    return Content("К сожалению, Вы не автор данной задачи и редактировать её не можете");
+                }
             }
+
+            ViewBag.AuthorId = new SelectList(_db.Users, "Id", "Name");
+            ViewBag.Requests = new SelectList(_db.Requests.Where(x => x.Author.Id == curId).Where(x => x.IsPaid == false), "Id", "Id");
             return View(request);
         }
         
@@ -79,7 +124,7 @@
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -90,14 +135,16 @@
         {
             var curId = HttpContext.User.Identity.GetUserId();
             // получаем текущего пользователя
-            ApplicationUser user = db.Users.Where(m => m.Id == curId).FirstOrDefault();
+            ApplicationUser user = _db.Users.FirstOrDefault(m => m.Id == curId);
             if (user != null)
             {
-                // Добавляются категории
-                ViewBag.Categories = new SelectList(db.Categories, "Id", "Name");
-                ViewBag.Subjects = new SelectList(db.Subjects, "Id", "Name");
-                var model = new Request();
-                model.Deadline=DateTime.Now;
+                // Добавляются категории и предмет
+                ViewBag.Categories = new SelectList(_db.Categories, "Id", "Name");
+                ViewBag.Subjects = new SelectList(_db.Subjects, "Id", "Name");
+                var model = new Request
+                {
+                    Deadline = DateTime.Now
+                };
 
                 return View(model);
             }
@@ -111,7 +158,7 @@
         {
             var curId = HttpContext.User.Identity.GetUserId();
             // получаем текущего пользователя
-            ApplicationUser user = db.Users.FirstOrDefault(m => m.Id == curId);
+            ApplicationUser user = _db.Users.FirstOrDefault(m => m.Id == curId);
             if (user == null)
             {
                 return RedirectToAction("LogOff", "Account");
@@ -131,7 +178,7 @@
                 request.LifecycleId = newLifecycle.Id;
 
                 //Добавляем жизненный цикл заявки
-                db.Lifecycles.Add(newLifecycle);
+                _db.Lifecycles.Add(newLifecycle);
 
                 // указываем пользователя заявки
                 request.Author = user;
@@ -152,27 +199,27 @@
                     doc.Url = path;
 
                     request.Document = doc;
-                    db.Documents.Add(doc);
+                    _db.Documents.Add(doc);
                 }
                 else
                     request.Document = null;
 
-                var cat = db.Categories.Find(request.CategoryId);
+                var cat = _db.Categories.Find(request.CategoryId);
                 request.Category = cat;
-                var sub = db.Subjects.Find(request.SubjectId);
+                var sub = _db.Subjects.Find(request.SubjectId);
                 request.Subject = sub;
 
                 request.Checked = false;
                 request.Status = (int)RequestStatus.Open;
 
                 //Добавляем заявку с возможно приложенными документами
-                db.Requests.Add(request);
+                _db.Requests.Add(request);
                 user.Requests.Add(request);
-                db.Entry(user).State = EntityState.Modified;
+                _db.Entry(user).State = EntityState.Modified;
 
                 try
                 {
-                    db.SaveChanges();
+                    _db.SaveChanges();
                 }
                 catch(Exception e)
                 {
@@ -193,12 +240,12 @@
         {
             var currentId = HttpContext.User.Identity.GetUserId();
             // получаем текущего пользователя
-            ApplicationUser user = db.Users.Where(m => m.Id == currentId).FirstOrDefault();
+            ApplicationUser user = _db.Users.Where(m => m.Id == currentId).FirstOrDefault();
             IEnumerable<Request> allReqs = null;
             if (category == null || category == 0)
             {
 
-                allReqs = db.Requests.Where(r => r.Author.Id == user.Id)
+                allReqs = _db.Requests.Where(r => r.Author.Id == user.Id)
                     //.Where(x => x.Checked) //получаем заявки для текущего пользователя
                                         .Include(r => r.Category)  // добавляем категории
                                         .Include(r => r.Lifecycle)  // добавляем жизненный цикл заявок
@@ -207,7 +254,7 @@
                                         .OrderByDescending(r => r.Lifecycle.Opened); // упорядочиваем по дате по убыванию   
             }
             else
-                allReqs = db.Requests
+                allReqs = _db.Requests
                     //.Where(x => x.Checked)
                     .Where(x => x.CategoryId == category)
                     .Where(r => r.Author.Id == user.Id) //получаем заявки для текущего пользователя
@@ -219,7 +266,7 @@
 
 
 
-            List<Category> categories = db.Categories.ToList();
+            List<Category> categories = _db.Categories.ToList();
             //Добавляем в список возможность выбора всех
             categories.Insert(0, new Category { Name = "Все", Id = 0 });
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
@@ -227,108 +274,21 @@
             return View(allReqs.ToList());
         }
 
-
-        /// <summary>
-        /// Просмотр подробных сведений о заявке
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public ActionResult MyDetails(int id)
-        {
-            Request request = db.Requests.Find(id);
-
-            if (request != null)
-            {
-                //получаем категорию
-                request.Category = db.Categories.First(m => m.Id == request.CategoryId);
-                return PartialView("_Details", request);
-            }
-            return View("MyIndex");
-        }
-
-        //[Authorize]
-        public ActionResult MyExecutor(string id)
-        {
-            ApplicationUser executor = db.Users.First(m => m.Id == id);
-
-            if (executor != null)
-            {
-                return PartialView("_Executor", executor);
-            }
-            return View("MyIndex");
-        }
-
-        //[Authorize]
-        public ActionResult MyLifecycle(int id)
-        {
-            Lifecycle lifecycle = db.Lifecycles.First(m => m.Id == id);
-
-            if (lifecycle != null)
-            {
-                return PartialView("_Lifecycle", lifecycle);
-            }
-            return View("MyIndex");
-        }
-
-        // Удаление заявки
-        //[Authorize]
-        public ActionResult MyDelete(int id)
-        {
-            Request request = db.Requests.Find(id);
-            // получаем текущего пользователя
-            var curId = HttpContext.User.Identity.GetUserId();
-            ApplicationUser user = db.Users.First(m => m.Id == curId);
-            if (request != null && request.Author.Id == user.Id)
-            {
-                Lifecycle lifecycle = db.Lifecycles.Find(request.LifecycleId);
-                db.Lifecycles.Remove(lifecycle);
-                db.SaveChanges();
-            }
-            return RedirectToAction("MyIndex");
-        }
-
         
-
         /// <summary>
         /// Скачивание файла
         /// </summary>
         /// <returns></returns>
         public FileResult Download(int id)
         {
-            var req = db.Requests.Find(id);
+            var req = _db.Requests.Find(id);
             var reqDoc = req.Document;
             
                 byte[] fileBytes = System.IO.File.ReadAllBytes(Server.MapPath("~/Files/RequestFiles/" + reqDoc.Url));
                 string fileName = req.Id + reqDoc.Type;
                 return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
         }
-
-
-
-        /// <summary>
-        /// Получение заявок текущего пользователя
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        //[Authorize]
-        public ActionResult Index()
-        {
-            var requests = db.Requests
-                //.Where(x => x.Checked)
-                .Include(r => r.Category)  // добавляем категории
-                                    .Include(r => r.Lifecycle)  // добавляем жизненный цикл заявок
-                                    .Include(r => r.Author)         // добавляем данные о пользователях
-                                    .OrderByDescending(r => r.Lifecycle.Opened); // упорядочиваем по дате по убыванию  
-             
-            List<Category> categories = db.Categories.ToList();
-            //Добавляем в список возможность выбора всех
-            categories.Insert(0, new Category { Name = "Все", Id = 0 });
-            ViewBag.Categories = new SelectList(categories, "Id", "Name");
-
-            return View(requests.ToList());
-        }
-
-
+        
         /// <summary>
         /// Просмотр подробных сведений о заявке
         /// </summary>
@@ -336,12 +296,12 @@
         /// <returns></returns>
         public ActionResult Details(int id)
         {
-            Request request = db.Requests.Find(id);
+            Request request = _db.Requests.Find(id);
 
             if (request != null)
             {
                 //получаем категорию
-                request.Category = db.Categories.Where(m => m.Id == request.CategoryId).First();
+                request.Category = _db.Categories.Where(m => m.Id == request.CategoryId).First();
                 return PartialView("_Details", request);
             }
             return View("Index");
@@ -350,7 +310,7 @@
         //[Authorize]
         public ActionResult Author(string id)
         {
-            ApplicationUser executor = db.Users.Where(m => m.Id == id).First();
+            ApplicationUser executor = _db.Users.Where(m => m.Id == id).First();
 
             if (executor != null)
             {
@@ -362,7 +322,7 @@
         //[Authorize]
         public ActionResult Executor(string id)
         {
-            ApplicationUser executor = db.Users.Where(m => m.Id == id).First();
+            ApplicationUser executor = _db.Users.Where(m => m.Id == id).First();
 
             if (executor != null)
             {
@@ -374,7 +334,7 @@
         //[Authorize]
         public ActionResult Lifecycle(int id)
         {
-            Lifecycle lifecycle = db.Lifecycles.Where(m => m.Id == id).First();
+            Lifecycle lifecycle = _db.Lifecycles.Where(m => m.Id == id).First();
 
             if (lifecycle != null)
             {
@@ -385,20 +345,20 @@
 
         // Удаление заявки
         //[Authorize]
-        public ActionResult Delete(int id)
+        public void Delete(int id)
         {
-            Request request = db.Requests.Find(id);
+            Request request = _db.Requests.Find(id);
             var curId = HttpContext.User.Identity.GetUserId();
             // получаем текущего пользователя
-            ApplicationUser user = db.Users.First(m => m.Id == curId);
+            ApplicationUser user = _db.Users.First(m => m.Id == curId);
             if (request != null && request.Author.Id == user.Id)
             {
-                Lifecycle lifecycle = db.Lifecycles.Find(request.LifecycleId);
-                db.Lifecycles.Remove(lifecycle);
-                db.Requests.Remove(request);
-                db.SaveChanges();
+                Lifecycle lifecycle = _db.Lifecycles.Find(request.LifecycleId);
+                _db.Lifecycles.Remove(lifecycle);
+                _db.Requests.Remove(request);
+                _db.SaveChanges();
             }
-            return RedirectToAction("Index");
+            Response.Redirect(Request.UrlReferrer.AbsoluteUri);
         }
 
 
@@ -415,26 +375,26 @@
             IEnumerable<Request> requests = null;
             if (category == null || category == 0)
             {
-                requests=db.Requests.Include(r => r.Author)
+                requests=_db.Requests.Include(r => r.Author)
                     .Include(r => r.Lifecycle)
                     .Include(r => r.Executor)
                     .Include(r => r.Document)
                     .Include(r => r.Solvers);
             }
             else
-                requests = db.Requests.Include(r => r.Author)
+                requests = _db.Requests.Include(r => r.Author)
                     .Include(r => r.Lifecycle)
                     .Include(r => r.Executor)
                     .Include(r => r.Document)
                     .Include(r=>r.Solvers)
                     .Where(x => x.CategoryId == category);
             
-            var users = db.Users;
+            var users = _db.Users;
 
             var executors = users.ToList();// Думаю, пока не стоит делать только для обычных пользователей
             ViewBag.Executors = new SelectList(executors, "Id", "Name");
 
-            List<Category> categories = db.Categories.ToList();
+            List<Category> categories = _db.Categories.ToList();
             //Добавляем в список возможность выбора всех
             categories.Insert(0, new Category { Name = "Все", Id = 0 });
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
@@ -452,8 +412,8 @@
             {
                 return RedirectToAction("Distribute");
             }
-            Request req = db.Requests.Find(requestId);
-            ApplicationUser ex = db.Users.Find(executorId);
+            Request req = _db.Requests.Find(requestId);
+            ApplicationUser ex = _db.Users.Find(executorId);
             if (req == null && ex == null)
             {
                 return RedirectToAction("Distribute");
@@ -461,12 +421,12 @@
             req.ExecutorId = executorId;
 
             req.Status = (int)RequestStatus.Distributed;
-            Lifecycle lifecycle = db.Lifecycles.Find(req.LifecycleId);
+            Lifecycle lifecycle = _db.Lifecycles.Find(req.LifecycleId);
             lifecycle.Distributed = DateTime.Now;
-            db.Entry(lifecycle).State = EntityState.Modified;
+            _db.Entry(lifecycle).State = EntityState.Modified;
 
-            db.Entry(req).State = EntityState.Modified;
-            db.SaveChanges();
+            _db.Entry(req).State = EntityState.Modified;
+            _db.SaveChanges();
 
             return RedirectToAction("Distribute");
         }
@@ -479,10 +439,10 @@
         {
             // получаем текущего пользователя
             var curId = HttpContext.User.Identity.GetUserId();
-            ApplicationUser user = db.Users.Where(m => m.Id == curId).FirstOrDefault();
+            ApplicationUser user = _db.Users.Where(m => m.Id == curId).FirstOrDefault();
             if (user != null)
             {
-                var requests = db.Requests.Include(r => r.Author)
+                var requests = _db.Requests.Include(r => r.Author)
                                     .Include(r => r.Lifecycle)
                                     .Include(r => r.Executor)
                                     .Include(r=>r.Document)
@@ -499,18 +459,18 @@
         public ActionResult ChangeStatus(int requestId, int status)
         {
             var curId = HttpContext.User.Identity.GetUserId();
-            ApplicationUser user = db.Users.First(m => m.Id == curId);
+            ApplicationUser user = _db.Users.First(m => m.Id == curId);
 
             if (user == null)
             {
                 return RedirectToAction("LogOff", "Account");
             }
 
-            Request req = db.Requests.Find(requestId);
+            Request req = _db.Requests.Find(requestId);
             if (req != null)
             {
                 req.Status = status;
-                Lifecycle lifecycle = db.Lifecycles.Find(req.LifecycleId);
+                Lifecycle lifecycle = _db.Lifecycles.Find(req.LifecycleId);
                 if (status == (int)RequestStatus.Open)
                 {
                     lifecycle.Opened = DateTime.Now;
@@ -527,9 +487,9 @@
                 {
                     lifecycle.Closed = DateTime.Now;
                 }
-                db.Entry(lifecycle).State = EntityState.Modified;
-                db.Entry(req).State = EntityState.Modified;
-                db.SaveChanges();
+                _db.Entry(lifecycle).State = EntityState.Modified;
+                _db.Entry(req).State = EntityState.Modified;
+                _db.SaveChanges();
             }
 
             return RedirectToAction("ChangeStatus");
@@ -541,21 +501,21 @@
         /// <returns></returns>
         public ActionResult GetCountOfAllRequests()
         {
-            string count = db.Requests.Count().ToString();
+            string count = _db.Requests.Count().ToString();
             ViewBag.Message = count;
             return PartialView("Message");
         }
 
         public ActionResult GetCountOfAllSolvedRequests()
         {
-            string count = db.RequestSolutions.Count().ToString();
+            string count = _db.RequestSolutions.Count().ToString();
             ViewBag.Message = count;
             return PartialView("Message");
         }
 
         public ActionResult GetCountOfAllUsers()
         {
-            string count = db.Users.Count().ToString();
+            string count = _db.Users.Count().ToString();
             ViewBag.Message = count;
             return PartialView("Message");
         }
@@ -571,14 +531,14 @@
         public ActionResult DistributeChangeStatus(int requestId, int status)
         {
             var curId = HttpContext.User.Identity.GetUserId();
-            ApplicationUser user = db.Users.First(m => m.Id == curId);
+            ApplicationUser user = _db.Users.First(m => m.Id == curId);
 
             if (user == null)
             {
                 return RedirectToAction("LogOff", "Account");
             }
 
-            Request req = db.Requests.Find(requestId);
+            Request req = _db.Requests.Find(requestId);
             if (req != null)
             {
                 if (status == 0)
@@ -590,8 +550,8 @@
                     req.Checked = true;
                 }
                 
-                db.Entry(req).State = EntityState.Modified;
-                db.SaveChanges();
+                _db.Entry(req).State = EntityState.Modified;
+                _db.SaveChanges();
             }
 
             return RedirectToAction("Distribute");
@@ -600,17 +560,17 @@
         //[Authorize]
         public ActionResult AddToSolvers(string id)
         {
-            var req = db.Requests.Find(id);
+            var req = _db.Requests.Find(id);
             var curId = this.User.Identity.GetUserId();
-            var thisUser = db.Users.Find(curId);
+            var thisUser = _db.Users.Find(curId);
 
             if (req.Solvers.Count(x => x.Id == curId) == 0)
             {
                 req.Solvers.Add(thisUser);
             }
 
-            db.Entry(req).State = EntityState.Modified;
-            db.SaveChanges();
+            _db.Entry(req).State = EntityState.Modified;
+            _db.SaveChanges();
 
             return RedirectToAction("Index");
         }
@@ -625,8 +585,8 @@
             {
                 return RedirectToAction("MyIndex");
             }
-            Request req = db.Requests.Find(requestId);
-            ApplicationUser ex = db.Users.Find(executorId);
+            Request req = _db.Requests.Find(requestId);
+            ApplicationUser ex = _db.Users.Find(executorId);
             if (req == null && ex == null)
             {
                 return RedirectToAction("MyIndex");
@@ -634,12 +594,12 @@
             req.ExecutorId = executorId;
 
             req.Status = (int)RequestStatus.Distributed;
-            Lifecycle lifecycle = db.Lifecycles.Find(req.LifecycleId);
+            Lifecycle lifecycle = _db.Lifecycles.Find(req.LifecycleId);
             lifecycle.Distributed = DateTime.Now;
-            db.Entry(lifecycle).State = EntityState.Modified;
+            _db.Entry(lifecycle).State = EntityState.Modified;
 
-            db.Entry(req).State = EntityState.Modified;
-            db.SaveChanges();
+            _db.Entry(req).State = EntityState.Modified;
+            _db.SaveChanges();
 
             return RedirectToAction("MyIndex");
         }
