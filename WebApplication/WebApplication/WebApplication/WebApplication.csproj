@@ -1,0 +1,1689 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9B12E1A4-B77E-48F8-AD09-5E743A5630A9}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WebApplication</RootNamespace>
+    <AssemblyName>WebApplication</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=__MvcPagesVersion__, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.0\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Facebook">
+      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.3.0.1\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Google">
+      <HintPath>..\packages\Microsoft.Owin.Security.Google.3.0.1\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Twitter">
+      <HintPath>..\packages\Microsoft.Owin.Security.Twitter.3.0.1\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount">
+      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.3.0.1\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CommentController.cs" />
+    <Compile Include="Controllers\ContactController.cs" />
+    <Compile Include="Controllers\DocumentsController.cs" />
+    <Compile Include="Controllers\ErrorMessageController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PaymentController.cs" />
+    <Compile Include="Controllers\PropsController.cs" />
+    <Compile Include="Controllers\RecallMessageController.cs" />
+    <Compile Include="Controllers\RequestController.cs" />
+    <Compile Include="Controllers\RequestSolutionController.cs" />
+    <Compile Include="Controllers\RequirementConfirmationController.cs" />
+    <Compile Include="Controllers\RequirementController.cs" />
+    <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508221052445_Initial.cs" />
+    <Compile Include="Migrations\201508221052445_Initial.Designer.cs">
+      <DependentUpon>201508221052445_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\BaseModel\BaseModel.cs" />
+    <Compile Include="Models\RequirementConfirmation.cs" />
+    <Compile Include="Models\Requirement.cs" />
+    <Compile Include="Models\ServiceModels\AccountViewModels.cs" />
+    <Compile Include="Models\Repo\ApplicationDbContext.cs" />
+    <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\ServiceModels\RecallMessageList.cs" />
+    <Compile Include="Models\ServiceModels\CommentList.cs" />
+    <Compile Include="Models\Subject.cs" />
+    <Compile Include="Models\Contact.cs" />
+    <Compile Include="Models\Props.cs" />
+    <Compile Include="Models\PropsCategory.cs" />
+    <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Document.cs" />
+    <Compile Include="Models\ErrorMessage.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Lifecycle.cs" />
+    <Compile Include="Models\ServiceModels\ManageViewModels.cs" />
+    <Compile Include="Models\Payment.cs" />
+    <Compile Include="Models\RecallMessage.cs" />
+    <Compile Include="Models\RequestSolution.cs" />
+    <Compile Include="Models\Request.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\ApplicationUserDTO.cs" />
+    <Compile Include="Service\ErrorDTO.cs" />
+    <Compile Include="Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\Database.mdf" />
+    <Content Include="App_Data\Database_log.ldf">
+      <DependentUpon>Database.mdf</DependentUpon>
+    </Content>
+    <Content Include="Content\css\bootstrap-theme.css" />
+    <Content Include="Content\css\bootstrap-theme.min.css" />
+    <Content Include="Content\css\bootstrap.css" />
+    <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\FortAwesome\css\font-awesome.css" />
+    <Content Include="Content\FortAwesome\css\font-awesome.min.css" />
+    <Content Include="Content\FortAwesome\css\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\FortAwesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\FortAwesome\HELP-US-OUT.txt" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\css\prettify.css" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\css\pygments.css" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\css\site.css" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\css\font-awesome-ie7.css" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\css\font-awesome-ie7.min.css" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\css\font-awesome.css" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\css\font-awesome.min.css" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\font\fontawesome-webfont.svg" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\ico\favicon.ico" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\img\contribution-sample.png" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\img\fort_awesome.jpg" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\img\glyphicons-halflings-white.png" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\img\glyphicons-halflings.png" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\js\backbone.min.js" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\js\bootstrap-2.3.1.min.js" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\js\bootstrap-222.min.js" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\js\jquery-1.7.1.min.js" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\js\prettify.min.js" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\js\site.js" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\js\underscore.min.js" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\js\ZeroClipboard-1.1.7.min.js" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\js\ZeroClipboard-1.1.7.swf" />
+    <Content Include="Content\FortAwesome\src\3.2.1\cheatsheet\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\community\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\design.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\examples\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\get-started\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icons\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\adjust\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\adn\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\align-center\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\align-justify\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\align-left\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\align-right\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\ambulance\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\anchor\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\android\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\angle-down\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\angle-left\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\angle-right\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\angle-up\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\apple\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\archive\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\arrow-down\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\arrow-left\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\arrow-right\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\arrow-up\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\asterisk\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\backward\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\ban-circle\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\bar-chart\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\barcode\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\beaker\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\beer\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\bell-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\bell\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\bitbucket-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\bitbucket\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\bold\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\bolt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\bookmark-empty\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\bookmark\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\book\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\briefcase\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\btc\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\bug\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\building\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\bullhorn\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\bullseye\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\calendar-empty\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\calendar\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\camera-retro\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\camera\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\caret-down\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\caret-left\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\caret-right\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\caret-up\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\certificate\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\check-empty\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\check-minus\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\check-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\check\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\chevron-down\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\chevron-left\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\chevron-right\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\chevron-sign-down\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\chevron-sign-left\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\chevron-sign-right\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\chevron-sign-up\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\chevron-up\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\circle-arrow-down\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\circle-arrow-left\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\circle-arrow-right\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\circle-arrow-up\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\circle-blank\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\circle\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\cloud-download\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\cloud-upload\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\cloud\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\cny\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\code-fork\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\code\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\coffee\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\cogs\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\cog\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\collapse-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\collapse-top\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\collapse\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\columns\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\comment-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\comments-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\comments\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\comment\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\compass\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\copy\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\credit-card\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\crop\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\css3\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\cut\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\dashboard\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\desktop\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\double-angle-down\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\double-angle-left\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\double-angle-right\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\double-angle-up\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\download-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\download\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\dribbble\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\dropbox\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\edit-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\edit\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\eject\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\ellipsis-horizontal\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\ellipsis-vertical\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\envelope-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\envelope\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\eraser\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\eur\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\exchange\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\exclamation-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\exclamation\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\expand-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\expand\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\external-link-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\external-link\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\eye-close\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\eye-open\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\facebook-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\facebook\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\facetime-video\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\fast-backward\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\fast-forward\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\female\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\fighter-jet\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\file-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\file-text-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\file-text\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\file\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\film\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\filter\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\fire-extinguisher\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\fire\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\flag-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\flag-checkered\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\flag\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\flickr\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\folder-close-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\folder-close\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\folder-open-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\folder-open\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\font\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\food\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\forward\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\foursquare\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\frown\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\fullscreen\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\gamepad\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\gbp\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\gift\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\github-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\github-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\github\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\gittip\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\glass\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\globe\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\google-plus-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\google-plus\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\group\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\h-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\hand-down\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\hand-left\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\hand-right\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\hand-up\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\hdd\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\headphones\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\heart-empty\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\heart\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\home\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\hospital\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\html5\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\inbox\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\indent-left\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\indent-right\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\info-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\info\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\inr\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\instagram\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\italic\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\jpy\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\keyboard\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\key\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\krw\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\laptop\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\leaf\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\legal\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\lemon\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\level-down\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\level-up\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\lightbulb\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\linkedin-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\linkedin\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\link\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\linux\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\list-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\list-ol\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\list-ul\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\list\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\location-arrow\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\lock\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\long-arrow-down\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\long-arrow-left\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\long-arrow-right\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\long-arrow-up\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\magic\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\magnet\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\mail-reply-all\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\male\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\map-marker\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\maxcdn\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\medkit\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\meh\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\microphone-off\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\microphone\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\minus-sign-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\minus-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\minus\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\mobile-phone\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\money\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\moon\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\move\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\music\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\off\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\ok-circle\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\ok-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\ok\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\paper-clip\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\paste\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\pause\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\pencil\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\phone-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\phone\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\picture\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\pinterest-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\pinterest\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\plane\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\play-circle\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\play-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\play\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\plus-sign-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\plus-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\plus\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\print\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\pushpin\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\puzzle-piece\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\qrcode\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\question-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\question\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\quote-left\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\quote-right\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\random\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\refresh\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\remove-circle\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\remove-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\remove\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\renren\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\reorder\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\repeat\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\reply-all\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\reply\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\resize-full\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\resize-horizontal\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\resize-small\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\resize-vertical\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\retweet\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\road\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\rocket\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\rss-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\rss\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\save\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\screenshot\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\search\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\share-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\share-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\share\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\shield\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\shopping-cart\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\sign-blank\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\signal\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\signin\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\signout\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\sitemap\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\skype\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\smile\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\sort-by-alphabet-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\sort-by-alphabet\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\sort-by-attributes-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\sort-by-attributes\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\sort-by-order-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\sort-by-order\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\sort-down\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\sort-up\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\sort\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\spinner\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\stackexchange\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\star-empty\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\star-half-empty\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\star-half\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\star\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\step-backward\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\step-forward\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\stethoscope\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\stop\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\strikethrough\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\subscript\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\suitcase\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\sun\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\superscript\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\tablet\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\table\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\tags\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\tag\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\tasks\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\terminal\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\text-height\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\text-width\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\th-large\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\th-list\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\thumbs-down-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\thumbs-down\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\thumbs-up-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\thumbs-up\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\th\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\ticket\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\time\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\tint\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\trash\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\trello\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\trophy\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\truck\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\tumblr-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\tumblr\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\twitter-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\twitter\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\umbrella\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\underline\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\undo\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\unlink\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\unlock-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\unlock\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\upload-alt\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\upload\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\usd\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\user-md\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\user\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\vk\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\volume-down\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\volume-off\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\volume-up\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\warning-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\weibo\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\windows\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\wrench\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\xing-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\xing\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\youtube-play\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\youtube-sign\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\youtube\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\zoom-in\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icon\zoom-out\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\license\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\test\index.html" />
+    <Content Include="Content\FortAwesome\src\3.2.1\whats-new\index.html" />
+    <Content Include="Content\FortAwesome\src\assets\css\prettify.css" />
+    <Content Include="Content\FortAwesome\src\assets\css\pygments.css" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\HELP-US-OUT.txt" />
+    <Content Include="Content\FortAwesome\src\assets\ico\favicon.ico" />
+    <Content Include="Content\FortAwesome\src\assets\img\logo-themeisle.png" />
+    <Content Include="Content\FortAwesome\src\assets\img\logo-wpbeginner.png" />
+    <Content Include="Content\FortAwesome\src\assets\js\html5shiv.js" />
+    <Content Include="Content\FortAwesome\src\assets\js\prettify.min.js" />
+    <Content Include="Content\FortAwesome\src\assets\js\respond.min.js" />
+    <Content Include="Content\FortAwesome\src\assets\js\site.js" />
+    <Content Include="Content\FortAwesome\src\assets\js\tabcomplete.min.js" />
+    <Content Include="Content\FortAwesome\src\assets\js\ZeroClipboard-1.1.7.min.js" />
+    <Content Include="Content\FortAwesome\src\assets\js\ZeroClipboard-1.1.7.swf" />
+    <Content Include="Content\FortAwesome\src\cheatsheet.html" />
+    <Content Include="Content\FortAwesome\src\community.html" />
+    <Content Include="Content\FortAwesome\src\design.html" />
+    <Content Include="Content\FortAwesome\src\examples.html" />
+    <Content Include="Content\FortAwesome\src\get-started.html" />
+    <Content Include="Content\FortAwesome\src\glyphicons-test.html" />
+    <Content Include="Content\FortAwesome\src\icons.html" />
+    <Content Include="Content\FortAwesome\src\index.html" />
+    <Content Include="Content\FortAwesome\src\license.html" />
+    <Content Include="Content\FortAwesome\src\test-2.3.2.html" />
+    <Content Include="Content\FortAwesome\src\test.html" />
+    <Content Include="Content\FortAwesome\src\thanks.html" />
+    <Content Include="Content\FortAwesome\src\whats-new.html" />
+    <Content Include="Content\FortAwesome\src\_includes\ads\fusion.html" />
+    <Content Include="Content\FortAwesome\src\_includes\brand-adblock-warning.html" />
+    <Content Include="Content\FortAwesome\src\_includes\brand-license.html" />
+    <Content Include="Content\FortAwesome\src\_includes\code\license.css" />
+    <Content Include="Content\FortAwesome\src\_includes\community\getting-support.html" />
+    <Content Include="Content\FortAwesome\src\_includes\community\project-milestones.html" />
+    <Content Include="Content\FortAwesome\src\_includes\community\reporting-bugs.html" />
+    <Content Include="Content\FortAwesome\src\_includes\community\requesting-new-icons.html" />
+    <Content Include="Content\FortAwesome\src\_includes\community\submitting-pull-requests.html" />
+    <Content Include="Content\FortAwesome\src\_includes\examples\animated.html" />
+    <Content Include="Content\FortAwesome\src\_includes\examples\basic.html" />
+    <Content Include="Content\FortAwesome\src\_includes\examples\bootstrap.html" />
+    <Content Include="Content\FortAwesome\src\_includes\examples\bordered-pulled.html" />
+    <Content Include="Content\FortAwesome\src\_includes\examples\custom.html" />
+    <Content Include="Content\FortAwesome\src\_includes\examples\fixed-width.html" />
+    <Content Include="Content\FortAwesome\src\_includes\examples\larger.html" />
+    <Content Include="Content\FortAwesome\src\_includes\examples\list.html" />
+    <Content Include="Content\FortAwesome\src\_includes\examples\rotated-flipped.html" />
+    <Content Include="Content\FortAwesome\src\_includes\examples\stacked.html" />
+    <Content Include="Content\FortAwesome\src\_includes\footer.html" />
+    <Content Include="Content\FortAwesome\src\_includes\icons\brand.html" />
+    <Content Include="Content\FortAwesome\src\_includes\icons\chart.html" />
+    <Content Include="Content\FortAwesome\src\_includes\icons\currency.html" />
+    <Content Include="Content\FortAwesome\src\_includes\icons\directional.html" />
+    <Content Include="Content\FortAwesome\src\_includes\icons\file-type.html" />
+    <Content Include="Content\FortAwesome\src\_includes\icons\filter.html" />
+    <Content Include="Content\FortAwesome\src\_includes\icons\form-control.html" />
+    <Content Include="Content\FortAwesome\src\_includes\icons\gender.html" />
+    <Content Include="Content\FortAwesome\src\_includes\icons\hand.html" />
+    <Content Include="Content\FortAwesome\src\_includes\icons\medical.html" />
+    <Content Include="Content\FortAwesome\src\_includes\icons\new.html" />
+    <Content Include="Content\FortAwesome\src\_includes\icons\payment.html" />
+    <Content Include="Content\FortAwesome\src\_includes\icons\spinner.html" />
+    <Content Include="Content\FortAwesome\src\_includes\icons\text-editor.html" />
+    <Content Include="Content\FortAwesome\src\_includes\icons\transportation.html" />
+    <Content Include="Content\FortAwesome\src\_includes\icons\video-player.html" />
+    <Content Include="Content\FortAwesome\src\_includes\icons\web-application.html" />
+    <Content Include="Content\FortAwesome\src\_includes\jumbotron-carousel.html" />
+    <Content Include="Content\FortAwesome\src\_includes\jumbotron.html" />
+    <Content Include="Content\FortAwesome\src\_includes\modals\download.html" />
+    <Content Include="Content\FortAwesome\src\_includes\navbar.html" />
+    <Content Include="Content\FortAwesome\src\_includes\new-features.html" />
+    <Content Include="Content\FortAwesome\src\_includes\new-naming.html" />
+    <Content Include="Content\FortAwesome\src\_includes\new-upgrading.html" />
+    <Content Include="Content\FortAwesome\src\_includes\stripe-ad.html" />
+    <Content Include="Content\FortAwesome\src\_includes\stripe-social.html" />
+    <Content Include="Content\FortAwesome\src\_includes\tell-me-thanks.html" />
+    <Content Include="Content\FortAwesome\src\_includes\tests\rotated-flipped-inside-anchor.html" />
+    <Content Include="Content\FortAwesome\src\_includes\tests\rotated-flipped-inside-btn.html" />
+    <Content Include="Content\FortAwesome\src\_includes\tests\rotated-flipped.html" />
+    <Content Include="Content\FortAwesome\src\_includes\tests\stacked-inside-anchor.html" />
+    <Content Include="Content\FortAwesome\src\_includes\tests\stacked-with-text.html" />
+    <Content Include="Content\FortAwesome\src\_includes\tests\stacked.html" />
+    <Content Include="Content\FortAwesome\src\_includes\thanks-to.html" />
+    <Content Include="Content\FortAwesome\src\_includes\why.html" />
+    <Content Include="Content\FortAwesome\src\_layouts\base.html" />
+    <Content Include="Content\FortAwesome\src\_layouts\icon.html" />
+    <Content Include="Content\js\bootstrap.js" />
+    <Content Include="Content\js\bootstrap.min.js" />
+    <Content Include="Content\js\npm.js" />
+    <Content Include="Content\pictures\del.png" />
+    <Content Include="Content\pictures\del1.png" />
+    <Content Include="Content\pictures\executor.png" />
+    <Content Include="Content\pictures\filen.png" />
+    <Content Include="Content\pictures\filey.png" />
+    <Content Include="Content\pictures\info.png" />
+    <Content Include="Content\pictures\lifecycle.png" />
+    <Content Include="Content\pictures\prior1.png" />
+    <Content Include="Content\pictures\prior2.png" />
+    <Content Include="Content\pictures\prior3.png" />
+    <Content Include="Content\pictures\prior4.png" />
+    <Content Include="Content\pictures\status1.png" />
+    <Content Include="Content\pictures\status2.png" />
+    <Content Include="Content\pictures\status3.png" />
+    <Content Include="Content\pictures\status4.png" />
+    <Content Include="Content\pictures\status5.png" />
+    <Content Include="Content\Site.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Plan.txt" />
+    <Content Include="Scripts\bootstrap-table-master\dist\bootstrap-table-all.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\bootstrap-table-all.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\bootstrap-table-locale-all.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\bootstrap-table-locale-all.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\bootstrap-table.css" />
+    <Content Include="Scripts\bootstrap-table-master\dist\bootstrap-table.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\bootstrap-table.min.css" />
+    <Content Include="Scripts\bootstrap-table-master\dist\bootstrap-table.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\angular\bootstrap-table-angular.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\angular\bootstrap-table-angular.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\cookie\bootstrap-table-cookie.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\cookie\bootstrap-table-cookie.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\editable\bootstrap-table-editable.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\editable\bootstrap-table-editable.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\export\bootstrap-table-export.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\export\bootstrap-table-export.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\filter-control\bootstrap-table-filter-control.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\filter-control\bootstrap-table-filter-control.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\filter\bootstrap-table-filter.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\filter\bootstrap-table-filter.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\flat-json\bootstrap-table-flat-json.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\flat-json\bootstrap-table-flat-json.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\key-events\bootstrap-table-key-events.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\key-events\bootstrap-table-key-events.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\mobile\bootstrap-table-mobile.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\mobile\bootstrap-table-mobile.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\multiple-sort\bootstrap-table-multiple-sort.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\multiple-sort\bootstrap-table-multiple-sort.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\natural-sorting\bootstrap-table-natural-sorting.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\natural-sorting\bootstrap-table-natural-sorting.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\reorder-columns\bootstrap-table-reorder-columns.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\reorder-columns\bootstrap-table-reorder-columns.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\reorder-rows\bootstrap-table-reorder-rows.css" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\reorder-rows\bootstrap-table-reorder-rows.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\reorder-rows\bootstrap-table-reorder-rows.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\resizable\bootstrap-table-resizable.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\resizable\bootstrap-table-resizable.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\toolbar\bootstrap-table-toolbar.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\extensions\toolbar\bootstrap-table-toolbar.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-ar-SA.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-ar-SA.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-ca-ES.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-ca-ES.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-cs-CZ.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-cs-CZ.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-da-DK.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-da-DK.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-de-DE.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-de-DE.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-el-GR.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-el-GR.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-en-US.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-en-US.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-es-AR.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-es-AR.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-es-CR.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-es-CR.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-es-ES.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-es-ES.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-es-MX.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-es-MX.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-es-NI.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-es-NI.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-es-SP.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-es-SP.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-fa-IR.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-fa-IR.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-fr-BE.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-fr-BE.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-fr-FR.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-fr-FR.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-hu-HU.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-hu-HU.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-it-IT.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-it-IT.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-ja-JP.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-ja-JP.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-ka-GE.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-ka-GE.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-ko-KR.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-ko-KR.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-ms-MY.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-ms-MY.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-nb-NO.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-nb-NO.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-nl-NL.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-nl-NL.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-pl-PL.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-pl-PL.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-pt-BR.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-pt-BR.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-pt-PT.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-pt-PT.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-ro-RO.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-ro-RO.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-ru-RU.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-ru-RU.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-sk-SK.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-sk-SK.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-sv-SE.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-sv-SE.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-th-TH.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-th-TH.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-tr-TR.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-tr-TR.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-uk-UA.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-uk-UA.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-ur-PK.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-ur-PK.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-vi-VN.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-vi-VN.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-zh-CN.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-zh-CN.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-zh-TW.js" />
+    <Content Include="Scripts\bootstrap-table-master\dist\locale\bootstrap-table-zh-TW.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\apple-touch-icon.png" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\bootstrap\css\bootstrap-theme.css" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\bootstrap\css\bootstrap-theme.min.css" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\bootstrap\css\bootstrap.css" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\bootstrap\js\bootstrap.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\bootstrap\js\npm.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\css\docs.min.css" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\css\sidenav.css" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\css\style.css" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\flash\ZeroClipboard.swf" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\js\common.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\js\customize.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\js\docs.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\js\ie-emulation-modes-warning.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\js\ie10-viewport-bug-workaround.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\js\ie8-responsive-file-warning.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\js\jquery.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\js\sidenav.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\bootstrap-table-all.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\bootstrap-table-all.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\bootstrap-table-locale-all.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\bootstrap-table-locale-all.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\bootstrap-table.css" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\bootstrap-table.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\bootstrap-table.min.css" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\bootstrap-table.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\angular\bootstrap-table-angular.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\angular\bootstrap-table-angular.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\cookie\bootstrap-table-cookie.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\cookie\bootstrap-table-cookie.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\editable\bootstrap-table-editable.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\editable\bootstrap-table-editable.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\export\bootstrap-table-export.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\export\bootstrap-table-export.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\filter-control\bootstrap-table-filter-control.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\filter-control\bootstrap-table-filter-control.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\filter\bootstrap-table-filter.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\filter\bootstrap-table-filter.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\flat-json\bootstrap-table-flat-json.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\flat-json\bootstrap-table-flat-json.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\key-events\bootstrap-table-key-events.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\key-events\bootstrap-table-key-events.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\mobile\bootstrap-table-mobile.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\mobile\bootstrap-table-mobile.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\multiple-sort\bootstrap-table-multiple-sort.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\multiple-sort\bootstrap-table-multiple-sort.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\natural-sorting\bootstrap-table-natural-sorting.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\natural-sorting\bootstrap-table-natural-sorting.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\reorder-columns\bootstrap-table-reorder-columns.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\reorder-columns\bootstrap-table-reorder-columns.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\reorder-rows\bootstrap-table-reorder-rows.css" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\reorder-rows\bootstrap-table-reorder-rows.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\reorder-rows\bootstrap-table-reorder-rows.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\resizable\bootstrap-table-resizable.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\resizable\bootstrap-table-resizable.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\toolbar\bootstrap-table-toolbar.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\extensions\toolbar\bootstrap-table-toolbar.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-ar-SA.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-ar-SA.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-cs-CZ.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-cs-CZ.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-da-DK.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-da-DK.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-de-DE.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-de-DE.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-el-GR.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-el-GR.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-en-US.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-en-US.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-es-AR.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-es-AR.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-es-CR.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-es-CR.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-es-MX.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-es-MX.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-es-NI.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-es-NI.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-es-SP.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-es-SP.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-fr-BE.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-fr-BE.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-fr-FR.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-fr-FR.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-hu-HU.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-hu-HU.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-it-IT.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-it-IT.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-ja-JP.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-ja-JP.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-ka-GE.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-ka-GE.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-ko-KR.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-ko-KR.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-ms-MY.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-ms-MY.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-nb-NO.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-nb-NO.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-nl-NL.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-nl-NL.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-pl-PL.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-pl-PL.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-pt-BR.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-pt-BR.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-pt-PT.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-pt-PT.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-ro-RO.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-ro-RO.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-ru-RU.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-ru-RU.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-sk-SK.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-sk-SK.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-sv-SE.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-sv-SE.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-th-TH.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-th-TH.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-tr-TR.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-tr-TR.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-uk-UA.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-uk-UA.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-ur-PK.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-ur-PK.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-vi-VN.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-vi-VN.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-zh-CN.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-zh-CN.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-zh-TW.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\dist\locale\bootstrap-table-zh-TW.min.js" />
+    <Content Include="Scripts\bootstrap-table-master\docs\favicon.ico" />
+    <Content Include="Scripts\bootstrap-table-master\docs\robots.txt" />
+    <Content Include="Scripts\bootstrap-table-master\docs\sitemap.xml" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_includes\footer.html" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_includes\header.html" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_includes\nav\main.html" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_includes\social-buttons.html" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_layouts\default.html" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_layouts\home.html" />
+    <Content Include="Scripts\bootstrap-table-master\Gruntfile.js" />
+    <Content Include="Scripts\bootstrap-table-master\index.html" />
+    <Content Include="Scripts\bootstrap-table-master\src\bootstrap-editable.css" />
+    <Content Include="Scripts\bootstrap-table-master\src\bootstrap-editable.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\bootstrap-table.css" />
+    <Content Include="Scripts\bootstrap-table-master\src\bootstrap-table.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\angular\bootstrap-table-angular.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\cookie\bootstrap-table-cookie.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\editable\bootstrap-table-editable.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\export\bootstrap-table-export.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\filter-control\bootstrap-table-filter-control.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\filter\bootstrap-table-filter.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\flat-json\bootstrap-table-flat-json.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\group-by\bootstrap-table-group-by.css" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\group-by\bootstrap-table-group-by.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\key-events\bootstrap-table-key-events.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\mobile\bootstrap-table-mobile.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\multiple-sort\bootstrap-table-multiple-sort.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\natural-sorting\bootstrap-table-natural-sorting.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\reorder-columns\bootstrap-table-reorder-columns.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\reorder-rows\bootstrap-table-reorder-rows.css" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\reorder-rows\bootstrap-table-reorder-rows.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\resizable\bootstrap-table-resizable.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\toolbar\bootstrap-table-toolbar.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\jquery.base64.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-ar-SA.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-ca-ES.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-cs-CZ.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-da-DK.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-de-DE.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-el-GR.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-en-US.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-es-AR.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-es-CR.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-es-ES.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-es-MX.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-es-NI.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-es-SP.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-fa-IR.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-fr-BE.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-fr-FR.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-hr-HR.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-hu-HU.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-it-IT.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-ja-JP.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-ka-GE.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-ko-KR.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-ms-MY.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-nb-NO.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-nl-NL.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-pl-PL.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-pt-BR.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-pt-PT.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-ro-RO.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-ru-RU.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-sk-SK.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-sv-SE.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-th-TH.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-tr-TR.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-uk-UA.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-ur-PK.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-vi-VN.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-zh-CN.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-zh-TW.js" />
+    <Content Include="Scripts\bootstrap-table-master\src\tableExport.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\css\bootstrap-theme.css.map" />
+    <Content Include="Content\css\bootstrap.css.map" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Scripts\bootstrap-table-master\.gitignore" />
+    <Content Include="Scripts\bootstrap-table-master\.travis.yml" />
+    <Content Include="Scripts\bootstrap-table-master\bootstrap-table.jquery.json" />
+    <Content Include="Scripts\bootstrap-table-master\bower.json" />
+    <Content Include="Scripts\bootstrap-table-master\CHANGELOG.md" />
+    <Content Include="Scripts\bootstrap-table-master\CONTRIBUTING.md" />
+    <Content Include="Scripts\bootstrap-table-master\DONATORS.md" />
+    <Content Include="Scripts\bootstrap-table-master\LICENSE" />
+    <Content Include="Scripts\bootstrap-table-master\package.json" />
+    <Content Include="Scripts\bootstrap-table-master\README.md" />
+    <Content Include="Scripts\bootstrap-table-master\_config.yml" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\bootstrap\css\bootstrap-theme.css.map" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\bootstrap\css\bootstrap.css.map" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Scripts\bootstrap-table-master\docs\assets\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Scripts\bootstrap-table-master\docs\data\data1\demo.response.json" />
+    <Content Include="Scripts\bootstrap-table-master\docs\data\data2\demo.response.json" />
+    <Content Include="Scripts\bootstrap-table-master\docs\data\data3\demo.response.json" />
+    <Content Include="Scripts\bootstrap-table-master\docs\data\data4\demo.response.json" />
+    <Content Include="Scripts\bootstrap-table-master\docs\data\data5\demo.response.json" />
+    <Content Include="Scripts\bootstrap-table-master\docs\data\README.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\documentation.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\examples.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\extensions.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\faq.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\getting-started.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\index.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\LICENSE" />
+    <Content Include="Scripts\bootstrap-table-master\docs\README.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en.yml" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\documentation\column-options.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\documentation\events.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\documentation\localizations.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\documentation\methods.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\documentation\table-options.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\examples\align.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\examples\basic.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\examples\card-view.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\examples\columns.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\examples\events.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\examples\format.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\examples\hide-header.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\examples\methods.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\examples\note.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\examples\pagination.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\examples\select.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\examples\sort.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\examples\style.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\examples\toolbar.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\extensions\cookie.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\extensions\editable.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\extensions\export.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\extensions\filter-control.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\extensions\filter.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\extensions\flat-json.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\extensions\group-by.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\extensions\key-events.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\extensions\mobile.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\extensions\multiple-sort.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\extensions\natural-sorting.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\extensions\reorder-columns.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\extensions\reorder-rows.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\extensions\resizable.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\extensions\toolbar.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\faq\faq.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\getting-started\download.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\getting-started\grunt.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\getting-started\usage.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\en\getting-started\whats-include.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es.yml" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\documentation\column-options.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\documentation\events.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\documentation\localizations.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\documentation\methods.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\documentation\table-options.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\examples\align.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\examples\basic.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\examples\card-view.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\examples\columns.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\examples\events.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\examples\format.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\examples\hide-header.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\examples\methods.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\examples\note.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\examples\pagination.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\examples\select.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\examples\sort.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\examples\style.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\examples\toolbar.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\extensions\cookie.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\extensions\editable.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\extensions\export.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\extensions\filter-control.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\extensions\filter.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\extensions\flat-json.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\extensions\group-by.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\extensions\key-events.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\extensions\mobile.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\extensions\multiple-sort.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\extensions\natural-sorting.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\extensions\reorder-columns.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\extensions\reorder-rows.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\extensions\resizable.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\extensions\toolbar.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\faq\faq.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\getting-started\download.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\getting-started\grunt.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\getting-started\usage.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\es\getting-started\whats-include.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn.yml" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\documentation\column-options.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\documentation\events.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\documentation\localizations.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\documentation\methods.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\documentation\table-options.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\examples\align.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\examples\basic.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\examples\card-view.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\examples\columns.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\examples\events.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\examples\format.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\examples\hide-header.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\examples\methods.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\examples\note.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\examples\pagination.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\examples\select.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\examples\sort.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\examples\style.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\examples\toolbar.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\extensions\cookie.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\extensions\editable.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\extensions\export.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\extensions\filter-control.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\extensions\filter.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\extensions\flat-json.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\extensions\group-by.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\extensions\key-events.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\extensions\mobile.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\extensions\multiple-sort.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\extensions\natural-sorting.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\extensions\reorder-columns.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\extensions\reorder-rows.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\extensions\resizable.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\extensions\toolbar.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\faq\faq.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\getting-started\download.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\getting-started\grunt.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\getting-started\usage.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_i18n\zh-cn\getting-started\whats-include.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_includes\feature.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_includes\latest-release.md" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_plugins\markdown-tag.rb" />
+    <Content Include="Scripts\bootstrap-table-master\docs\_plugins\multiple-languages.rb" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\cookie\README.md" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\editable\README.md" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\export\README.md" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\filter-control\README.md" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\filter\README.md" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\flat-json\README.md" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\group-by\README.md" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\key-events\README.md" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\mobile\README.md" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\multiple-sort\README.md" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\natural-sorting\README.md" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\reorder-columns\README.md" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\reorder-rows\README.md" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\resizable\README.md" />
+    <Content Include="Scripts\bootstrap-table-master\src\extensions\toolbar\README.md" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-en-US.js.template" />
+    <Content Include="Scripts\bootstrap-table-master\src\locale\README.md" />
+    <Content Include="examples\bootstrap_table\data.json" />
+    <Content Include="Content\FortAwesome\.gitignore" />
+    <Content Include="Content\FortAwesome\.npmignore" />
+    <Content Include="Content\FortAwesome\bower.json" />
+    <Content Include="Content\FortAwesome\component.json" />
+    <Content Include="Content\FortAwesome\composer.json" />
+    <Content Include="Content\FortAwesome\CONTRIBUTING.md" />
+    <Content Include="Content\FortAwesome\css\font-awesome.css.map" />
+    <Content Include="Content\FortAwesome\css\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\FortAwesome\css\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\FortAwesome\css\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\FortAwesome\css\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\FortAwesome\css\fonts\FontAwesome.otf" />
+    <Content Include="Content\FortAwesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\FortAwesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\FortAwesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\FortAwesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\FortAwesome\fonts\FontAwesome.otf" />
+    <Content Include="Content\FortAwesome\Gemfile" />
+    <Content Include="Content\FortAwesome\Gemfile.lock" />
+    <Content Include="Content\FortAwesome\less\animated.less" />
+    <Content Include="Content\FortAwesome\less\bordered-pulled.less" />
+    <Content Include="Content\FortAwesome\less\core.less" />
+    <Content Include="Content\FortAwesome\less\fixed-width.less" />
+    <Content Include="Content\FortAwesome\less\font-awesome.less" />
+    <Content Include="Content\FortAwesome\less\icons.less" />
+    <Content Include="Content\FortAwesome\less\larger.less" />
+    <Content Include="Content\FortAwesome\less\list.less" />
+    <Content Include="Content\FortAwesome\less\mixins.less" />
+    <Content Include="Content\FortAwesome\less\path.less" />
+    <Content Include="Content\FortAwesome\less\rotated-flipped.less" />
+    <Content Include="Content\FortAwesome\less\stacked.less" />
+    <Content Include="Content\FortAwesome\less\variables.less" />
+    <Content Include="Content\FortAwesome\package.json" />
+    <Content Include="Content\FortAwesome\README.md" />
+    <Content Include="Content\FortAwesome\scss\font-awesome.scss" />
+    <Content Include="Content\FortAwesome\scss\_animated.scss" />
+    <Content Include="Content\FortAwesome\scss\_bordered-pulled.scss" />
+    <Content Include="Content\FortAwesome\scss\_core.scss" />
+    <Content Include="Content\FortAwesome\scss\_fixed-width.scss" />
+    <Content Include="Content\FortAwesome\scss\_icons.scss" />
+    <Content Include="Content\FortAwesome\scss\_larger.scss" />
+    <Content Include="Content\FortAwesome\scss\_list.scss" />
+    <Content Include="Content\FortAwesome\scss\_mixins.scss" />
+    <Content Include="Content\FortAwesome\scss\_path.scss" />
+    <Content Include="Content\FortAwesome\scss\_rotated-flipped.scss" />
+    <Content Include="Content\FortAwesome\scss\_stacked.scss" />
+    <Content Include="Content\FortAwesome\scss\_variables.scss" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome.zip" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\font\fontawesome-webfont.eot" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\font\fontawesome-webfont.ttf" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\font\fontawesome-webfont.woff" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\font\FontAwesome.otf" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\less\bootstrap.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\less\core.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\less\extras.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\less\font-awesome-ie7.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\less\font-awesome.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\less\icons.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\less\mixins.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\less\path.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\less\variables.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\scss\font-awesome-ie7.scss" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\scss\font-awesome.scss" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\scss\_bootstrap.scss" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\scss\_core.scss" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\scss\_extras.scss" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\scss\_icons.scss" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\scss\_mixins.scss" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\scss\_path.scss" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\font-awesome\scss\_variables.scss" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\img\icon-flag.pdf" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\accordion.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\alerts.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\bootstrap.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\breadcrumbs.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\button-groups.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\buttons.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\carousel.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\close.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\code.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\component-animations.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\dropdowns.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\forms.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\grid.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\hero-unit.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\labels-badges.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\layouts.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\media.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\mixins.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\modals.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\navbar.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\navs.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\pager.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\pagination.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\popovers.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\progress-bars.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\reset.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\responsive-1200px-min.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\responsive-767px-max.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\responsive-768px-979px.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\responsive-navbar.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\responsive-utilities.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\responsive.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\scaffolding.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\sprites.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\tables.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\thumbnails.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\tooltip.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\type.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\utilities.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\variables.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\bootstrap-2.3.2\wells.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\lazy.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\mixins.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\responsive-1200px-min.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\responsive-767px-max.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\responsive-768px-979px.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\responsive-navbar.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\responsive.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\site.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\sticky-footer.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\assets\less\variables.less" />
+    <Content Include="Content\FortAwesome\src\3.2.1\CNAME" />
+    <Content Include="Content\FortAwesome\src\3.2.1\icons.yml" />
+    <Content Include="Content\FortAwesome\src\3.2.1\Makefile" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\less\animated.less" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\less\bordered-pulled.less" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\less\core.less" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\less\fixed-width.less" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\less\font-awesome.less" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\less\icons.less" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\less\larger.less" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\less\list.less" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\less\mixins.less" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\less\path.less" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\less\rotated-flipped.less" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\less\stacked.less" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\less\variables.less" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\scss\font-awesome.scss" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\scss\_animated.scss" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\scss\_bordered-pulled.scss" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\scss\_core.scss" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\scss\_fixed-width.scss" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\scss\_icons.scss" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\scss\_larger.scss" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\scss\_list.scss" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\scss\_mixins.scss" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\scss\_path.scss" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\scss\_rotated-flipped.scss" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\scss\_stacked.scss" />
+    <Content Include="Content\FortAwesome\src\assets\font-awesome\scss\_variables.scss" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\.csscomb.json" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\.csslintrc" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\alerts.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\badges.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\bootstrap.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\breadcrumbs.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\button-groups.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\buttons.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\carousel.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\close.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\code.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\component-animations.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\dropdowns.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\forms.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\glyphicons.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\grid.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\input-groups.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\jumbotron.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\labels.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\list-group.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\media.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\alerts.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\background-variant.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\border-radius.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\buttons.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\center-block.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\clearfix.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\forms.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\gradients.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\grid-framework.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\grid.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\hide-text.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\image.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\labels.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\list-group.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\nav-divider.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\nav-vertical-align.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\opacity.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\pagination.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\panels.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\progress-bar.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\reset-filter.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\reset-text.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\resize.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\responsive-visibility.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\size.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\tab-focus.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\table-row.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\text-emphasis.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\text-overflow.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\mixins\vendor-prefixes.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\modals.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\navbar.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\navs.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\normalize.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\pager.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\pagination.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\panels.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\popovers.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\print.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\progress-bars.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\responsive-embed.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\responsive-utilities.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\scaffolding.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\tables.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\theme.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\thumbnails.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\tooltip.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\type.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\utilities.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\variables.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\bootstrap-3.3.5\wells.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\banner-ad.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\bootstrap\buttons.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\bootstrap\jumbotron.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\bootstrap\modals.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\bootstrap\navbar.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\bootstrap\type.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\bootstrap\variables.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\bootstrap\wells.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\bsap-ad.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\example-rating.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\feature-list.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\fontawesome-icon-list.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\footer.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\fusion-ad.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\jumbotron-carousel.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\layout.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\lazy.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\responsive\screen-lg.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\responsive\screen-md.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\responsive\screen-sm.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\responsive\screen-xs.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\search.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\social-buttons.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\stripe-ad.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\sumome.less" />
+    <Content Include="Content\FortAwesome\src\assets\less\site\textured-bg.less" />
+    <Content Include="Content\FortAwesome\src\CNAME" />
+    <Content Include="Content\FortAwesome\src\icons.yml" />
+    <Content Include="Content\FortAwesome\src\Makefile" />
+    <Content Include="Content\FortAwesome\src\README.md-nobuild" />
+    <Content Include="Content\FortAwesome\src\_includes\code\core.less" />
+    <Content Include="Content\FortAwesome\src\_includes\code\core.scss" />
+    <Content Include="Content\FortAwesome\src\_plugins\flatten_icon_filters.rb" />
+    <Content Include="Content\FortAwesome\src\_plugins\icon_page_generator.rb" />
+    <Content Include="Content\FortAwesome\src\_plugins\site.rb" />
+    <Content Include="Content\FortAwesome\_config.yml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\helpdesk.js" />
+    <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="Scripts\jquery-1.7.1.js" />
+    <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <Content Include="Scripts\jquery-ui-1.8.20.js" />
+    <Content Include="Scripts\jquery-ui-1.8.20.min.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.noty.packaged.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\knockout-2.1.0.debug.js" />
+    <Content Include="Scripts\knockout-2.1.0.js" />
+    <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\SendCode.cshtml" />
+    <Content Include="Views\Account\VerifyCode.cshtml" />
+    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
+    <Content Include="Views\Manage\ChangePassword.cshtml" />
+    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Manage\ManageLogins.cshtml" />
+    <Content Include="Views\Manage\SetPassword.cshtml" />
+    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Request\Create.cshtml" />
+    <Content Include="Views\Request\Delete.cshtml" />
+    <Content Include="Views\Request\Edit.cshtml" />
+    <Content Include="Views\Request\Index.cshtml" />
+    <Content Include="Views\Service\Categories.cshtml" />
+    <Content Include="Views\Service\AddRole.cshtml" />
+    <Content Include="Views\Request\MyIndex.cshtml" />
+    <Content Include="Views\Request\_Details.cshtml" />
+    <Content Include="Views\Request\_Executor.cshtml" />
+    <Content Include="Views\Request\_Lifecycle.cshtml" />
+    <Content Include="Views\Request\Distribute.cshtml" />
+    <Content Include="Views\Request\ChangeStatus.cshtml" />
+    <Content Include="Views\ErrorMessage\Create.cshtml" />
+    <Content Include="Views\ErrorMessage\Details.cshtml" />
+    <Content Include="Views\ErrorMessage\Index.cshtml" />
+    <Content Include="Views\Account\Create.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\Edit.cshtml" />
+    <Content Include="Views\ErrorMessage\_Message.cshtml" />
+    <Content Include="Views\Payment\Create.cshtml" />
+    <Content Include="Views\Payment\MyDelete.cshtml" />
+    <Content Include="Views\Payment\MyDetails.cshtml" />
+    <Content Include="Views\Payment\MyEdit.cshtml" />
+    <Content Include="Views\Payment\Index.cshtml" />
+    <Content Include="Views\Payment\MyIndex.cshtml" />
+    <Content Include="Views\Home\Rules.cshtml" />
+    <Content Include="Views\Documents\Create.cshtml" />
+    <Content Include="Views\Documents\Delete.cshtml" />
+    <Content Include="Views\Documents\Details.cshtml" />
+    <Content Include="Views\Documents\Edit.cshtml" />
+    <Content Include="Views\Documents\Index.cshtml" />
+    <Content Include="Views\RequestSolution\Create.cshtml" />
+    <Content Include="Views\RequestSolution\MyDelete.cshtml" />
+    <Content Include="Views\RequestSolution\MyEdit.cshtml" />
+    <Content Include="Views\RequestSolution\Index.cshtml" />
+    <Content Include="Views\RequestSolution\MyIndex.cshtml" />
+    <Content Include="Views\Request\Message.cshtml" />
+    <Content Include="Views\Home\Price.cshtml" />
+    <Content Include="Views\Home\RulesAndPayment.cshtml" />
+    <Content Include="Views\Home\Relax.cshtml" />
+    <Content Include="Views\Home\Example.cshtml" />
+    <Content Include="Views\Service\AddPropsCategory.cshtml" />
+    <Content Include="Views\Props\Create.cshtml" />
+    <Content Include="Views\Service\AddSubject.cshtml" />
+    <Content Include="Views\Manage\CreateProps.cshtml" />
+    <Content Include="Views\Manage\CreateContact.cshtml" />
+    <Content Include="Views\Contact\Create.cshtml" />
+    <Content Include="Views\Account\Details.cshtml" />
+    <Content Include="Views\Comment\Index.cshtml" />
+    <Content Include="Views\Comment\_TreeList.cshtml" />
+    <Content Include="Views\Request\Details.cshtml" />
+    <Content Include="Views\Comment\_RequestDetails.cshtml" />
+    <Content Include="Views\RecallMessage\Index.cshtml" />
+    <Content Include="Views\RecallMessage\_TreeList.cshtml" />
+    <Content Include="Views\Account\_TreeList.cshtml" />
+    <Content Include="Views\Account\_UserDetails.cshtml" />
+    <Content Include="Views\Account\UserDetails.cshtml" />
+    <Content Include="Views\Requirement\Create.cshtml" />
+    <Content Include="Views\Requirement\Delete.cshtml" />
+    <Content Include="Views\Requirement\Details.cshtml" />
+    <Content Include="Views\Requirement\Edit.cshtml" />
+    <Content Include="Views\Requirement\Index.cshtml" />
+    <Content Include="Views\RequirementConfirmation\Create.cshtml" />
+    <Content Include="Views\RequirementConfirmation\Delete.cshtml" />
+    <Content Include="Views\RequirementConfirmation\Details.cshtml" />
+    <Content Include="Views\RequirementConfirmation\Edit.cshtml" />
+    <Content Include="Views\RequirementConfirmation\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\themes\" />
+    <Folder Include="Files\ErrorMessageFiles\" />
+    <Folder Include="Files\PaymentFiles\" />
+    <Folder Include="Files\RequestFiles\" />
+    <Folder Include="Files\RequestSolutionFiles\" />
+    <Folder Include="Files\UserAvatarFiles\" />
+    <Folder Include="Scripts\jquery.mb.YTPlayer-master\" />
+    <Folder Include="Scripts\jquery.tubular.1.0.1\" />
+    <Folder Include="Scripts\noty-2.3.5\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="packages.config" />
+    <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201508221052445_Initial.resx">
+      <DependentUpon>201508221052445_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>52229</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:52229/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

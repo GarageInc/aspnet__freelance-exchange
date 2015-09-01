@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "О нас и наших целях";
+}
+<h2>@ViewBag.Title.</h2>
+
+
+
+<div class="well">
+    <h2>Решатель не получит оплату, пока Вы не получите решение. Но и к решению он не приступит, пока - не получит подтверждения от администрации о переводе средств. Это нашей основное правило "Третьей стороны".</h2>
+</div>
+
+
+
+<div class="well well-large">
+    <h2>Связаться:</h2>
+
+    <div class="text" align="center">
+        Помните, что краткость — сестра таланта. Пишите сразу по существу. Как показывает практика,
+        особенно хорошо наше внимание привлекают заходы в духе «Парни, привет, меня зовут Билл Гейтс , есть большой заказ в Чикаго для Berkshire Hathaway, вас мне посоветовал Уорен
+        Баффет, джет за вами уже вылетел».
+    </div>
+    <br/>
+
+    <div align="center">
+        <form action="/RecallMessage/CreateForAdmin" method="POST" class="form">
+            <label>
+                <span>Ваше имя</span>
+                <input type="text" name="name" />
+            </label>
+
+            <label>
+                <span>Почта</span>
+                <input type="email" name="mail" />
+            </label>
+
+            <br/>
+            <span>Сообщение <i id="shortUp">(Краткость - сестра таланта, вы ведь помните?)</i></span>
+            <br />
+            <label>
+                <b>Любимые мои,</b>
+                <textarea name="message"></textarea>
+            </label>
+
+            <a  href="https://vk.com/" target="_blank">
+                <img class="img-polaroid" width="50" height="50" src="/Content/pictures/vk_group.png" alt="" />
+                Официальная группа ВКонтакте
+            </a>
+
+            <a  href="https://vk.com/rrrinat" target="_blank">
+                <img class="img-polaroid" width="50" height="50" src="~/Content/pictures/vk_admin.png" alt="" />
+                ГлавАдмин
+            </a>
+
+            <input type="submit" value="Отправить письмо" />
+        </form>
+    </div>
+</div>
+        

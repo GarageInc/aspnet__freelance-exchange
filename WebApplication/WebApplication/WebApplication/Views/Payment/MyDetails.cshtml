@@ -1,0 +1,82 @@
+﻿@model WebApplication.Models.Payment
+
+@{
+    ViewBag.Title = "Детали";
+}
+
+<h2>Детали</h2>
+
+<div>
+    <h4>Payment</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Author.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Author.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Document.Url)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Document.Url)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Req.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Req.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReqSolution.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReqSolution.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReqId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReqId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Checked)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Checked)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

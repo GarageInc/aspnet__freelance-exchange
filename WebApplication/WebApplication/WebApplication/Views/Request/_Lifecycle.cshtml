@@ -1,0 +1,21 @@
+﻿@model WebApplication.Models.Lifecycle
+
+<div>
+    
+</div>
+<div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal" area-hidden="true">X</button>
+        <h4>Жизненный цикл</h4>
+    </div>
+    <div class="modal-body">
+        <dl class="dl-horizontal">
+            <p><b>Заявка № @Html.DisplayFor(m => m.Id)</b></p>
+            <p>Открыта:  @Html.DisplayFor(m => m.Opened)</p>
+            <p>Распределена:  @Html.DisplayFor(m => m.Distributed)</p>
+            <p>В процессе:  @Html.DisplayFor(m => m.Proccesing)</p>
+            <p>На проверке:  @Html.DisplayFor(m => m.Checking)</p>
+            <p>Закрыта:  @Html.DisplayFor(m => m.Closed)</p>
+        </dl>
+    </div>
+</div>

@@ -1,0 +1,207 @@
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\obj\Debug\WebApplication.Tests.csprojResolveAssemblyReference.cache
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\WebApplication.Tests.dll.config
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\WebApplication.Tests.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\WebApplication.Tests.pdb
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Web.Infrastructure.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\Newtonsoft.Json.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Helpers.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Mvc.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Razor.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\System.Web.WebPages.Deployment.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\System.Web.WebPages.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\System.Web.WebPages.Razor.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\WebApplication.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Optimization.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.AspNet.Identity.Core.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.AspNet.Identity.Owin.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.Security.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\Owin.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.Security.Cookies.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Http.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.AspNet.Identity.EntityFramework.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\EntityFramework.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Http.WebHost.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.Host.SystemWeb.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\System.Net.Http.Formatting.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\WebApplication.pdb
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\Newtonsoft.Json.xml
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Helpers.xml
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Mvc.xml
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Razor.xml
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\System.Web.WebPages.xml
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\System.Web.WebPages.Deployment.xml
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\System.Web.WebPages.Razor.xml
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.xml
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Optimization.xml
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.AspNet.Identity.Core.xml
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.AspNet.Identity.Owin.xml
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.Security.xml
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.Security.Cookies.xml
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Http.xml
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.AspNet.Identity.EntityFramework.xml
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\EntityFramework.xml
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Http.WebHost.xml
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.Host.SystemWeb.xml
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\bin\Debug\System.Net.Http.Formatting.xml
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\obj\Debug\WebApplication.Tests.dll
+c:\users\350v5c\documents\visual studio 2015\Projects\WebApplication\WebApplication.Tests\obj\Debug\WebApplication.Tests.pdb
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\WebApplication.Tests.dll.config
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\WebApplication.Tests.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\WebApplication.Tests.pdb
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Web.Infrastructure.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Helpers.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Mvc.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Razor.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.WebPages.Deployment.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.WebPages.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.WebPages.Razor.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\WebApplication.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Optimization.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.AspNet.Identity.Core.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.AspNet.Identity.Owin.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.Security.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Owin.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.Security.Cookies.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Http.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.AspNet.Identity.EntityFramework.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\EntityFramework.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Http.WebHost.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Net.Http.Formatting.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\WebApplication.pdb
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Helpers.xml
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Mvc.xml
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Razor.xml
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.WebPages.xml
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.WebPages.Deployment.xml
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.WebPages.Razor.xml
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.xml
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Optimization.xml
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.AspNet.Identity.Core.xml
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.AspNet.Identity.Owin.xml
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.Security.xml
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.Security.Cookies.xml
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Http.xml
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.AspNet.Identity.EntityFramework.xml
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\EntityFramework.xml
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Http.WebHost.xml
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Net.Http.Formatting.xml
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\obj\Debug\WebApplication.Tests.csprojResolveAssemblyReference.cache
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\obj\Debug\WebApplication.Tests.dll
+C:\Users\Ринат\Desktop\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\obj\Debug\WebApplication.Tests.pdb
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\WebApplication.Tests.dll.config
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\WebApplication.Tests.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\WebApplication.Tests.pdb
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\EntityFramework.Commands.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\EntityFramework.Core.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\EntityFramework.Relational.Design.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\EntityFramework.Relational.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\EntityFramework.SqlServer.Design.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.CodeAnalysis.CSharp.Desktop.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.CodeAnalysis.CSharp.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.CodeAnalysis.Desktop.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.CodeAnalysis.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Framework.Caching.Interfaces.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Framework.Caching.Memory.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Framework.ConfigurationModel.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Framework.ConfigurationModel.Interfaces.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Framework.DependencyInjection.Abstractions.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Framework.DependencyInjection.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Framework.DependencyInjection.Interfaces.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Framework.Logging.Abstractions.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Framework.Logging.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Framework.OptionsModel.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Web.Infrastructure.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Newtonsoft.Json.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Remotion.Linq.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Collections.Immutable.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Interactive.Async.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Reflection.Metadata.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Helpers.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Mvc.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Razor.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.WebPages.Deployment.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.WebPages.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.WebPages.Razor.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\WebApplication.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Optimization.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.AspNet.Identity.Core.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.AspNet.Identity.Owin.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.Security.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Owin.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.Security.Cookies.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Http.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.AspNet.Identity.EntityFramework.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\EntityFramework.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Http.WebHost.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.Host.SystemWeb.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Net.Http.Formatting.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\WebApplication.pdb
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\EntityFramework.Commands.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\EntityFramework.Core.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\EntityFramework.Relational.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\EntityFramework.Relational.Design.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\EntityFramework.SqlServer.Design.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.CodeAnalysis.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.CodeAnalysis.CSharp.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.CodeAnalysis.CSharp.Desktop.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.CodeAnalysis.Desktop.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Framework.Caching.Interfaces.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Framework.Caching.Memory.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Framework.ConfigurationModel.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Framework.ConfigurationModel.Interfaces.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Framework.DependencyInjection.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Framework.DependencyInjection.Abstractions.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Framework.DependencyInjection.Interfaces.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Framework.Logging.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Framework.Logging.Abstractions.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Framework.OptionsModel.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Remotion.Linq.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Collections.Immutable.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Interactive.Async.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Reflection.Metadata.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Newtonsoft.Json.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Helpers.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Mvc.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Razor.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.WebPages.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.WebPages.Deployment.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.WebPages.Razor.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Optimization.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.AspNet.Identity.Core.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.AspNet.Identity.Owin.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.Security.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.Security.Cookies.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Http.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.AspNet.Identity.EntityFramework.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\EntityFramework.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Web.Http.WebHost.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\Microsoft.Owin.Host.SystemWeb.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\System.Net.Http.Formatting.xml
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\ru\System.Web.Helpers.resources.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\ru\System.Web.Mvc.resources.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\ru\System.Web.Razor.resources.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\ru\System.Web.WebPages.resources.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\ru\System.Web.WebPages.Deployment.resources.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\ru\System.Web.WebPages.Razor.resources.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\ru\Microsoft.Owin.resources.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\ru\System.Web.Optimization.resources.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\ru\Microsoft.AspNet.Identity.Core.resources.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\ru\Microsoft.AspNet.Identity.Owin.resources.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\ru\Microsoft.Owin.Security.resources.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\ru\System.Web.Http.resources.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\ru\Microsoft.AspNet.Identity.EntityFramework.resources.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\ru\System.Web.Http.WebHost.resources.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\ru\Microsoft.Owin.Host.SystemWeb.resources.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\ru\System.Net.Http.Formatting.resources.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\obj\Debug\WebApplication.Tests.csprojResolveAssemblyReference.cache
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\obj\Debug\WebApplication.Tests.dll
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\obj\Debug\WebApplication.Tests.pdb
+G:\Новая папка\Проект сайта\WebApplication\WebApplication\WebApplication.Tests\bin\Debug\ru\EntityFramework.resources.dll
