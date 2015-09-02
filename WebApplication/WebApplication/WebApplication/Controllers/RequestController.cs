@@ -25,17 +25,64 @@
             if (category == null || category == 0)
             {
                 allReqs = _db.Requests
+                                        .Where(r => !r.IsDeleted)
                                         .Include(r => r.Category)  // добавляем категории
                                         .Include(r => r.Lifecycle)  // добавляем жизненный цикл заявок
                                         .Include(r => r.Author) // добавляем данные о пользователях
                                         .Include(r => r.Solvers);
             }
             else
-                allReqs = _db.Requests.Where(x => x.CategoryId == category)
+                allReqs = _db.Requests
+                                        .Where(x => x.CategoryId == category)
+                                        .Where(r => !r.IsDeleted)
                                         .Include(r => r.Category)  // добавляем категории
                                         .Include(r => r.Lifecycle)  // добавляем жизненный цикл заявок
                                         .Include(r => r.Author)         // добавляем данные о пользователях
                                         .Include(r => r.Solvers);
+            ;
+            List<Category> categories = _db.Categories.ToList();
+
+            //Добавляем в список возможность выбора всех
+            categories.Insert(0, new Category { Name = "Все", Id = 0 });
+            ViewBag.Categories = new SelectList(categories, "Id", "Name");
+
+            return View(allReqs.ToList());
+        }
+
+
+        /// <summary>
+        /// Получение заявок текущего пользователя
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult MyIndex(int? category)
+        {
+            var currentId = HttpContext.User.Identity.GetUserId();
+            // получаем текущего пользователя
+            ApplicationUser user = _db.Users.FirstOrDefault(m => m.Id == currentId);
+            IEnumerable<Request> allReqs = null;
+            if (category == null || category == 0)
+            {
+
+                allReqs = _db.Requests.Where(r => r.Author.Id == user.Id)
+                                        .Where(r => !r.IsDeleted)
+                                        .Include(r => r.Category)  // добавляем категории
+                                        .Include(r => r.Lifecycle)  // добавляем жизненный цикл заявок
+                                        .Include(r => r.Author)         // добавляем данные о пользователях
+                                        .Include(r => r.Solvers)
+                                        .OrderByDescending(r => r.Lifecycle.Opened); // упорядочиваем по дате по убыванию   
+            }
+            else
+                allReqs = _db.Requests
+                                        .Where(x => x.CategoryId == category)
+                                        .Where(r => r.Author.Id == user.Id)
+                                        .Where(r => !r.IsDeleted) //получаем заявки для текущего пользователя
+                                        .Include(r => r.Category)  // добавляем категории
+                                        .Include(r => r.Lifecycle)  // добавляем жизненный цикл заявок
+                                        .Include(r => r.Author)         // добавляем данные о пользователях
+                                        .Include(r => r.Solvers)
+                                        .OrderByDescending(r => r.Lifecycle.Opened); // упорядочиваем по дате по убыванию  ;
+
+
             List<Category> categories = _db.Categories.ToList();
 
             //Добавляем в список возможность выбора всех
@@ -160,15 +207,11 @@
             }
             if (ModelState.IsValid)
             {
-                // указываем статус Открыта у заявки
-                request.Status = (int)RequestStatus.Open;
-                request.IsPaid = false;
-
                 //получаем время открытия
                 DateTime current = DateTime.Now;
 
                 //Создаем запись о жизненном цикле заявки
-                Lifecycle newLifecycle = new Lifecycle() { Opened = current };
+                Lifecycle newLifecycle = new Lifecycle() { Opened = current, IsDeleted = false, CreateDateTime = current};
                 request.Lifecycle = newLifecycle;
                 request.LifecycleId = newLifecycle.Id;
 
@@ -202,10 +245,13 @@
                 request.Category = cat;
                 var sub = _db.Subjects.Find(request.SubjectId);
                 request.Subject = sub;
-
+                request.CreateDateTime = DateTime.Now;
+                request.IsDeleted = false;
                 request.Checked = false;
                 request.CanDownload = false;
 
+                // указываем статус Открыта у заявки
+                request.IsPaid = false;
                 request.Status = (int)RequestStatus.Open;
 
                 // Добавляем заявку с возможно приложенными документами
@@ -227,46 +273,6 @@
             return View(request);
         }
 
-        /// <summary>
-        /// Получение заявок текущего пользователя
-        /// </summary>
-        /// <returns></returns>
-        
-        public ActionResult MyIndex(int? category)
-        {
-            var currentId = HttpContext.User.Identity.GetUserId();
-            // получаем текущего пользователя
-            ApplicationUser user = _db.Users.FirstOrDefault(m => m.Id == currentId);
-            IEnumerable<Request> allReqs = null;
-            if (category == null || category == 0)
-            {
-
-                allReqs = _db.Requests.Where(r => r.Author.Id == user.Id)
-                                        .Include(r => r.Category)  // добавляем категории
-                                        .Include(r => r.Lifecycle)  // добавляем жизненный цикл заявок
-                                        .Include(r => r.Author)         // добавляем данные о пользователях
-                                        .Include(r=>r.Solvers)
-                                        .OrderByDescending(r => r.Lifecycle.Opened); // упорядочиваем по дате по убыванию   
-            }
-            else
-                allReqs = _db.Requests
-                                        .Where(x => x.CategoryId == category)
-                                        .Where(r => r.Author.Id == user.Id) //получаем заявки для текущего пользователя
-                                        .Include(r => r.Category)  // добавляем категории
-                                        .Include(r => r.Lifecycle)  // добавляем жизненный цикл заявок
-                                        .Include(r => r.Author)         // добавляем данные о пользователях
-                                        .Include(r => r.Solvers)
-                                        .OrderByDescending(r => r.Lifecycle.Opened); // упорядочиваем по дате по убыванию  ;
-
-            
-            List<Category> categories = _db.Categories.ToList();
-
-            //Добавляем в список возможность выбора всех
-            categories.Insert(0, new Category { Name = "Все", Id = 0 });
-            ViewBag.Categories = new SelectList(categories, "Id", "Name");
-
-            return View(allReqs.ToList());
-        }
 
         /// <summary>
         /// Просмотр подробных сведений о заявке
@@ -295,7 +301,7 @@
         [AllowAnonymous]
         public ActionResult Lifecycle(int id)
         {
-            Lifecycle lifecycle = _db.Lifecycles.Where(m => m.Id == id).First();
+            Lifecycle lifecycle = _db.Lifecycles.First(m => m.Id == id);
 
             if (lifecycle != null)
             {
@@ -303,9 +309,31 @@
             }
             return View("Index");
         }
+        
+        // Удаление заявки
+        [HttpGet]
+        public ActionResult Delete(int id)
+        {
+            Request request = _db.Requests
+                .Where(x => x.Id == id)
+                .Include(x => x.Subject)
+                .Include(x => x.Category)
+                .First();
+
+            if (request != null)
+            {
+                //получаем категорию
+                request.Category = _db.Categories.First(m => m.Id == request.CategoryId);
+                return PartialView("_Delete", request);
+            }
+            return View("Index");
+        }
+
 
         // Удаление заявки
-        public void Delete(int id)
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public void DeleteConfirmed(int id)
         {
             Request request = _db.Requests.Find(id);
             var curId = HttpContext.User.Identity.GetUserId();
@@ -314,8 +342,12 @@
             if (request != null && request.Author.Id == user.Id)
             {
                 Lifecycle lifecycle = _db.Lifecycles.Find(request.LifecycleId);
-                _db.Lifecycles.Remove(lifecycle);
-                _db.Requests.Remove(request);
+                lifecycle.IsDeleted = true;
+                request.IsDeleted = true;
+
+                _db.Entry(lifecycle).State = EntityState.Modified;
+                _db.Entry(request).State = EntityState.Modified;
+
                 _db.SaveChanges();
             }
             Response.Redirect(Request.UrlReferrer.AbsoluteUri);
@@ -368,6 +400,7 @@
             {
                 return RedirectToAction("Distribute");
             }
+
             Request req = _db.Requests.Find(requestId);
             ApplicationUser ex = _db.Users.Find(executorId);
             if (req == null && ex == null)
@@ -433,18 +466,28 @@
                 if (status == (int)RequestStatus.Open)
                 {
                     lifecycle.Opened = DateTime.Now;
+                    lifecycle.Distributed = null;
+                    lifecycle.Proccesing = null;
+                    lifecycle.Checking = null;
+                    lifecycle.Closed = null;
                 }
                 if (status == (int)RequestStatus.Distributed)
                 {
                     lifecycle.Distributed = DateTime.Now;
+                    lifecycle.Proccesing = null;
+                    lifecycle.Checking = null;
+                    lifecycle.Closed = null;
                 }
                 if (status == (int)RequestStatus.Proccesing)
                 {
                     lifecycle.Proccesing = DateTime.Now;
+                    lifecycle.Checking = null;
+                    lifecycle.Closed = null;
                 }
                 else if (status == (int)RequestStatus.Closed)
                 {
                     lifecycle.Closed = DateTime.Now;
+                    lifecycle.Closed = null;
                 }
                 _db.Entry(lifecycle).State = EntityState.Modified;
                 _db.Entry(req).State = EntityState.Modified;
@@ -458,20 +501,21 @@
         /// Статистика
         /// </summary>
         /// <returns></returns>
+        [AllowAnonymous]
         public ActionResult GetCountOfAllRequests()
         {
-            string count = _db.Requests.Count().ToString();
+            string count = _db.Requests.Count(x=>!x.IsDeleted).ToString();
             ViewBag.Message = count;
             return PartialView("Message");
         }
-
+        [AllowAnonymous]
         public ActionResult GetCountOfAllSolvedRequests()
         {
-            string count = _db.RequestSolutions.Count().ToString();
+            string count = _db.RequestSolutions.Count(x => !x.IsDeleted).ToString();
             ViewBag.Message = count;
             return PartialView("Message");
         }
-
+        [AllowAnonymous]
         public ActionResult GetCountOfAllUsers()
         {
             string count = _db.Users.Count().ToString();
@@ -516,7 +560,11 @@
             return RedirectToAction("Distribute");
         }
         
-
+        /// <summary>
+        /// Нажатие на кнопку "Хочу решать"
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult AddToSolvers(string id)
         {
             var req = _db.Requests.Find(id);
@@ -547,6 +595,7 @@
             {
                 return RedirectToAction("MyIndex");
             }
+
             Request req = _db.Requests.Find(requestId);
             ApplicationUser ex = _db.Users.Find(executorId);
             if (req == null && ex == null)
@@ -566,7 +615,4 @@
             return RedirectToAction("MyIndex");
         }
     }
-
-
-
 }

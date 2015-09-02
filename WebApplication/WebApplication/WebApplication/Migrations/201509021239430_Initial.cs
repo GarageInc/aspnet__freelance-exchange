@@ -13,6 +13,8 @@ namespace WebApplication.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Name = c.String(nullable: false, maxLength: 50),
+                        CreateDateTime = c.DateTime(nullable: false),
+                        IsDeleted = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -25,9 +27,10 @@ namespace WebApplication.Migrations
                         Karma = c.Int(nullable: false),
                         Text = c.String(),
                         ParentId = c.Int(),
-                        IsDeleted = c.Boolean(nullable: false),
                         AddDateTime = c.DateTime(nullable: false),
                         ReqId = c.Int(),
+                        CreateDateTime = c.DateTime(nullable: false),
+                        IsDeleted = c.Boolean(nullable: false),
                         ApplicationUser_Id = c.String(maxLength: 128),
                         ApplicationUser_Id1 = c.String(maxLength: 128),
                         ApplicationUser_Id2 = c.String(maxLength: 128),
@@ -85,6 +88,8 @@ namespace WebApplication.Migrations
                         Url = c.String(),
                         Size = c.Int(nullable: false),
                         Type = c.String(),
+                        CreateDateTime = c.DateTime(nullable: false),
+                        IsDeleted = c.Boolean(nullable: false),
                         ApplicationUser_Id = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id)
@@ -111,6 +116,8 @@ namespace WebApplication.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         ContactAdress = c.String(nullable: false, maxLength: 200),
                         AuthorId = c.String(maxLength: 128),
+                        CreateDateTime = c.DateTime(nullable: false),
+                        IsDeleted = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.AspNetUsers", t => t.AuthorId)
@@ -125,10 +132,10 @@ namespace WebApplication.Migrations
                         AuthorId = c.String(maxLength: 128),
                         Karma = c.Int(nullable: false),
                         ParentId = c.Int(),
-                        IsDeleted = c.Boolean(nullable: false),
-                        AddDateTime = c.DateTime(nullable: false),
                         AboutSite = c.Boolean(nullable: false),
                         UserId = c.String(maxLength: 128),
+                        CreateDateTime = c.DateTime(nullable: false),
+                        IsDeleted = c.Boolean(nullable: false),
                         ApplicationUser_Id = c.String(maxLength: 128),
                         ApplicationUser_Id1 = c.String(maxLength: 128),
                         ApplicationUser_Id2 = c.String(maxLength: 128),
@@ -153,9 +160,10 @@ namespace WebApplication.Migrations
                         Text = c.String(nullable: false),
                         AuthorId = c.String(maxLength: 128),
                         ErrorStatus = c.Int(nullable: false),
-                        CreateDate = c.DateTime(nullable: false),
                         ForAdministration = c.Boolean(nullable: false),
                         Email = c.String(),
+                        CreateDateTime = c.DateTime(nullable: false),
+                        IsDeleted = c.Boolean(nullable: false),
                         Document_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
@@ -188,6 +196,8 @@ namespace WebApplication.Migrations
                         Checked = c.Boolean(nullable: false),
                         AuthorId = c.String(maxLength: 128),
                         Price = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        CreateDateTime = c.DateTime(nullable: false),
+                        IsDeleted = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Documents", t => t.DocumentId)
@@ -204,8 +214,8 @@ namespace WebApplication.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(nullable: false),
-                        Description = c.String(nullable: false),
+                        Name = c.String(nullable: false, maxLength: 50),
+                        Description = c.String(nullable: false, maxLength: 200),
                         DocumentId = c.Int(),
                         AuthorId = c.String(maxLength: 128),
                         ExecutorId = c.String(maxLength: 128),
@@ -220,6 +230,8 @@ namespace WebApplication.Migrations
                         Checked = c.Boolean(nullable: false),
                         CanDownload = c.Boolean(nullable: false),
                         IsOnline = c.Boolean(nullable: false),
+                        CreateDateTime = c.DateTime(nullable: false),
+                        IsDeleted = c.Boolean(nullable: false),
                         ApplicationUser_Id = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id)
@@ -248,6 +260,8 @@ namespace WebApplication.Migrations
                         Proccesing = c.DateTime(),
                         Checking = c.DateTime(),
                         Closed = c.DateTime(),
+                        CreateDateTime = c.DateTime(nullable: false),
+                        IsDeleted = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -257,6 +271,8 @@ namespace WebApplication.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Name = c.String(nullable: false, maxLength: 50),
+                        CreateDateTime = c.DateTime(nullable: false),
+                        IsDeleted = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -265,12 +281,13 @@ namespace WebApplication.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
+                        Name = c.String(maxLength: 50),
                         ReqId = c.Int(),
                         DocumentId = c.Int(),
                         AuthorId = c.String(maxLength: 128),
-                        Date = c.DateTime(nullable: false),
                         Comment = c.String(),
+                        CreateDateTime = c.DateTime(nullable: false),
+                        IsDeleted = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Documents", t => t.DocumentId)
@@ -288,6 +305,8 @@ namespace WebApplication.Migrations
                         PropsCategoryId = c.Int(),
                         Number = c.String(nullable: false, maxLength: 200),
                         AuthorId = c.String(maxLength: 128),
+                        CreateDateTime = c.DateTime(nullable: false),
+                        IsDeleted = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.PropsCategories", t => t.PropsCategoryId)
@@ -300,8 +319,10 @@ namespace WebApplication.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(nullable: false, maxLength: 50),
+                        Name = c.String(nullable: false),
                         Info = c.String(nullable: false, maxLength: 200),
+                        CreateDateTime = c.DateTime(nullable: false),
+                        IsDeleted = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -310,11 +331,13 @@ namespace WebApplication.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(nullable: false),
-                        Description = c.String(nullable: false),
+                        Name = c.String(nullable: false, maxLength: 50),
+                        Description = c.String(nullable: false, maxLength: 200),
                         DocumentId = c.Int(),
                         AuthorId = c.String(maxLength: 128),
                         RequirementId = c.Int(),
+                        CreateDateTime = c.DateTime(nullable: false),
+                        IsDeleted = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Documents", t => t.DocumentId)
@@ -329,14 +352,16 @@ namespace WebApplication.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(nullable: false),
-                        Description = c.String(nullable: false),
+                        Name = c.String(nullable: false, maxLength: 50),
+                        Description = c.String(nullable: false, maxLength: 200),
                         DocumentId = c.Int(),
                         AuthorId = c.String(maxLength: 128),
                         Status = c.Int(nullable: false),
                         Blocked = c.Boolean(nullable: false),
                         BlockedReason = c.String(),
                         Price = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        CreateDateTime = c.DateTime(nullable: false),
+                        IsDeleted = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Documents", t => t.DocumentId)

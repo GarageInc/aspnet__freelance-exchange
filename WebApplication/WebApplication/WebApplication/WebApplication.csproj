@@ -189,9 +189,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201508221052445_Initial.cs" />
-    <Compile Include="Migrations\201508221052445_Initial.Designer.cs">
-      <DependentUpon>201508221052445_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201509021239430_Initial.cs" />
+    <Compile Include="Migrations\201509021239430_Initial.Designer.cs">
+      <DependentUpon>201509021239430_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BaseModel\BaseModel.cs" />
@@ -1562,7 +1562,7 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Request\Create.cshtml" />
-    <Content Include="Views\Request\Delete.cshtml" />
+    <Content Include="Views\Request\_Delete.cshtml" />
     <Content Include="Views\Request\Edit.cshtml" />
     <Content Include="Views\Request\Index.cshtml" />
     <Content Include="Views\Service\Categories.cshtml" />
@@ -1611,7 +1611,6 @@
     <Content Include="Views\Account\Details.cshtml" />
     <Content Include="Views\Comment\Index.cshtml" />
     <Content Include="Views\Comment\_TreeList.cshtml" />
-    <Content Include="Views\Request\Details.cshtml" />
     <Content Include="Views\Comment\_RequestDetails.cshtml" />
     <Content Include="Views\RecallMessage\Index.cshtml" />
     <Content Include="Views\RecallMessage\_TreeList.cshtml" />
@@ -1648,8 +1647,8 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201508221052445_Initial.resx">
-      <DependentUpon>201508221052445_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201509021239430_Initial.resx">
+      <DependentUpon>201509021239430_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

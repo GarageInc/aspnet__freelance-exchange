@@ -306,7 +306,7 @@ F:\GarageInc\WebApplication\WebApplication\WebApplication\bin\ru\Microsoft.Owin.
 F:\GarageInc\WebApplication\WebApplication\WebApplication\bin\ru\Microsoft.Owin.Security.Twitter.resources.dll
 F:\GarageInc\WebApplication\WebApplication\WebApplication\bin\ru\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
 F:\GarageInc\WebApplication\WebApplication\WebApplication\obj\Debug\WebApplication.csprojResolveAssemblyReference.cache
-F:\GarageInc\WebApplication\WebApplication\WebApplication\obj\Debug\WebApplication.Migrations.Initial.resources
-F:\GarageInc\WebApplication\WebApplication\WebApplication\obj\Debug\WebApplication.csproj.GenerateResource.Cache
 F:\GarageInc\WebApplication\WebApplication\WebApplication\obj\Debug\WebApplication.dll
 F:\GarageInc\WebApplication\WebApplication\WebApplication\obj\Debug\WebApplication.pdb
+F:\GarageInc\WebApplication\WebApplication\WebApplication\obj\Debug\WebApplication.Migrations.Initial.resources
+F:\GarageInc\WebApplication\WebApplication\WebApplication\obj\Debug\WebApplication.csproj.GenerateResource.Cache

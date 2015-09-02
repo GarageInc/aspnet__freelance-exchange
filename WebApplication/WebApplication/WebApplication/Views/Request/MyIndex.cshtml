@@ -192,7 +192,15 @@
                     }
                 </td>
                 <td>
-                    @Html.ActionLink("Удалить", "Delete", new {id = item.Id})
+                    @if (item.Author.Id == userId)
+                    {
+                        <a class="compItem" href='@Url.Action("Delete", "Request", new {id = item.Id})'>
+                            <img src="../../Content/pictures/delete.png" class="tdImage" title="Удаление заявки" />
+                        </a>
+                                @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { @class = "buttonb" })
+                    }
+
+                    @Html.ActionLink("Обсуждение", "Index", "Comment", new { requestId = item.Id }, new { @class = "buttons" })
                 </td>
             </tr>
         }

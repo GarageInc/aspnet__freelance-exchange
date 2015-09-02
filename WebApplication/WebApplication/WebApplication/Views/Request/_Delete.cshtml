@@ -1,0 +1,45 @@
+﻿@model WebApplication.Models.Request
+
+
+<div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal" area-hidden="true">X</button>
+        <h4>Детали удаляемой заявки</h4>
+    </div>
+    <div class="modal-body">
+        <dl class="dl-horizontal">
+            <p>
+                <b>Задача № </b>
+                @Html.DisplayFor(m => m.Id)
+            </p>
+
+            <p>
+                @Html.DisplayFor(m => m.Category.Name)
+                @Html.DisplayFor(m => m.Subject.Name)
+            </p>
+
+            <p>
+                <b>Название:</b> @Html.DisplayFor(m => m.Name)
+            </p>
+
+            <p>
+                <b>Описание:</b> @Html.DisplayFor(m => m.Description)
+            </p>
+
+            <p>
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-actions no-color">
+                        <input type="submit" value="Удалить" class="buttons" /> |
+                    </div>
+                }
+            </p>
+        </dl>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+    </div>
+</div>
