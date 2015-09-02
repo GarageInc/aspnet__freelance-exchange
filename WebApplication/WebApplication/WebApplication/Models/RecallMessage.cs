@@ -8,12 +8,8 @@ namespace WebApplication.Models
     /// <summary>
     ///  Отзыв
     /// </summary>
-    public class RecallMessage
+    public class RecallMessage: BaseModel.BaseModel
     {
-        [Key]
-        [Display(Name = "ID сообщения")]
-        public virtual int Id { get; set; }
-
         [Display(Name = "Текст")]
         [Required(ErrorMessage = "Обязательно для заполнения!")]
         public virtual string Text { get; set; }
@@ -29,13 +25,7 @@ namespace WebApplication.Models
 
         [Display(Name = "Первый уровень")]
         public virtual int? ParentId { get; set; } //Идентификатор родительской новости
-
-        [Display(Name = "Удаленность")]
-        public virtual bool IsDeleted { get; set; } //Флаг удаления
-
-        [Display(Name = "Дата добавления")]
-        public virtual DateTime AddDateTime { get; set; }
-
+        
         [Display(Name = "Флаг 'О сайте'")]
         public  virtual bool AboutSite { get; set; }
 

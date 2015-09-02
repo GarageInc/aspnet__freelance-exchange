@@ -7,12 +7,8 @@ namespace WebApplication.Models
     /// <summary>
     /// Оплата задач
     /// </summary>
-    public class Payment
+    public class Payment : BaseModel.BaseModel
     {
-        [Key]
-        [Display(Name = "ID")]
-        public virtual int Id { get; set; }
-
         [Display(Name = "ID решения")]
         public virtual int? ReqSolutionId { get; set; }
 

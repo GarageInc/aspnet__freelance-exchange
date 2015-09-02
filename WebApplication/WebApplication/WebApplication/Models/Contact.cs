@@ -2,11 +2,8 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class Contact
+    public class Contact : BaseModel.BaseModel
     {
-        [Key]
-        public int Id { get; set; }
-
         [Required(ErrorMessage = "Обязательно для заполнения!")]
         [Display(Name = "Адрес, номер, страница в соц. сети и т.п.")]
         [MaxLength(200, ErrorMessage = "Превышена максимальная длина записи(200 символов)")]

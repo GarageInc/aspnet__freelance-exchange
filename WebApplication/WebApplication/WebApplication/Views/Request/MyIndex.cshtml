@@ -13,7 +13,7 @@
 <div>
     <form method="post" action="/Request/MyIndex">
         <label>Предмет</label>
-        @Html.DropDownList("categories", ViewBag.Categories as SelectList)
+        @Html.DropDownList("category", ViewBag.Categories as SelectList)
         <input type="submit" value="Фильтр" class="buttonb" />
     </form>
 </div>
@@ -150,14 +150,14 @@
                         </a>
                 </td>
                 <td>
-                        <a class="compItem" href='@Url.Action("Author", "Request", new {id = item.AuthorId}, null)'>
+                        <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = item.AuthorId}, null)'>
                             <img src="../../Content/pictures/author.png" class="tdImage" title="Автор заявки"/>
                         </a>
                 </td>
                 <td>
                         @if (item.Executor != null)
                         {
-                            <a class="compItem" href='@Url.Action("Executor", "Request", new {id = item.ExecutorId}, null)'>
+                            <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = item.ExecutorId}, null)'>
                                 <img src="../../Content/pictures/executor.png" class="tdImage" title="Исполнитель заявки"/>
                             </a>
                         }

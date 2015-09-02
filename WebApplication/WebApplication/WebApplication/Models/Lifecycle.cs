@@ -5,11 +5,8 @@ namespace WebApplication.Models
     using System.ComponentModel.DataAnnotations;
 
     // Модель жизенного цикла задачи-заявки
-    public class Lifecycle
+    public class Lifecycle : BaseModel.BaseModel
     {
-        // ID 
-        public int Id { get; set; }
-
         // Дата открытия
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy H:mm:ss}", ApplyFormatInEditMode = true)]
         [DataType(DataType.Date)]

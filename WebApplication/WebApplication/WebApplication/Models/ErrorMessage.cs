@@ -5,11 +5,8 @@ namespace WebApplication.Models
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class ErrorMessage
+    public class ErrorMessage : BaseModel.BaseModel
     {
-        [Display(Name = "ID сообщения")]
-        public virtual int Id { get; set; }
-
         [Display(Name = "Сообщение")]
         [Required(ErrorMessage = "Обязательно для заполнения!")]
         public virtual string Text { get; set; }
@@ -26,16 +23,12 @@ namespace WebApplication.Models
         // Статус задачи
         [Display(Name = "Статус")]
         public int ErrorStatus { get; set; }
-
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd'/'MM'/'yyyy}", ApplyFormatInEditMode = true)]
-        [Display(Name = "Дата создания")]
-        public virtual DateTime CreateDate { get; set; }
         
         [Display(Name = "Для администрации")]
         public virtual bool ForAdministration { get; set; }
 
         [Display(Name = "Мыло")]
+        [EmailAddress]
         public virtual string Email { get; set; }
     }
 

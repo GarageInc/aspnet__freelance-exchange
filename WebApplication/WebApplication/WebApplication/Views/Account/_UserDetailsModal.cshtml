@@ -8,46 +8,46 @@
         <h4>Пользователь</h4>
     </div>
     <div class="modal-body">
-        <dl class="dl-horizontal">
-            <dt> @Html.DisplayNameFor(m => m.Name) </dt>
-            <dd>
+            <p>
+                <b>
+                    @Html.DisplayNameFor(m => m.Name)
+                </b>
                 @Html.DisplayFor(m => m.Name)
-            </dd>
-            <br/>
+            </p>
 
-            <dt>
-                @Html.DisplayNameFor(m => m.Avatar)
-            </dt>
-            <dd>
+
+            <p>
+                <b>
+                    @Html.DisplayNameFor(m => m.Avatar)
+                </b>
                 @{
                     var yes = ApplicationUserDTO.GetUserAvatar(this.User.Identity.GetUserId()).IsEmpty();
                     if (!yes)
                     {
-                        @Html.Raw("<img style='width:50px; height:50px;' src=\"../../Files/UserAvatarFiles/"
-                                  + ApplicationUserDTO.GetUserAvatar(this.User.Identity.GetUserId()) + "\" />")
+                        @Html.Raw("<img style='wibh:50px; height:50px;' src=\"../../Files/UserAvatarFiles/"
+                              + ApplicationUserDTO.GetUserAvatar(this.User.Identity.GetUserId()) + "\" />")
                     }
                     else
                     {
-                        <b>Аватар не выбран</b>
+                        <text>Аватар не выбран</text>
                     }
                 }
-            </dd>
-            <br />
+            </p>
 
-            <dt>
-                 @Html.DisplayNameFor(m => m.Karma)
-            </dt>
-            <dd>
-                 @Html.DisplayFor(m => m.Karma)
-            </dd>
-            <br/>
+            <p>
+                <b>
+                    @Html.DisplayNameFor(m => m.Karma)
+                </b>
+                @Html.DisplayFor(m => m.Karma)
+            </p>
 
-            @if (User.IsInRole("Administrator"))
+            <p>
+                @if (User.IsInRole("Administrator"))
             {
-                <dt>
-                    @Html.DisplayNameFor(m => m.Props)
-                </dt>
-                <dd>
+                    <b>
+                        @Html.DisplayNameFor(m => m.Props)
+                    </b>
+
                     <table class="table">
                         <tr>
                             <th>
@@ -57,7 +57,6 @@
                             <th>
                                 Номер/адрес
                             </th>
-                            <th></th>
                         </tr>
 
                         @foreach (var item in Model.Props)
@@ -72,25 +71,20 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Number)
                                 </td>
-                                <td>
-                                    @Html.ActionLink("Удалить", "Delete", "Props", new { id = item.Id }, null)
-                                </td>
                             </tr>
                         }
                     </table>
-                </dd>
-                <hr />
 
-                <dt>
-                    @Html.DisplayNameFor(m => m.Contacts)
-                </dt>
-                <dd>
+
+                    <b>
+                        @Html.DisplayNameFor(m => m.Contacts)
+                    </b>
+
                     <table class="table">
                         <tr>
                             <th>
                                 Ссылка/номер/адрес
                             </th>
-                            <th></th>
                         </tr>
 
                         @foreach (var item in Model.Contacts)
@@ -99,15 +93,12 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.ContactAdress)
                                 </td>
-                                <td>
-                                    @Html.ActionLink("Удалить", "Delete", "Contact", new { id = item.Id }, null)
-                                </td>
                             </tr>
                         }
                     </table>
-                </dd>
-            }
+                }
+            </p>
+           
 
-        </dl>
     </div>
 </div>

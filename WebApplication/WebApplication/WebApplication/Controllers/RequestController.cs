@@ -12,11 +12,13 @@
     using Microsoft.AspNet.Identity;
     using System.Web.WebPages;
 
+    [Authorize]// Только авторизованным
     public class RequestController : Controller
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
         // Вывод всех задач по выбранному критерию
+        [AllowAnonymous]// Исключение - могут смотреть все
         public ActionResult Index(int? category)
         {
             IEnumerable<Request> allReqs = null;
@@ -25,7 +27,7 @@
                 allReqs = _db.Requests
                                         .Include(r => r.Category)  // добавляем категории
                                         .Include(r => r.Lifecycle)  // добавляем жизненный цикл заявок
-                                        .Include(r => r.Author)         // добавляем данные о пользователях
+                                        .Include(r => r.Author) // добавляем данные о пользователях
                                         .Include(r => r.Solvers);
             }
             else
@@ -43,8 +45,8 @@
             return View(allReqs.ToList());
         }
 
-        // Редактировать
-        //[Authorize]
+        // Редактировать заявку
+        [HttpGet]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -68,10 +70,9 @@
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Authorize]
         public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Description,CategoryId,SubjectId,Deadline,Priority,Price")] Request request, HttpPostedFileBase error)
         {
-            var curId = this.User.Identity.GetUserId();
+            var curId = this.HttpContext.User.Identity.GetUserId();
 
             if (ModelState.IsValid)
             {
@@ -86,7 +87,7 @@
                         string ext = error.FileName.Substring(error.FileName.LastIndexOf('.'));
                         doc.Type = ext;
                         // сохраняем файл по определенному пути на сервере
-                        string path = DateTime.Now.ToString(this.User.Identity.GetUserId().GetHashCode() + "dd/MM/yyyy H:mm:ss").Replace(":", "_").Replace("/", ".") + ext;
+                        string path = DateTime.Now.ToString(curId.GetHashCode() + "dd/MM/yyyy H:mm:ss").Replace(":", "_").Replace("/", ".") + ext;
                         error.SaveAs(Server.MapPath("~/Files/RequestFiles/" + path));
                         doc.Url = path;
 
@@ -130,7 +131,6 @@
         }
 
         [HttpGet]
-        //[Authorize]
         public ActionResult Create()
         {
             var curId = HttpContext.User.Identity.GetUserId();
@@ -141,19 +141,14 @@
                 // Добавляются категории и предмет
                 ViewBag.Categories = new SelectList(_db.Categories, "Id", "Name");
                 ViewBag.Subjects = new SelectList(_db.Subjects, "Id", "Name");
-                var model = new Request
-                {
-                    Deadline = DateTime.Now
-                };
 
-                return View(model);
+                return View();
             }
             return RedirectToAction("LogOff", "Account");
         }
 
         // Создание новой заявки
         [HttpPost]
-        //[Authorize]
         public ActionResult Create(Request request, HttpPostedFileBase error)
         {
             var curId = HttpContext.User.Identity.GetUserId();
@@ -183,8 +178,7 @@
                 // указываем пользователя заявки
                 request.Author = user;
                 request.AuthorId = user.Id;
-
-
+                
                 // если получен файл
                 if (error != null)
                 {
@@ -210,9 +204,11 @@
                 request.Subject = sub;
 
                 request.Checked = false;
+                request.CanDownload = false;
+
                 request.Status = (int)RequestStatus.Open;
 
-                //Добавляем заявку с возможно приложенными документами
+                // Добавляем заявку с возможно приложенными документами
                 _db.Requests.Add(request);
                 user.Requests.Add(request);
                 _db.Entry(user).State = EntityState.Modified;
@@ -235,18 +231,17 @@
         /// Получение заявок текущего пользователя
         /// </summary>
         /// <returns></returns>
-        //[Authorize]
+        
         public ActionResult MyIndex(int? category)
         {
             var currentId = HttpContext.User.Identity.GetUserId();
             // получаем текущего пользователя
-            ApplicationUser user = _db.Users.Where(m => m.Id == currentId).FirstOrDefault();
+            ApplicationUser user = _db.Users.FirstOrDefault(m => m.Id == currentId);
             IEnumerable<Request> allReqs = null;
             if (category == null || category == 0)
             {
 
                 allReqs = _db.Requests.Where(r => r.Author.Id == user.Id)
-                    //.Where(x => x.Checked) //получаем заявки для текущего пользователя
                                         .Include(r => r.Category)  // добавляем категории
                                         .Include(r => r.Lifecycle)  // добавляем жизненный цикл заявок
                                         .Include(r => r.Author)         // добавляем данные о пользователях
@@ -255,18 +250,17 @@
             }
             else
                 allReqs = _db.Requests
-                    //.Where(x => x.Checked)
-                    .Where(x => x.CategoryId == category)
-                    .Where(r => r.Author.Id == user.Id) //получаем заявки для текущего пользователя
+                                        .Where(x => x.CategoryId == category)
+                                        .Where(r => r.Author.Id == user.Id) //получаем заявки для текущего пользователя
                                         .Include(r => r.Category)  // добавляем категории
                                         .Include(r => r.Lifecycle)  // добавляем жизненный цикл заявок
                                         .Include(r => r.Author)         // добавляем данные о пользователях
                                         .Include(r => r.Solvers)
                                         .OrderByDescending(r => r.Lifecycle.Opened); // упорядочиваем по дате по убыванию  ;
 
-
-
+            
             List<Category> categories = _db.Categories.ToList();
+
             //Добавляем в список возможность выбора всех
             categories.Insert(0, new Category { Name = "Все", Id = 0 });
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
@@ -274,64 +268,31 @@
             return View(allReqs.ToList());
         }
 
-        
-        /// <summary>
-        /// Скачивание файла
-        /// </summary>
-        /// <returns></returns>
-        public FileResult Download(int id)
-        {
-            var req = _db.Requests.Find(id);
-            var reqDoc = req.Document;
-            
-                byte[] fileBytes = System.IO.File.ReadAllBytes(Server.MapPath("~/Files/RequestFiles/" + reqDoc.Url));
-                string fileName = req.Id + reqDoc.Type;
-                return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
-        }
-        
         /// <summary>
         /// Просмотр подробных сведений о заявке
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [AllowAnonymous]
         public ActionResult Details(int id)
         {
-            Request request = _db.Requests.Find(id);
+            Request request = _db.Requests
+                .Where(x=>x.Id==id)
+                .Include(x=>x.Subject)
+                .Include(x => x.Category)
+                .First();
 
             if (request != null)
             {
                 //получаем категорию
-                request.Category = _db.Categories.Where(m => m.Id == request.CategoryId).First();
+                request.Category = _db.Categories.First(m => m.Id == request.CategoryId);
                 return PartialView("_Details", request);
             }
             return View("Index");
         }
 
-        //[Authorize]
-        public ActionResult Author(string id)
-        {
-            ApplicationUser executor = _db.Users.Where(m => m.Id == id).First();
 
-            if (executor != null)
-            {
-                return PartialView("_Executor", executor);
-            }
-            return View("Index");
-        }
-
-        //[Authorize]
-        public ActionResult Executor(string id)
-        {
-            ApplicationUser executor = _db.Users.Where(m => m.Id == id).First();
-
-            if (executor != null)
-            {
-                return PartialView("_Executor", executor);
-            }
-            return View("Index");
-        }
-
-        //[Authorize]
+        [AllowAnonymous]
         public ActionResult Lifecycle(int id)
         {
             Lifecycle lifecycle = _db.Lifecycles.Where(m => m.Id == id).First();
@@ -344,7 +305,6 @@
         }
 
         // Удаление заявки
-        //[Authorize]
         public void Delete(int id)
         {
             Request request = _db.Requests.Find(id);
@@ -367,9 +327,7 @@
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        //[Authorize(Roles = "Moderator")]
-        //[Authorize(Roles = "Administrator")]
-        //[Authorize]
+        [Authorize(Roles = "Moderator, Administrator")]
         public ActionResult Distribute(int? category)
         {
             IEnumerable<Request> requests = null;
@@ -403,9 +361,7 @@
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Модератор")]
-        //[Authorize(Roles = "Administrator")]
-        //[Authorize]
+        [Authorize(Roles = "Moderator, Administrator")]
         public ActionResult Distribute(int? requestId, string executorId)
         {
             if (requestId == null && executorId.IsEmpty())// == null)
@@ -434,12 +390,12 @@
 
         //Заявки для изменения статуса исполнителем
         [HttpGet]
-        //[Authorize]
         public ActionResult ChangeStatus()
         {
             // получаем текущего пользователя
             var curId = HttpContext.User.Identity.GetUserId();
-            ApplicationUser user = _db.Users.Where(m => m.Id == curId).FirstOrDefault();
+            ApplicationUser user = _db.Users.FirstOrDefault(m => m.Id == curId);
+
             if (user != null)
             {
                 var requests = _db.Requests.Include(r => r.Author)
@@ -447,15 +403,13 @@
                                     .Include(r => r.Executor)
                                     .Include(r=>r.Document)
                                     .Where(r => r.ExecutorId == user.Id);
-                                    //.Where(r=>r.Checked==false)
-                                    //.Where(r => r.Status != (int)RequestStatus.Closed);
                 return View(requests);
             }
+
             return RedirectToAction("LogOff", "Account");
         }
 
         [HttpPost]
-        //[Authorize]
         public ActionResult ChangeStatus(int requestId, int status)
         {
             var curId = HttpContext.User.Identity.GetUserId();
@@ -467,6 +421,11 @@
             }
 
             Request req = _db.Requests.Find(requestId);
+            if (req.Executor.Id != curId)
+            {
+                return Content("К сожалению, Вы не исполнитель данной заявки и не можете изменить её статус");
+            }
+
             if (req != null)
             {
                 req.Status = status;
@@ -527,7 +486,7 @@
         /// <param name="status"></param>
         /// <returns></returns>
         [HttpPost]
-        //[Authorize]
+        [Authorize(Roles = "Moderator, Administrator")]
         public ActionResult DistributeChangeStatus(int requestId, int status)
         {
             var curId = HttpContext.User.Identity.GetUserId();
@@ -556,12 +515,12 @@
 
             return RedirectToAction("Distribute");
         }
+        
 
-        //[Authorize]
         public ActionResult AddToSolvers(string id)
         {
             var req = _db.Requests.Find(id);
-            var curId = this.User.Identity.GetUserId();
+            var curId = this.HttpContext.User.Identity.GetUserId();
             var thisUser = _db.Users.Find(curId);
 
             if (req.Solvers.Count(x => x.Id == curId) == 0)
@@ -575,10 +534,13 @@
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Пользователь сам устанавливает исполнителя
+        /// </summary>
+        /// <param name="requestId"></param>
+        /// <param name="executorId"></param>
+        /// <returns></returns>
         [HttpPost]
-        //[Authorize(Roles = "Модератор")]
-        //[Authorize(Roles = "Administrator")]
-        //[Authorize]
         public ActionResult MySelfDistribute(int? requestId, string executorId)
         {
             if (requestId == null && executorId.IsEmpty())// == null)

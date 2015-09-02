@@ -2,11 +2,8 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class Props
+    public class Props: BaseModel.BaseModel
     {
-        [Key]
-        public int Id { get; set; }
-
         // Внешний ключ Категория
         [Display(Name = "ID")]
         public int? PropsCategoryId { get; set; }

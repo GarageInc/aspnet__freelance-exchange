@@ -11,48 +11,34 @@ using System.Web.WebPages;
 
 namespace WebApplication.Controllers
 {
+    [Authorize]
     public class ErrorMessageController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext _db = new ApplicationDbContext();
 
         // GET: ErrorMessage
+        [Authorize(Roles = "Administrator, Moderator")]
         public async Task<ActionResult> Index()
         {
 
-            var errorMessages = db.ErrorMessages
+            var errorMessages = _db.ErrorMessages
                 .Include(e => e.Author)
                 .Include(r=>r.Document)
-                .OrderByDescending(r => r.CreateDate);
+                .OrderByDescending(r => r.CreateDateTime);
             var errorStatus = new[] { new { Id = 0, Name = "Открыто" }, new { Id = 1, Name = "Закрыто" } };
             ViewBag.ErrorStatus = new SelectList(errorStatus, "Id", "Name");
 
             return View(await errorMessages.ToListAsync());
         }
-
-        // GET: ErrorMessage/Details/5
-        public async Task<ActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ErrorMessage errorMessage = await db.ErrorMessages.FindAsync(id);
-            if (errorMessage == null)
-            {
-                return HttpNotFound();
-            }
-            return View(errorMessage);
-        }
         
-
         // POST: ErrorMessage/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(int id)
         {
-            ErrorMessage errorMessage = await db.ErrorMessages.FindAsync(id);
-            db.ErrorMessages.Remove(errorMessage);
-            await db.SaveChangesAsync();
+            ErrorMessage errorMessage = await _db.ErrorMessages.FindAsync(id);
+            _db.ErrorMessages.Remove(errorMessage);
+            await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -60,11 +46,24 @@ namespace WebApplication.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }
-        
+
+        [HttpGet]
+        public ActionResult Create()
+        {
+            var curId = HttpContext.User.Identity.GetUserId();
+            // получаем текущего пользователя
+            ApplicationUser user = _db.Users.FirstOrDefault(m => m.Id == curId);
+            if (user != null)
+            {
+                return View();
+            }
+            return RedirectToAction("LogOff", "Account");
+        }
+
         // Создание новой заявки об ошибке
         [HttpPost]
         public void Create(string forAdm, HttpPostedFileBase error)
@@ -72,7 +71,7 @@ namespace WebApplication.Controllers
             var uploadText = Request.Params["Text"];
             var curId = HttpContext.User.Identity.GetUserId();
             // получаем текущего пользователя
-            ApplicationUser user = db.Users.FirstOrDefault(m => m.Id == curId);
+            ApplicationUser user = _db.Users.FirstOrDefault(m => m.Id == curId);
             ErrorMessage erM;
             if (user != null)
             {
@@ -80,7 +79,7 @@ namespace WebApplication.Controllers
                 {
                     Author = user,
                     AuthorId = user.Id,
-                    CreateDate = DateTime.Now,
+                    CreateDateTime = DateTime.Now,
                     ErrorStatus = 0
                 };
             }
@@ -88,7 +87,7 @@ namespace WebApplication.Controllers
             {
                 erM = new ErrorMessage
                 {
-                    CreateDate = DateTime.Now,
+                    CreateDateTime = DateTime.Now,
                     ErrorStatus = 0
                 };
             }
@@ -109,7 +108,7 @@ namespace WebApplication.Controllers
                 doc.Url = path;
 
                 erM.Document = doc;
-                db.Documents.Add(doc);
+                _db.Documents.Add(doc);
             }
             else
                 erM.Document = null;
@@ -126,17 +125,13 @@ namespace WebApplication.Controllers
             }
             else
                 erM.ForAdministration = false;
-
-            //var cat = db.Categories.Find(request.CategoryId);
-            //request.Category = cat;
-            //request.Comment = "";
-
-            // Добавляем заявку с возможно приложенными документами
-            db.ErrorMessages.Add(erM);
-            user.ErrorMessages.Add(erM);
-            db.Entry(user).State = EntityState.Modified;
             
-            db.SaveChanges();
+            // Добавляем заявку с возможно приложенными документами
+            _db.ErrorMessages.Add(erM);
+            user.ErrorMessages.Add(erM);
+            _db.Entry(user).State = EntityState.Modified;
+            
+            _db.SaveChanges();
             Response.Redirect(Request.UrlReferrer.AbsoluteUri);                
         }
 
@@ -146,8 +141,7 @@ namespace WebApplication.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        //[Authorize(Roles = "Модератор")]
-        //[Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Moderator")]
         [Authorize]
         public ActionResult ChangeErrorMessageStatus(int? errorMessageId, string errorStatusId)
         {
@@ -155,8 +149,8 @@ namespace WebApplication.Controllers
             {
                 return RedirectToAction("Index");
             }
-            ErrorMessage req = db.ErrorMessages.Find(errorMessageId);
-            ApplicationUser ex = db.Users.Find(errorStatusId);
+            ErrorMessage req = _db.ErrorMessages.Find(errorMessageId);
+            ApplicationUser ex = _db.Users.Find(errorStatusId);
 
             var erSt = int.Parse(errorStatusId);
 
@@ -165,10 +159,22 @@ namespace WebApplication.Controllers
                 return RedirectToAction("Index");
             }
             req.ErrorStatus = erSt;
-            db.Entry(req).State = EntityState.Modified;
-            db.SaveChanges();
+            _db.Entry(req).State = EntityState.Modified;
+            _db.SaveChanges();
 
             return RedirectToAction("Index");
         }
+
+        public ActionResult Details(int id)
+        {
+            ErrorMessage erMes = _db.ErrorMessages.Find(id);
+
+            if (erMes != null)
+            {
+                return PartialView("_Details", erMes);
+            }
+            return View("Index");
+        }
+
     }
 }

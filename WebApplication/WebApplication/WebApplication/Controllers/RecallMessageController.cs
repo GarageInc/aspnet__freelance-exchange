@@ -48,7 +48,7 @@ namespace WebApplication.Controllers
                     Text = Text,
                     Author = user,
                     AuthorId = user.Id,
-                    AddDateTime = DateTime.Now,
+                    CreateDateTime = DateTime.Now,
                     Karma = 0,
                     IsDeleted = false,
                     AboutSite=true

@@ -1,7 +1,4 @@
-﻿using System.Net;
-using System.Web.WebPages;
-
-namespace WebApplication.Controllers
+﻿namespace WebApplication.Controllers
 {
     using System;
     using System.Globalization;
@@ -19,15 +16,18 @@ namespace WebApplication.Controllers
     using System.Data.Entity;
     using System.Collections.Generic;
     using Microsoft.AspNet.Identity.EntityFramework;
+    using System.Net;
+    using System.Web.WebPages;
+
     [Authorize]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        ApplicationDbContext db;
+        ApplicationDbContext _db;
         public AccountController()
         {
-            db = new ApplicationDbContext();
+            _db = new ApplicationDbContext();
         }
 
         
@@ -36,7 +36,7 @@ namespace WebApplication.Controllers
         {
             UserManager = userManager;
             SignInManager = signInManager;
-            db = new ApplicationDbContext();
+            _db = new ApplicationDbContext();
         }
 
         public ApplicationSignInManager SignInManager
@@ -94,12 +94,12 @@ namespace WebApplication.Controllers
                         if(this.User!=null)
                         {
                             var curId = this.User.Identity.GetUserId();
-                            var user = db.Users.Where(x => x.Id ==curId).FirstOrDefault();
+                            var user = _db.Users.Where(x => x.Id ==curId).FirstOrDefault();
                             if (user != null)
                             {
                                 user.LastVisition = DateTime.Now;
-                                db.Entry(user).State = EntityState.Modified;
-                                db.SaveChanges();
+                                _db.Entry(user).State = EntityState.Modified;
+                                _db.SaveChanges();
                             }
                         }
                         
@@ -191,7 +191,7 @@ namespace WebApplication.Controllers
                     string path = current.ToString(this.User.Identity.GetUserId().GetHashCode() + "dd/MM/yyyy H:mm:ss").Replace(":", "_").Replace("/", ".") + ext;
                     avatar.SaveAs(Server.MapPath("~/Files/UserAvatarFiles/" + path));
                     newAvatar.Url = path;
-                    db.SaveChanges();
+                    _db.SaveChanges();
                 }
 
                 var user = new ApplicationUser {
@@ -208,10 +208,10 @@ namespace WebApplication.Controllers
                 {
                     if(avatar!=null)
                     {
-                        var newUser = db.Users.First(x => x.Id == user.Id);
+                        var newUser = _db.Users.First(x => x.Id == user.Id);
                         newUser.Avatar.Add(newAvatar);
-                        db.Entry(newUser).State = EntityState.Modified;
-                        db.SaveChanges();
+                        _db.Entry(newUser).State = EntityState.Modified;
+                        _db.SaveChanges();
                     }
                     SignInManager.SignIn(user, isPersistent:false, rememberBrowser:false);
                     
@@ -550,7 +550,7 @@ namespace WebApplication.Controllers
         {
             //var result = Membership.FindUsersByEmail(Email).Count == 0;
 
-            var result = db.Users.Where(x=>x.Email==Email).Count() == 0;
+            var result = _db.Users.Where(x=>x.Email==Email).Count() == 0;
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -562,7 +562,7 @@ namespace WebApplication.Controllers
         [Authorize(Roles = "Administrator")]
         public ActionResult Create()
         {
-            SelectList roles = new SelectList(db.Roles, "Id", "Name");
+            SelectList roles = new SelectList(_db.Roles, "Id", "Name");
             ViewBag.Roles = roles;
             return View();
         }
@@ -590,20 +590,20 @@ namespace WebApplication.Controllers
                 Balance=0
             };
 
-            var role = db.Roles.First(x => x.Id == model.RoleId);
+            var role = _db.Roles.First(x => x.Id == model.RoleId);
             // создадим пользователя
             var result = await UserManager.CreateAsync(user, model.Password);
             // и добавим его к роли
             UserManager.AddToRole(user.Id, role.Name);
             
-            var users = db.Users.ToList();
+            var users = _db.Users.ToList();
             return View("Index", users);
         }
 
         [HttpGet]
         public ActionResult Index()
         {
-            var users = db.Users.ToList();
+            var users = _db.Users.ToList();
             return View(users);
         }
 
@@ -611,8 +611,8 @@ namespace WebApplication.Controllers
         [Authorize(Roles = "Administrator")]
         public ActionResult Edit(string id)
         {
-            ApplicationUser user = db.Users.Find(id);
-            SelectList roles = new SelectList(db.Roles, "Id", "Name");
+            ApplicationUser user = _db.Users.Find(id);
+            SelectList roles = new SelectList(_db.Roles, "Id", "Name");
             ViewBag.Roles = roles;
 
             EditViewModel regWm = new EditViewModel();
@@ -630,7 +630,7 @@ namespace WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userCurrent = db.Users.Find(user.Id);
+                var userCurrent = _db.Users.Find(user.Id);
 
                 string pass = user.Password;
 
@@ -641,14 +641,14 @@ namespace WebApplication.Controllers
                 userCurrent.PasswordHash = UserManager.PasswordHasher.HashPassword(pass);
 
                 // Теперь разберемся с изменением роли 
-                #warning TODO Крайне кривая конструкция
+#warning TODO Крайне кривая конструкция
                 var allRoles = new List<IdentityRole>();
                 var userRoles = userCurrent.Roles;
 
                 // Соберем все роли
                 foreach(var ur in userRoles)
                 {
-                    allRoles.Add(db.Roles.First(x => x.Id == ur.RoleId));
+                    allRoles.Add(_db.Roles.First(x => x.Id == ur.RoleId));
                 }
                 // Удалим роли
                 foreach(var r in allRoles)
@@ -656,18 +656,18 @@ namespace WebApplication.Controllers
                     UserManager.RemoveFromRole(user.Id, r.Name);
                 }
                 // Добавим новую роль
-                var newRole = db.Roles.First(x => x.Id == user.RoleId).Name;
+                var newRole = _db.Roles.First(x => x.Id == user.RoleId).Name;
                 UserManager.AddToRole(user.Id, newRole);
 
                 // Сохраним изменения
-                db.Entry(userCurrent).State = EntityState.Modified;
+                _db.Entry(userCurrent).State = EntityState.Modified;
 
-                db.SaveChanges();
+                _db.SaveChanges();
 
                 return RedirectToAction("Index");
             }
             
-            SelectList roles = new SelectList(db.Roles, "Id", "Name");
+            SelectList roles = new SelectList(_db.Roles, "Id", "Name");
             ViewBag.Roles = roles;
 
             return View(user);
@@ -676,9 +676,9 @@ namespace WebApplication.Controllers
         [Authorize(Roles = "Administrator")]
         public ActionResult Delete(string id)
         {
-            ApplicationUser user = db.Users.Find(id);
-            db.Users.Remove(user);
-            db.SaveChanges();
+            ApplicationUser user = _db.Users.Find(id);
+            _db.Users.Remove(user);
+            _db.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -688,7 +688,7 @@ namespace WebApplication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ApplicationUser user = db.Users.Where(x=>x.Id==id).Include(x=>x.Props).Include(x=>x.Contacts).FirstOrDefault();
+            ApplicationUser user = _db.Users.Where(x=>x.Id==id).Include(x=>x.Props).Include(x=>x.Contacts).FirstOrDefault();
             if (user == null)
             {
                 return HttpNotFound();
@@ -700,11 +700,11 @@ namespace WebApplication.Controllers
         // ПОДРОБНОСТИ О ПОЛЬЗОВАТЕЛЕ
         public ActionResult UserDetails(string userId)
         {
-            var user = db.Users.Find(userId);
+            var user = _db.Users.Find(userId);
 
-            using (db)
+            using (_db)
             {
-                var comms = db.RecallMessages
+                var comms = _db.RecallMessages
                         .Where(r => r.User.Id == userId)
                         .Where(x => !x.IsDeleted)
                         .Include(x => x.Author);
@@ -726,11 +726,11 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public void Add(string userId, int? parentId, string Text)
         {
-            using (db)
+            using (_db)
             {
                 var curId = this.HttpContext.User.Identity.GetUserId();
-                var author = db.Users.Find(curId);
-                var user = db.Users.Find(userId);
+                var author = _db.Users.Find(curId);
+                var user = _db.Users.Find(userId);
 
                 var newRecallMessages = new RecallMessage()
                 {
@@ -738,7 +738,7 @@ namespace WebApplication.Controllers
                     Text = Text,
                     Author = author,
                     AuthorId = author.Id,
-                    AddDateTime = DateTime.Now,
+                    CreateDateTime = DateTime.Now,
                     Karma = 0,
                     IsDeleted = false,
                     AboutSite = false,
@@ -746,8 +746,8 @@ namespace WebApplication.Controllers
                     UserId = user.Id
                 };
 
-                db.RecallMessages.Add(newRecallMessages);
-                db.SaveChanges();
+                _db.RecallMessages.Add(newRecallMessages);
+                _db.SaveChanges();
             }
 
             Response.Redirect(Request.UrlReferrer.AbsoluteUri);
@@ -761,15 +761,15 @@ namespace WebApplication.Controllers
             {
                 Response.Redirect(Request.UrlReferrer.AbsoluteUri);
             }
-            using (db)
+            using (_db)
             {
-                if (newParentId.HasValue && ContainsChilds(db, nodeId, newParentId.Value))
+                if (newParentId.HasValue && ContainsChilds(_db, nodeId, newParentId.Value))
                 {
                     Response.Redirect(Request.UrlReferrer.AbsoluteUri);
                 }
-                var node = db.RecallMessages.Where(x => x.Id == nodeId).Single();
+                var node = _db.RecallMessages.Where(x => x.Id == nodeId).Single();
                 node.ParentId = newParentId;
-                db.SaveChanges();
+                _db.SaveChanges();
             }
             Response.Redirect(Request.UrlReferrer.AbsoluteUri);
         }
@@ -791,10 +791,10 @@ namespace WebApplication.Controllers
 
         public void DeleteRecall(string id)
         {
-            using (db)
+            using (_db)
             {
-                DeleteNodes(db, int.Parse(id));
-                db.SaveChanges();
+                DeleteNodes(_db, int.Parse(id));
+                _db.SaveChanges();
             }
 
             Response.Redirect(Request.UrlReferrer.AbsoluteUri);
@@ -815,9 +815,9 @@ namespace WebApplication.Controllers
         public void UpRecallMessage(int id)
         {
             var curId = this.User.Identity.GetUserId();
-            var user = db.Users.Find(curId);
+            var user = _db.Users.Find(curId);
 
-            var com = db.RecallMessages.Find(id);
+            var com = _db.RecallMessages.Find(id);
 
             if (!user.UpRecalls.Where(x => x.Id == id).Any())
             {
@@ -826,9 +826,9 @@ namespace WebApplication.Controllers
                 user.UpRecalls.Add(com);
                 user.DownRecalls.Remove(com);
 
-                db.Entry(user).State = EntityState.Modified; ;
-                db.Entry(com).State = EntityState.Modified;
-                db.SaveChanges();
+                _db.Entry(user).State = EntityState.Modified; ;
+                _db.Entry(com).State = EntityState.Modified;
+                _db.SaveChanges();
 
             }
 
@@ -838,9 +838,9 @@ namespace WebApplication.Controllers
         public void DownRecallMessage(int id)
         {
             var curId = this.User.Identity.GetUserId();
-            var user = db.Users.Find(curId);
+            var user = _db.Users.Find(curId);
 
-            var com = db.RecallMessages.Find(id);
+            var com = _db.RecallMessages.Find(id);
 
             if (!user.DownRecalls.Where(x => x.Id == id).Any())
             {
@@ -849,15 +849,28 @@ namespace WebApplication.Controllers
                 user.DownRecalls.Add(com);
                 user.UpRecalls.Remove(com);
 
-                db.Entry(user).State = EntityState.Modified; ;
-                db.Entry(com).State = EntityState.Modified;
-                db.SaveChanges();
+                _db.Entry(user).State = EntityState.Modified; ;
+                _db.Entry(com).State = EntityState.Modified;
+                _db.SaveChanges();
 
             }
 
             Response.Redirect(Request.UrlReferrer.AbsoluteUri);
         }
-        
+
+
+        [AllowAnonymous]
+        public ActionResult UserDetailsModal(string id)
+        {
+            ApplicationUser executor = _db.Users.First(m => m.Id == id);
+
+            if (executor != null)
+            {
+                return PartialView("_UserDetailsModal", executor);
+            }
+            return View("Index");
+        }
+
     }
 }
 

@@ -5,18 +5,16 @@ namespace WebApplication.Models
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    public class Request
+    public class Request : BaseModel.BaseModel
     {
-        [Key]
-        [Display(Name = "ID")]
-        public virtual int Id { get; set; }
-        
         [Display(Name = "Название")]
         [Required(ErrorMessage = "Обязательно для заполнения!")]
+        [MaxLength(50, ErrorMessage = "Превышена максимальная длина записи(50 символов)")]
         public virtual string Name { get; set; }
 
         [Display(Name = "Описание/Пожелания")]
         [Required(ErrorMessage = "Обязательно для заполнения!")]
+        [MaxLength(200, ErrorMessage = "Превышена максимальная длина записи(200 символов)")]
         public virtual string Description { get; set; }
         
         [Display(Name = "Файл")]

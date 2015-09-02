@@ -5,13 +5,10 @@ namespace WebApplication.Models
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public class RequestSolution
+    public class RequestSolution: BaseModel.BaseModel
     {
-        [Key]
-        [Display(Name = "ID решения задачи")]
-        public virtual int Id { get; set; }
-        
         [Display(Name = "Название")]
+        [MaxLength(50, ErrorMessage = "Превышена максимальная длина записи(50 символов)")]
         public virtual string Name { get; set; }
 
         [Display(Name = "ID заявки")]
@@ -32,10 +29,7 @@ namespace WebApplication.Models
 
         [Display(Name = "ID Автора")]
         public virtual string AuthorId { get; set; }
-
-        [Display(Name = "Дата выполнения")]
-        public virtual DateTime Date { get; set; }
-
+        
         [Display(Name = "Комментарии")]
         public virtual string Comment { get; set; }
     }

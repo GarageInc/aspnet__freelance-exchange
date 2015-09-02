@@ -95,7 +95,7 @@
                 requestSolution.Author = user;
                 requestSolution.AuthorId = user.Id;
                 
-                requestSolution.Date = DateTime.Now;
+                requestSolution.CreateDateTime = DateTime.Now;
 
                 req.CanDownload = true;
                 db.Entry(req).State = EntityState.Modified;

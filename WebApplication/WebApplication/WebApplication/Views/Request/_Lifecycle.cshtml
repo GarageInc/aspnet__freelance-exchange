@@ -10,12 +10,39 @@
     </div>
     <div class="modal-body">
         <dl class="dl-horizontal">
-            <p><b>Заявка № @Html.DisplayFor(m => m.Id)</b></p>
-            <p>Открыта:  @Html.DisplayFor(m => m.Opened)</p>
-            <p>Распределена:  @Html.DisplayFor(m => m.Distributed)</p>
-            <p>В процессе:  @Html.DisplayFor(m => m.Proccesing)</p>
-            <p>На проверке:  @Html.DisplayFor(m => m.Checking)</p>
-            <p>Закрыта:  @Html.DisplayFor(m => m.Closed)</p>
+            <p>
+                <b>
+                    Заявка № @Html.DisplayFor(m => m.Id)
+                </b>
+            </p>
+            <p>
+                <b>
+                    Открыта:
+                </b>
+                    @Html.DisplayFor(m => m.Opened)
+            </p>
+            <p>
+                <b>
+                    Распределена:
+                </b> 
+                @Html.DisplayFor(m => m.Distributed)
+            </p>
+            <p>
+                <b>
+                    В процессе:
+                </b>
+                 @Html.DisplayFor(m => m.Proccesing)
+            </p>
+            <p>
+                <b>
+                    На проверке:
+                </b> 
+                @Html.DisplayFor(m => m.Checking)
+            </p>
+            <p>
+                <b>Закрыта:</b>
+                @Html.DisplayFor(m => m.Closed)
+            </p>
         </dl>
     </div>
 </div>

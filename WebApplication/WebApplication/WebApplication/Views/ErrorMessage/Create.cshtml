@@ -4,7 +4,7 @@
     ViewBag.Title = "Создание новой заявки об ошибке";
 }
 
-<h2>Создание новой заявки об ошибке</h2>
+<h3>Создание новой заявки об ошибке</h3>
 
 
 @using (Html.BeginForm("Create", "ErrorMessage", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
@@ -12,28 +12,33 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
         <div class="form-group">
             @Html.LabelFor(model => model.Text, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            <div class="col-md-4">
                 @Html.TextArea("Text", new { @class = "form-control", id = "Text" })
-            </div>                
+            </div>  
+            <text align="justify" class="col-md-6">
+                Текст сообщения об ошибке. Что сломалось или что именно не нравится в проекте?
+            </text>              
         </div>
 
         <div class="form-group">
             @Html.Label("Приложенный файл?", new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                <input type="file" class="form-control" id="error" name="error" value="Сохранить файл" />
+            <div class="col-md-4">
+                <input type="file" class="form-control" id="error" name="error" value="Сохранить файл"/>
             </div>
+            <text align="justify" class="col-md-6">
+                Если есть что приложить - прикладывай. Будь хоть скрин, хоть участок неправильно работающего кода
+            </text>
         </div>
         <br />
 
         <div class="form-group">
             @Html.Label("Подтвердить отправку?", new { @class = "col-md-2 control-label" })
 
-            <div class="col-md-10">
+            <div class="col-md-4">
                 <input class="buttonS" type="submit" value="Сохранить" width="100" />
             </div>
         </div>
@@ -41,7 +46,7 @@
 }
 
 <div>
-    @Html.ActionLink("Назад к списку", "Index","ErrorMessage", new { @class="buttonB"})
+    @Html.ActionLink("Назад к списку", "Index","ErrorMessage", new { @class="buttonb"})
 </div>
 
 @section Scripts {

@@ -1569,12 +1569,12 @@
     <Content Include="Views\Service\AddRole.cshtml" />
     <Content Include="Views\Request\MyIndex.cshtml" />
     <Content Include="Views\Request\_Details.cshtml" />
-    <Content Include="Views\Request\_Executor.cshtml" />
+    <Content Include="Views\Account\_UserDetailsModal.cshtml" />
     <Content Include="Views\Request\_Lifecycle.cshtml" />
     <Content Include="Views\Request\Distribute.cshtml" />
     <Content Include="Views\Request\ChangeStatus.cshtml" />
     <Content Include="Views\ErrorMessage\Create.cshtml" />
-    <Content Include="Views\ErrorMessage\Details.cshtml" />
+    <Content Include="Views\ErrorMessage\_Details.cshtml" />
     <Content Include="Views\ErrorMessage\Index.cshtml" />
     <Content Include="Views\Account\Create.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
