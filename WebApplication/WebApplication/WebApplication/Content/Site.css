@@ -303,8 +303,8 @@ Generic Styling, for Desktops/Laptops
 */
 table { 
   width: 100%; 
-  border-collapse: collapse; 
-  font-size: 12px
+  border-collapse: collapse;
+    font-size: 12px;
 }
 tr:nth-of-type(odd) { 
   background: #dbfad9; 
@@ -318,6 +318,7 @@ td, th {
   padding: 6px; 
   border: 1px solid #ccc; 
   text-align: left; 
+  text-align: center;
 }
 
 @media 

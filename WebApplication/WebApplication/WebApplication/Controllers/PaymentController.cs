@@ -1,5 +1,4 @@
-﻿
-namespace WebApplication.Controllers
+﻿namespace WebApplication.Controllers
 {
     using System;
     using System.Data.Entity;
@@ -10,14 +9,19 @@ namespace WebApplication.Controllers
     using System.Web.Mvc;
     using WebApplication.Models;
     using Microsoft.AspNet.Identity;
+    using WebApplication.Service;
+
+    [Authorize]
     public class PaymentController : Controller
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
+        private readonly DocumentService _docService = new DocumentService();
 
         // GET: Payment
         public async Task<ActionResult> Index()
         {
             var payments = _db.Payments
+                .Where(p=>p.IsDeleted==false)
                 .Include(p => p.Author)
                 .Include(p => p.Document)
                 .Include(p => p.Req)
@@ -31,17 +35,18 @@ namespace WebApplication.Controllers
             var curId = this.User.Identity.GetUserId();
 
             var payments = _db.Payments
+                .Where(p => p.IsDeleted == false)
+                .Where(p => p.Author.Id == curId)
                 .Include(p => p.Author)
                 .Include(p => p.Document)
                 .Include(p => p.Req)
-                .Include(p => p.ReqSolution)
-                .Where(p=>p.Author.Id==curId);
+                .Include(p => p.ReqSolution);
 
             return View(await payments.ToListAsync());
         }
 
         // GET: Payment/Details/5
-        public async Task<ActionResult> MyDetails(int? id)
+        public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -59,8 +64,14 @@ namespace WebApplication.Controllers
         public ActionResult Create()
         {
             var curId = this.User.Identity.GetUserId();
+
             ViewBag.AuthorId = new SelectList(_db.Users, "Id", "Name");
-            ViewBag.Requests = new SelectList(_db.Requests.Where(x=>x.Author.Id==curId).Where(x=>x.IsPaid==false), "Id", "Id");
+            ViewBag.Requests = new SelectList(_db.Requests
+                .Where(x=>x.Author.Id==curId)
+                .Where(x=>x.IsPaid==false)
+                .Where(x=>x.IsDeleted==false)
+                , "Id", "Id");
+
             return View();
         }
 
@@ -79,17 +90,7 @@ namespace WebApplication.Controllers
                 var user = _db.Users.Find(curId);
                 if (error != null)
                 {
-                    Document doc = new Document {Size = error.ContentLength};
-                    // Получаем расширение
-                    var ext = error.FileName.Substring(error.FileName.LastIndexOf('.'));
-                    doc.Type = ext;
-                    // сохраняем файл по определенному пути на сервере
-                    var path = current.ToString(user.Id.GetHashCode() + "dd/MM/yyyy H:mm:ss").Replace(":", "_").Replace("/", ".") + ext;
-                    error.SaveAs(Server.MapPath("~/Files/PaymentFiles/" + path));
-                    doc.Url = path;
-
-                    payment.Document = doc;
-                    _db.Documents.Add(doc);
+                    payment.Document = _docService.CreateDocument(Server.MapPath("~/Files/PaymentFiles/"), error);
                 }
                 else
                     payment.Document = null;
@@ -99,21 +100,26 @@ namespace WebApplication.Controllers
                 payment.Req = req;
                 payment.Author = user;
                 payment.AuthorId = user.Id;
-
+                payment.IsDeleted = false;
+                payment.CreateDateTime = current;
                 payment.Checked = false;
 
                 payment.ReqSolution = null;
                 payment.ReqSolutionId = null;
 
                 _db.Payments.Add(payment);
-                _db.Entry(req).State = EntityState.Modified;
 
                 await _db.SaveChangesAsync();
                 return RedirectToAction("MyIndex");
             }
             
             ViewBag.AuthorId = new SelectList(_db.Users, "Id", "Name");
-            ViewBag.Requests = new SelectList(_db.Requests.Where(x => x.Author.Id == curId).Where(x => x.IsPaid == false), "Id", "Id");
+            ViewBag.Requests = new SelectList(_db.Requests
+                .Where(x => x.Author.Id == curId)
+                .Where(x => x.IsPaid == false)
+                .Where(x => x.IsDeleted == false)
+                , "Id", "Id");
+
             return View(payment);
         }
         
@@ -122,7 +128,7 @@ namespace WebApplication.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<ActionResult> MyEdit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -136,7 +142,12 @@ namespace WebApplication.Controllers
 
             var curId = this.User.Identity.GetUserId();
             ViewBag.AuthorId = new SelectList(_db.Users, "Id", "Name");
-            ViewBag.Requests = new SelectList(_db.Requests.Where(x => x.Author.Id == curId).Where(x => x.IsPaid == false), "Id", "Id");
+            ViewBag.Requests = new SelectList(_db.Requests
+                .Where(x=>x.IsDeleted==false)
+                .Where(x => x.Author.Id == curId)
+                .Where(x => x.IsPaid == false)
+                , "Id", "Id");
+
             return View(payment);
         }
         
@@ -144,25 +155,14 @@ namespace WebApplication.Controllers
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> MyEdit([Bind(Include = "Id,Description,Price")] Payment payment, HttpPostedFileBase error)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Description,Price")] Payment payment, HttpPostedFileBase error)
         {
             if (ModelState.IsValid)
             {
                 var pay = _db.Payments.Find(payment.Id);
                 if (error != null)
                 {
-                    Document doc = new Document();
-                    doc.Size = error.ContentLength;
-                    // Получаем расширение
-                    string ext = error.FileName.Substring(error.FileName.LastIndexOf('.'));
-                    doc.Type = ext;
-                    // сохраняем файл по определенному пути на сервере
-                    string path = DateTime.Now.ToString(this.User.Identity.GetUserId().GetHashCode() + "dd/MM/yyyy H:mm:ss").Replace(":", "_").Replace("/", ".") + ext;
-                    error.SaveAs(Server.MapPath("~/Files/PaymentFiles/" + path));
-                    doc.Url = path;
-
-                    pay.Document = doc;
-                    _db.Documents.Add(doc);
+                    pay.Document = _docService.CreateDocument(Server.MapPath("~/Files/PaymentFiles/"), error);
                 }
 
                 pay.Description = payment.Description;
@@ -175,35 +175,57 @@ namespace WebApplication.Controllers
 
             var curId = this.User.Identity.GetUserId();
             ViewBag.AuthorId = new SelectList(_db.Users, "Id", "Name");
-            ViewBag.Requests = new SelectList(_db.Requests.Where(x => x.Author.Id == curId).Where(x => x.IsPaid == false), "Id", "Id");
+            ViewBag.Requests = new SelectList(_db.Requests
+                .Where(x => x.IsDeleted == false)
+                .Where(x => x.Author.Id == curId)
+                .Where(x => x.IsPaid == false)
+                , "Id", "Id");
             return View(payment);
         }
 
-        // GET: Payment/Delete/5
-        public async Task<ActionResult> MyDelete(int? id)
+        // Удаление заявки
+        [HttpGet]
+        public ActionResult Delete(int id)
         {
-            if (id == null)
+            Payment payment = _db.Payments
+                .Where(x => x.Id == id)
+                .Include(x=>x.Req)
+                .First();
+
+            if (payment != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return PartialView("_Delete", payment);
             }
-            Payment payment = await _db.Payments.FindAsync(id);
-            if (payment == null)
-            {
-                return HttpNotFound();
-            }
-            return View(payment);
+            return View("Index");
         }
 
-        // POST: Payment/Delete/5
-        [HttpPost, ActionName("MyDelete")]
+
+        // Удаление заявки
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> MyDeleteConfirmed(int id)
+        public void DeleteConfirmed(int id)
         {
-            Payment payment = await _db.Payments.FindAsync(id);
-            _db.Payments.Remove(payment);
-            await _db.SaveChangesAsync();
-            return RedirectToAction("MyIndex");
+            Payment payment = _db.Payments.Find(id);
+            var curId = HttpContext.User.Identity.GetUserId();
+            // получаем текущего пользователя
+            ApplicationUser user = _db.Users.First(m => m.Id == curId);
+            if (payment != null && payment.Author.Id == user.Id)
+            {
+                // Изменим сразу же и заявку, за которую отвечает оплата
+                var request = _db.Requests.Find(payment.ReqId);
+                request.IsPaid = false;
+                request.CanDownload = false;
+
+                payment.IsDeleted = true;
+
+                _db.Entry(request).State = EntityState.Modified;
+                _db.Entry(payment).State = EntityState.Modified;
+
+                _db.SaveChanges();
+            }
+            Response.Redirect(Request.UrlReferrer.AbsoluteUri);
         }
+
 
         protected override void Dispose(bool disposing)
         {
@@ -235,16 +257,19 @@ namespace WebApplication.Controllers
             Payment pay = _db.Payments.Find(paymentId);
             if (pay != null)
             {
+                // Найдем заявку, которую регулирует эта оплата
                 var req = _db.Requests.Find(pay.Req.Id);
                 switch (status)
                 {
                     case 0:
                         pay.Checked = false;
+
                         req.IsPaid = false;
                         req.CanDownload = false;
                         break;
                     case 1:
                         pay.Checked = true;
+
                         req.IsPaid = true;
                         req.CanDownload = true;
                         break;

@@ -1,10 +1,16 @@
-﻿@model IEnumerable<WebApplication.Models.Payment>
+﻿@using Microsoft.AspNet.Identity
+@model IEnumerable<WebApplication.Models.Payment>
 
 @{
     ViewBag.Title = "Мои оплаты";
+    var userId = this.User.Identity.GetUserId();
 }
 
-<h2>Мои оплаты</h2>
+<div class="modal fade" id="modDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="dialogContent" class="modal-dialog"></div>
+</div>
+
+<h3>Мои оплаты</h3>
 
 <p>
     @Html.ActionLink("Новая оплата", "Create", "Payment", new { @class = "buttonB" })
@@ -38,6 +44,7 @@
            data-show-multi-sort="true">
             <thead>
             <tr>
+                <th></th>
                 <th>
                     @Html.DisplayNameFor(model => model.Id)
                 </th>
@@ -66,6 +73,7 @@
                 @foreach (var item in Model)
                 {
                     <tr>
+                        <td></td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Id)
                         </td>
@@ -75,11 +83,11 @@
                         <td>
                             @if (item.Document != null)
                             {
-                                <a href="/Document/DownloadPaymentFiles/@item.Document.Id"><img src="../../Content/pictures/filey.png" alt='@item.Document.Url' class="tdImage" title="Скачать файл" /></a>
+                                <a href="/Document/DownloadPaymentFiles/@item.Document.Id"><img src="../../Content/pictures/filey.png" alt='@item.Document.Url' class="tdImage" title="Скачать файл"/></a>
                             }
                             else
                             {
-                                <img src="../../Content/pictures/filen.png" alt="без файла изображения" class="tdImage" title="Файл не приложен" />
+                                <img src="../../Content/pictures/filen.png" alt="без файла изображения" class="tdImage" title="Файл не приложен"/>
                             }
                         </td>
                         <td>
@@ -95,8 +103,13 @@
                             @Html.DisplayFor(modelItem => item.Price)
                         </td>
                         <td>
-                            @Html.ActionLink("Редактировать", "MyEdit", new { id = item.Id }) |
-                            @Html.ActionLink("Удалить", "MyDelete", new { id = item.Id })
+                            @if (userId == item.AuthorId)
+                            {
+                                <a class="compItem" href='@Url.Action("Delete", "Payment", new {id = item.Id})'>
+                                    <img src="../../Content/pictures/delete.png" class="tdImage" title="Удаление заявки" />
+                                </a>
+                                @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { @class = "buttonb" })
+                            }
                         </td>
                     </tr>
                 }
@@ -125,4 +138,18 @@
     @Scripts.Render("~/bundles/bootstrap-table-master/17")
     @Scripts.Render("~/bundles/bootstrap-table-master/18")
     @Scripts.Render("~/bundles/bootstrap-table-master/19")
+    <script type="text/javascript">
+        // Модальное окно снизу справа
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".compItem").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
+            });
+        });
+</script>
 }

@@ -96,7 +96,7 @@
             @Html.DisplayNameFor(modelItem => item.Author)
         </dt>
         <dd>
-            <a class="compItem" href='@Url.Action("Author", "Request", new {id = item.AuthorId}, null)'>
+            <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = item.AuthorId}, null)'>
                 @item.Author.Name
             </a>
         </dd>
@@ -107,7 +107,7 @@
         <dd>
             @if (item.Executor != null)
             {
-                <a class="compItem" href='@Url.Action("Executor", "Request", new { id = item.ExecutorId }, null)'>
+                <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new { id = item.ExecutorId }, null)'>
                     @item.Executor.Name
                 </a>
             }

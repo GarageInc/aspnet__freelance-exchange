@@ -116,7 +116,7 @@
                 </td>
 
                 <td>
-                    @ApplicationUserDTO.GetUserRole(item.Id)
+                    @ApplicationUserService.GetUserRole(item.Id)
                 </td>
                 <td>
                     @if (HttpContext.Current.User.IsInRole("Administrator"))

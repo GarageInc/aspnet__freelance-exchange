@@ -23,55 +23,6 @@ namespace WebApplication.Migrations
             rm.Create(new IdentityRole("Administrator"));
             rm.Create(new IdentityRole("Moderator"));
             rm.Create(new IdentityRole("User"));
-
-            ApplicationDbContext db = new ApplicationDbContext();
-            
-            db.Categories.Add(new Category{Name = "Сайт / программа"});
-            db.Categories.Add(new Category{ Name = "Домашние задачи" });
-            db.Categories.Add(new Category{ Name = "Контрольная" });
-            db.Categories.Add(new Category{ Name = "Реферат" });
-            db.Categories.Add(new Category{ Name = "Эссе" });
-            db.Categories.Add(new Category{ Name = "Перевод" });
-            db.Categories.Add(new Category{ Name = "Чертежи" });
-            db.Categories.Add(new Category{ Name = "Отчет по практике" });
-            db.Categories.Add(new Category{ Name = "ДИПЛОМ" });
-            db.Categories.Add(new Category{ Name = "КУРСОВАЯ РАБОТА" });
-            db.Categories.Add(new Category{ Name = "Доработка" });
-            db.Categories.Add(new Category{ Name = "Другое" });
-            db.Categories.Add(new Category{ Name = "АНТИПЛАГИАТ" });
-            
-            db.Subjects.Add(new Subject { Name = "ПРОГРАММИРОВАНИЕ" });
-            db.Subjects.Add(new Subject { Name = "Математика" });
-            db.Subjects.Add(new Subject { Name = "Экономика" });
-            db.Subjects.Add(new Subject { Name = "Бухучет" });
-            db.Subjects.Add(new Subject { Name = "Химия" });
-            db.Subjects.Add(new Subject { Name = "Физика" });
-            db.Subjects.Add(new Subject { Name = "Чертежи" });
-            db.Subjects.Add(new Subject { Name = "Право" });
-            db.Subjects.Add(new Subject { Name = "Сопромат" });
-            db.Subjects.Add(new Subject { Name = "Иностранный язык" });
-            db.Subjects.Add(new Subject { Name = "Гидравлика" });
-            db.Subjects.Add(new Subject { Name = "Электротехника" });
-            db.Subjects.Add(new Subject { Name = "Филология / Журналистика" });
-            db.Subjects.Add(new Subject { Name = "История / Политология / Культурология" });
-            db.Subjects.Add(new Subject { Name = "Психология / Педагогика / Логопедия" });
-            db.Subjects.Add(new Subject { Name = "Геология / Горно-нефтяное дело" });
-            db.Subjects.Add(new Subject { Name = "Автодорожное" });
-            db.Subjects.Add(new Subject { Name = "Философия / КСЕ" });
-            db.Subjects.Add(new Subject { Name = "Социология" });
-            db.Subjects.Add(new Subject { Name = "Биология / Экология" });
-            db.Subjects.Add(new Subject { Name = "Медицина" });
-            db.Subjects.Add(new Subject { Name = "БЖД" });
-            db.Subjects.Add(new Subject { Name = "География" });
-            db.Subjects.Add(new Subject { Name = "Другое" });
-            db.Subjects.Add(new Subject { Name = "Повышение оригинальности" });
-            
-            db.PropsCategories.Add(new PropsCategory { Name = "Карта Сбербанка'", Info = "Желательно указать так же срок действия карты и владельца, бывает, что это спрашивается на кассе при пополнении" });
-            db.PropsCategories.Add(new PropsCategory { Name = "Номер телефона", Info = "Желательно указать оператор и лучше использовать при суммах менее 200р" });
-            db.PropsCategories.Add(new PropsCategory { Name = "QIWI Кошелек", Info = "Желательно использовать при суммах менее 200р" });
-
-            db.SaveChanges();
-
         }
     }
 }

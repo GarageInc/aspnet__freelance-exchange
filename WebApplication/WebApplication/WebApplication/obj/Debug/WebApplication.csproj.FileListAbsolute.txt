@@ -308,5 +308,9 @@ F:\GarageInc\WebApplication\WebApplication\WebApplication\bin\ru\Microsoft.Owin.
 F:\GarageInc\WebApplication\WebApplication\WebApplication\obj\Debug\WebApplication.csprojResolveAssemblyReference.cache
 F:\GarageInc\WebApplication\WebApplication\WebApplication\obj\Debug\WebApplication.dll
 F:\GarageInc\WebApplication\WebApplication\WebApplication\obj\Debug\WebApplication.pdb
+F:\GarageInc\WebApplication\WebApplication\WebApplication\bin\ru\EntityFramework.resources.dll
+F:\GarageInc\WebApplication\WebApplication\WebApplication\bin\ru\EntityFramework.SqlServer.resources.dll
 F:\GarageInc\WebApplication\WebApplication\WebApplication\obj\Debug\WebApplication.Migrations.Initial.resources
 F:\GarageInc\WebApplication\WebApplication\WebApplication\obj\Debug\WebApplication.csproj.GenerateResource.Cache
+F:\GarageInc\WebApplication\WebApplication\WebApplication\obj\Debug\WebApplication.Migrations.Initial1.resources
+F:\GarageInc\WebApplication\WebApplication\WebApplication\obj\Debug\WebApplication.Migrations.Initial2.resources

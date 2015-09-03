@@ -12,7 +12,6 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
         <div class="form-group">
@@ -25,6 +24,7 @@
                 Лучше всего - написать название той задачи, решение которой загружаете
             </text>
         </div>
+        <hr />
         
         <div class="form-group">
             @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -36,6 +36,7 @@
                 Напишите свой комментарий/совет к разбору решения. Ведь заказчику ещё нужно будет в нем разобраться.
             </text>
         </div>
+        <hr />
         
         <div class="form-group">
             @Html.LabelFor(model => model.Req, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -46,6 +47,7 @@
                 Выберите ID той задачи, решение которой загружаете
             </text>
         </div>
+        <hr />
 
         <div class="form-group">
             @Html.Label("Файл(решение)", new { @class = "col-md-2 control-label" })
@@ -58,6 +60,7 @@
                 Важно! Перевод за решение произойдет через некоторое время(от 1 до 3х дней), после того как администрация проверит его и заказчик удостоверится в правильности 
             </text>
         </div>
+        <hr />
 
         @if ((ViewBag.Requests as SelectList).Any())
         {

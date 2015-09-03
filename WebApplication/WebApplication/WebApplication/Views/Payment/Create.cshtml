@@ -4,7 +4,7 @@
     ViewBag.Title = "Создать оплату за задачу";
 }
 
-<h2>Создать оплату за задачу</h2>
+<h3>Создать оплату за задачу</h3>
 
 
 @using (Html.BeginForm("Create", "Payment", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
@@ -17,40 +17,61 @@
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
             <div class="form-group">
-                @Html.LabelFor(model => model.Req, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.ReqId, ViewBag.Requests as SelectList, new { @class = "form-control" })
+                @Html.LabelFor(model => model.Req, htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.ReqId, ViewBag.Requests as SelectList, new {@class = "form-control"})
                 </div>
+                <text align="justify" class="col-md-6">
+                    Выберите среди своих задач то, за которое вносится оплата.
+                    <br/>
+                    Администрация проверит транзакцию и разрешит Вам скачать решение.
+                </text>
             </div>
+            <hr/>
 
             <div class="form-group">
                 @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
+                <div class="col-md-4">
                     @Html.TextAreaFor(model => model.Description, 3, 100, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                 </div>
+                <text align="justify" class="col-md-6">
+                    Если хотите - напишите свой комментарий(последние 4 номера карты-счета для сравнения, допустим).
+                </text>
             </div>
+            <hr />
 
             <div class="form-group">
                 @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
+                <div class="col-md-4">
                     @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
                 </div>
+                <text align="justify" class="col-md-6">
+                    Вносимая стоимость. Учтите, что если Вы внесли меньше стоимости выбранной заявки - то вся внесенная сумма перейдет на Ваш баланс. 
+                    Если же Вы вносите сумму больше стоимости выбранной заявки, то опять же - остаток перейдет на Ваш счет.
+                    <br/>
+                    Важно! Всё это происходит после проверки транзакции администрацией.
+                </text>
             </div>
+            <hr />
 
             <div class="form-group">
                 @Html.Label("Файл(чек, фото и тп)?", new { @class = "col-md-2 control-label" })
-                <div class="col-md-10">
-                    <input type="file" class="form-control" id="error" name="error" value="Сохранить файл" />
+                <div class="col-md-4">
+                    <input type="file" class="form-control" id="error" name="error" value="Сохранить файл"/>
                 </div>
+                <text align="justify" class="col-md-6">
+                    Приложите фото чека-перевода, чтобы быстрее произошла транзация. Рекомендуем всё же приложить какой-нибудь файл-подтверждение
+                </text>
             </div>
+            <hr />
             @if ((ViewBag.Requests as SelectList).Count() > 0)
             {
                 <div class="form-group">
                     @Html.Label("Подтвердить отправку?", new { @class = "col-md-2 control-label" })
 
-                    <div class="col-md-10">
+                    <div class="col-md-4">
                         <input class="buttonS" type="submit" value="Подтвердить сохранение" width="100" />
                     </div>
                 </div>
@@ -60,7 +81,7 @@
                 <div class="form-group">
                     @Html.Label("Подтвердить отправку?", new { @class = "col-md-2 control-label" })
 
-                    <div class="col-md-10">
+                    <div class="col-md-4">
                         <input class="buttonS" disabled type="submit" value="Нет активных задач" width="100" />
                     </div>
                 </div>

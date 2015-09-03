@@ -1,8 +1,10 @@
 ﻿@model IEnumerable<Request>
+@using Microsoft.AspNet.Identity
 @using WebApplication.Models
 
 @{
     ViewBag.Title = "Список моих задач-заявок";
+    var userId = this.User.Identity.GetUserId();
 }
 <div class="modal fade" id="modDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div id="dialogContent" class="modal-dialog"></div>
@@ -188,7 +190,7 @@
                     else
                     {
                         <h5>Список желающих пуст</h5>
-                        <h6>Это значит, что за задачу примется администрация или же назначит их в скорейшем времени</h6>
+                        <h6>Это значит, что за задачу примется администрация или же назначит исполнителя в скорейшем времени</h6>
                     }
                 </td>
                 <td>

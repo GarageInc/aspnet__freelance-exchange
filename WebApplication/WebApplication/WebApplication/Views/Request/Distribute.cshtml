@@ -14,7 +14,7 @@
 <div>
     <form method="post" action="/Request/Distribute">
         <label>Предмет</label>
-        @Html.DropDownList("categories", ViewBag.Categories as SelectList)
+        @Html.DropDownList("category", ViewBag.Categories as SelectList)
         <input type="submit" value="Фильтр" class="buttonb" />
     </form>
 </div>
@@ -48,6 +48,7 @@
        data-show-multi-sort="true">
     <thead>
     <tr>
+        <th></th>
         <th>
             @Html.DisplayNameFor(model => model.Id)
         </th>
@@ -84,12 +85,13 @@
         <th>
             @Html.DisplayNameFor(model => model.Checked)
         </th>
+
         <th>
 
         </th>
 
         <th>
-            Исполнитель 
+            Исполнитель
         </th>
         <th>
             Исполнитель из общего списка
@@ -106,42 +108,43 @@
         @foreach (var item in Model)
         {
             <tr>
+                <td></td>
                 <td><b>@item.Id</b></td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Category.Name)
                 </td>
                 <td>
-                    @if (item.Status == (int)RequestStatus.Open)
+                    @if (item.Status == (int) RequestStatus.Open)
                     {
                         <span class="label label-success">Открыта</span>
                     }
-                    else if (item.Status == (int)RequestStatus.Distributed)
+                    else if (item.Status == (int) RequestStatus.Distributed)
                     {
                         <span class="label label-warning">Распределена</span>
                     }
-                    else if (item.Status == (int)RequestStatus.Proccesing)
+                    else if (item.Status == (int) RequestStatus.Proccesing)
                     {
                         <span class="label label-important">На решении</span>
                     }
-                    else if (item.Status == (int)RequestStatus.Closed)
+                    else if (item.Status == (int) RequestStatus.Closed)
                     {
                         <span class="label label-inverse">Закрыта</span>
                     }
                 </td>
                 <td>
-                    @if (item.Priority == (int)RequestPriority.Low)
+                    @if (item.Priority == (int) RequestPriority.Low)
                     {
                         <span class="badge badge-low">Низкий</span>
                     }
-                    else if (item.Priority == (int)RequestPriority.Medium)
+                    else if (item.Priority == (int) RequestPriority.Medium)
                     {
                         <span class="badge badge-medium">Средний</span>
                     }
-                    else if (item.Priority == (int)RequestPriority.High)
+                    else if (item.Priority == (int) RequestPriority.High)
                     {
                         <span class="badge badge-high">Высокий</span>
                     }
-                    else if (item.Priority == (int)RequestPriority.Critical)
+                    else if (item.Priority == (int) RequestPriority.Critical)
                     {
                         <span class="badge badge-critical">Критичный</span>
                     }
@@ -149,25 +152,25 @@
                 <td>
                     @if (item.Document != null)
                     {
-                        <a href="/Document/DownloadRequestFile/@item.Document.Id"><img src="../../Content/pictures/filey.png" alt='@item.Document.Url' class="tdImage" title="Скачать файл" /></a>
+                        <a href="/Document/DownloadRequestFile/@item.Document.Id"><img src="../../Content/pictures/filey.png" alt='@item.Document.Url' class="tdImage" title="Скачать файл"/></a>
                     }
                     else
                     {
-                        <img src="../../Content/pictures/filen.png" alt="без файла изображения" class="tdImage" title="Файл не приложен" />
+                        <img src="../../Content/pictures/filen.png" alt="без файла изображения" class="tdImage" title="Файл не приложен"/>
                     }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Deadline)
                 </td>
                 <td>
-                        <a class="compItem" href='@Url.Action("Details", "Request", new {id = item.Id}, null)'>
-                            <img src="../../Content/pictures/info.png" class="tdImage" title="Детали заявки" />
-                        </a>
+                    <a class="compItem" href='@Url.Action("Details", "Request", new {id = item.Id}, null)'>
+                        <img src="../../Content/pictures/info.png" class="tdImage" title="Детали заявки"/>
+                    </a>
                 </td>
                 <td>
-                        <a class="compItem" href='@Url.Action("Author", "Request", new {id = item.AuthorId}, null)'>
-                            <img src="../../Content/pictures/author.png" class="tdImage" title="Автор заявки" />
-                        </a>
+                    <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = item.AuthorId}, null)'>
+                        <img src="../../Content/pictures/author.png" class="tdImage" title="Автор заявки"/>
+                    </a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)
@@ -183,9 +186,9 @@
                     }
                 </td>
                 <td>
-                        <a class="compItem" href='@Url.Action("Lifecycle", "Request", new {id = item.LifecycleId}, null)'>
-                            <img src="../../Content/pictures/lifecycle.png" class="tdImage" title="Жизненный цикл заявки" />
-                        </a>
+                    <a class="compItem" href='@Url.Action("Lifecycle", "Request", new {id = item.LifecycleId}, null)'>
+                        <img src="../../Content/pictures/lifecycle.png" class="tdImage" title="Жизненный цикл заявки"/>
+                    </a>
                 </td>
                 <td>
                     @if (item.Checked)
@@ -202,62 +205,76 @@
                     {
                         @Html.Hidden("requestId", item.Id)
                         @Html.DropDownList("status",
-                                                    new[]
-                                                    {
-                                                        new SelectListItem() {Text = "Не проверено", Value = "0"},
-                                                        new SelectListItem() {Text = "Проверено", Value = "1"}
-                                                    })
+                            new[]
+                            {
+                                new SelectListItem() {Text = "Не проверено", Value = "0"},
+                                new SelectListItem() {Text = "Проверено", Value = "1"}
+                            })
 
-                        <input type="submit" value="Изменить" class="buttons" />
+                        <input type="submit" value="Изменить" class="buttons"/>
                     }
                 </td>
                 <td>
-                        @if (item.Executor != null)
+                    @if (item.Executor != null)
+                    {
+                        <a class="compItem" href='@Url.Action("Executor", "Request", new {id = item.ExecutorId}, null)'>
+                            @item.Executor.Name
+                            <img src="../../Content/pictures/executor.png" class="tdImage" title="Исполнитель заявки"/>
+                        </a>
+                    }
+                    else
+                    {
+                        <h6>Исполнитель не установлен</h6>
+                    }
+                </td>
+                <td>
+                    @if (item.Checked)
+                    {
+                        if ((ViewBag.Executors as SelectList).Count() > 0)
                         {
-                            <a class="compItem" href='@Url.Action("Executor", "Request", new {id = item.ExecutorId}, null)'>
-                                @item.Executor.Name
-                                <img src="../../Content/pictures/executor.png" class="tdImage" title="Исполнитель заявки" />
-                            </a>
+                            using (Html.BeginForm("DistributeRequest", "Request", "POST"))
+                            {
+                                @Html.Hidden("requestId", item.Id)
+                                @Html.DropDownList("executorId", ViewBag.Executors as SelectList)
+                                <br>
+                                <input type="submit" value="Назначить" class="buttonb"/>
+                            }
                         }
                         else
                         {
-                            <h6>Исполнитель не установлен</h6>
-                        }
-                </td>
-                <td>
-                    @if ((ViewBag.Executors as SelectList).Count() > 0)
-                    {
-                        using (Html.BeginForm("Distribute", "Request", "POST"))
-                        {
-                            @Html.Hidden("requestId", item.Id)
-                            @Html.DropDownList("executorId", ViewBag.Executors as SelectList)
-                            <br>
-                            <input type="submit" value="Назначить" class="buttonb"/>
+                            <h5>В БД отсутствуют исполнители</h5>
                         }
                     }
                     else
                     {
-                        <h5>В БД отсутствуют исполнители</h5>
+                        <text>НЕ ПРОВЕРЕНО</text>
                     }
                 </td>
                 <td>
-                    @if ((item.Solvers).Any())
+                    @if (item.Checked)
                     {
-                        using (Html.BeginForm("Distribute", "Request", "POST"))
+                        if ((item.Solvers).Any())
                         {
-                            @Html.Hidden("requestId", item.Id)
-                            @Html.DropDownList("executorId", item.Solvers as SelectList)
-                            <br>
-                            <input type="submit" value="Назначить" class="buttonb" />
+                            using (Html.BeginForm("Distribute", "Request", "POST"))
+                            {
+                                @Html.Hidden("requestId", item.Id)
+                                @Html.DropDownList("executorId", item.Solvers as SelectList)
+                                <br>
+                                <input type="submit" value="Назначить" class="buttonb"/>
+                            }
+                        }
+                        else
+                        {
+                            <h5>Список желающих пуст</h5>
                         }
                     }
                     else
                     {
-                        <h5>Список желающих пуст</h5>
+                        <text>НЕ ПРОВЕРЕНО</text>
                     }
                 </td>
                 <td>
-                    @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
+                    @Html.ActionLink("Удалить", "Delete", new {id = item.Id})
                 </td>
             </tr>
         }

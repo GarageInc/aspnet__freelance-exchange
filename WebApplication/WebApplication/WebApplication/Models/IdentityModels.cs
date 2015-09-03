@@ -85,7 +85,7 @@ namespace WebApplication.Models
         public virtual ICollection<Requirement> Requirements { get; set; }
 
         [Display(Name = "Подтверждения заявок на вывод средств")]
-        public virtual ICollection<RequirementConfirmation> RequirementConfirmations { get; set; }
+        public virtual ICollection<ReqConfirmation> ReqConfirmations { get; set; }
         
         [Display(Name="Баланс пользователя")]
         public  virtual decimal Balance { get; set; }

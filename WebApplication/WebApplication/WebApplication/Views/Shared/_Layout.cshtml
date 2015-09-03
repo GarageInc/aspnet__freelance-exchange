@@ -143,10 +143,22 @@
 
                                 <li>@Html.ActionLink("Загрузить решение", "Create", "RequestSolution")</li>
                                 <li>@Html.ActionLink("Я загрузил решения", "MyIndex", "RequestSolution")</li>
+
+                                @if (User.IsInRole("Administrator") || User.IsInRole("Modearator"))
+                                {
+
+                                    <li>@Html.ActionLink("Все решения", "Index", "RequestSolution")</li>
+                                }
+
                                 <li class="divider"></li>
 
                                 <li>@Html.ActionLink("Загрузить оплату", "Create", "Payment")</li>
                                 <li>@Html.ActionLink("Я загрузил оплаты", "MyIndex", "Payment")</li>
+                                @if (User.IsInRole("Administrator") || User.IsInRole("Modearator"))
+                                {
+
+                                    <li>@Html.ActionLink("Все оплаты", "Index", "Payment")</li>
+                                }
                                 <li class="divider"></li>
 
                                 <li>@Html.ActionLink("Я отправил заявки на вывод средства", "MyIndex", "Requirement")</li>
@@ -184,7 +196,10 @@
                                 <li>@Html.ActionLink("Направления", "AddSubject", "Service")</li>
                                 <li>@Html.ActionLink("Категории ролей", "AddRole", "Service")</li>
                                 <li>@Html.ActionLink("Категории реквизитов", "AddPropsCategory", "Service")</li>
-                            </ul>
+
+                                <li class="divider"></li>
+                                <li>@Html.ActionLink("Добавить справочники", "UpdateDatabase", "Service")</li>
+                             </ul>
                         </li>
                     }
                     @if (ViewContext.HttpContext.User.IsInRole("Administrator") ||

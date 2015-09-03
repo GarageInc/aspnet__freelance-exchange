@@ -22,8 +22,6 @@
         [Display(Name = "Первый уровень")]
         public virtual int? ParentId { get; set; } //Идентификатор родительской новости
         
-        public virtual DateTime AddDateTime { get; set; }
-
         [Display(Name = "ID заявки")]
         public virtual int? ReqId { get; set; }
 

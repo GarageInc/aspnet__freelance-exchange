@@ -1,4 +1,6 @@
-﻿namespace WebApplication.Controllers
+﻿using WebApplication.Service;
+
+namespace WebApplication.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -12,49 +14,45 @@
     using WebApplication.Models;
     using Microsoft.AspNet.Identity;
 
+    [Authorize]
     public class RequestSolutionController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext _db = new ApplicationDbContext();
+        private readonly DocumentService _docService = new DocumentService();
 
         // GET: RequestSolution
         public async Task<ActionResult> Index()
         {
-            var requestSolutions = db.RequestSolutions
+            var requestSolutions = _db.RequestSolutions
+                .Where(r=>!r.IsDeleted)
                 .Include(r => r.Author)
                 .Include(r => r.Document);
+
             return View(await requestSolutions.ToListAsync());
         }
 
         public async Task<ActionResult> MyIndex()
         {
             var curId = this.User.Identity.GetUserId();
-            var requestSolutions = db.RequestSolutions
+            var requestSolutions = _db.RequestSolutions
+                .Where(r => !r.IsDeleted)
+                .Where(r => r.Author.Id == curId)
                 .Include(r => r.Author)
-                .Include(r => r.Document)
-                .Where(r=>r.Author.Id== curId);
+                .Include(r => r.Document);
+
             return View(await requestSolutions.ToListAsync());
         }
-
-        // GET: RequestSolution/Details/5
-        public async Task<ActionResult> MyDetails(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            RequestSolution requestSolution = await db.RequestSolutions.FindAsync(id);
-            if (requestSolution == null)
-            {
-                return HttpNotFound();
-            }
-            return View(requestSolution);
-        }
-
+        
         // GET: RequestSolution/Create
         public ActionResult Create()
         {
             var curId = this.User.Identity.GetUserId();
-            ViewBag.Requests = new SelectList(db.Requests.Where(x => x.Executor.Id == curId), "Id", "Id");
+
+            ViewBag.Requests = new SelectList(_db.Requests
+                .Where(x => x.Executor.Id == curId)
+                .Where(x=>!x.IsDeleted)
+                , "Id", "Id");
+
             return View();
         }
 
@@ -70,54 +68,45 @@
             if (ModelState.IsValid)
             {
                 // если получен файл
-                var current = DateTime.Now;
-                var user = db.Users.Find(curId);
+                var user = _db.Users.Find(curId);
                 if (error != null)
                 {
-                    Document doc = new Document();
-                    doc.Size = error.ContentLength;
-                    // Получаем расширение
-                    string ext = error.FileName.Substring(error.FileName.LastIndexOf('.'));
-                    doc.Type = ext;
-                    // сохраняем файл по определенному пути на сервере
-                    string path = current.ToString(user.Id.GetHashCode() + "dd/MM/yyyy H:mm:ss").Replace(":", "_").Replace("/", ".") + ext;
-                    error.SaveAs(Server.MapPath("~/Files/RequestSolutionFiles/" + path));
-                    doc.Url = path;
-
-                    requestSolution.Document = doc;
-                    db.Documents.Add(doc);
+                    requestSolution.Document = _docService.CreateDocument(Server.MapPath("~/Files/RequestSolutionFiles/"), error);
                 }
                 else
                     requestSolution.Document = null;
 
-                var req = db.Requests.Find(requestSolution.ReqId);
+                var req = _db.Requests.Find(requestSolution.ReqId);
                 requestSolution.Req = req;
+                requestSolution.ReqId = req.Id;
                 requestSolution.Author = user;
                 requestSolution.AuthorId = user.Id;
-                
+                requestSolution.IsDeleted = false;
                 requestSolution.CreateDateTime = DateTime.Now;
+                
 
-                req.CanDownload = true;
-                db.Entry(req).State = EntityState.Modified;
+                _db.RequestSolutions.Add(requestSolution);
 
-                db.RequestSolutions.Add(requestSolution);
-
-                await db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
                 return RedirectToAction("MyIndex");
             }
-            
-            ViewBag.Requests = new SelectList(db.Requests.Where(x => x.Executor.Id == curId).Where(x => x.IsPaid), "Id", "Id");
+
+            ViewBag.Requests = new SelectList(_db.Requests
+                 .Where(x => x.Executor.Id == curId)
+                 .Where(x => !x.IsDeleted)
+                 , "Id", "Id");
+
             return View(requestSolution);
         }
 
         // GET: RequestSolution/Edit/5
-        public async Task<ActionResult> MyEdit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            RequestSolution requestSolution = await db.RequestSolutions.FindAsync(id);
+            RequestSolution requestSolution = await _db.RequestSolutions.FindAsync(id);
             if (requestSolution == null)
             {
                 return HttpNotFound();
@@ -131,71 +120,78 @@
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> MyEdit([Bind(Include = "Id,Name,Comment")] RequestSolution requestSolution, HttpPostedFileBase error)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Comment")] RequestSolution requestSolution, HttpPostedFileBase error)
         {
             if (ModelState.IsValid)
             {
-                var reqS = db.RequestSolutions.Find(requestSolution.Id);
+                var reqS = _db.RequestSolutions.Find(requestSolution.Id);
                 if (error != null)
                 {
-                    Document doc = new Document();
-                    doc.Size = error.ContentLength;
-                    // Получаем расширение
-                    string ext = error.FileName.Substring(error.FileName.LastIndexOf('.'));
-                    doc.Type = ext;
-                    // сохраняем файл по определенному пути на сервере
-                    string path = DateTime.Now.ToString(this.User.Identity.GetUserId().GetHashCode() + "dd/MM/yyyy H:mm:ss").Replace(":", "_").Replace("/", ".") + ext;
-                    error.SaveAs(Server.MapPath("~/Files/RequestSolutionFiles/" + path));
-                    doc.Url = path;
 
-                    reqS.Document = doc;
-                    db.Documents.Add(doc);
+                    reqS.Document = _docService.CreateDocument(Server.MapPath("~/Files/RequestSolutionFiles/"), error);
                 }
 
                 reqS.Name = requestSolution.Name;
                 reqS.Comment = requestSolution.Comment;
 
-                db.Entry(requestSolution).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                _db.Entry(requestSolution).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
                 return RedirectToAction("MyIndex");
             }
 
             var curId = this.User.Identity.GetUserId();
-            ViewBag.Requests = new SelectList(db.Requests.Where(x => x.Executor.Id == curId), "Id", "Id");
-            return View(requestSolution);
-        }
-     
-        // GET: RequestSolution/Delete/5
-        public async Task<ActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            RequestSolution requestSolution = await db.RequestSolutions.FindAsync(id);
-            if (requestSolution == null)
-            {
-                return HttpNotFound();
-            }
+            ViewBag.Requests = new SelectList(_db.Requests
+                .Where(x => x.Executor.Id == curId)
+                .Where(x => !x.IsDeleted),
+                "Id", "Id");
+
             return View(requestSolution);
         }
 
-        // POST: RequestSolution/Delete/5
+        // Удаление заявки
+        [HttpGet]
+        public ActionResult Delete(int id)
+        {
+            RequestSolution requestSol = _db.RequestSolutions
+                .Where(x => x.Id == id)
+                .Where(x=>x.IsDeleted==false)
+                .Include(x => x.Author)
+                .First();
+
+            if (requestSol != null)
+            {
+                //получаем категорию
+                return PartialView("_Delete", requestSol);
+            }
+            return View("Index");
+        }
+
+        // Удаление заявки
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
+        public void DeleteConfirmed(int id)
         {
-            RequestSolution requestSolution = await db.RequestSolutions.FindAsync(id);
-            db.RequestSolutions.Remove(requestSolution);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            RequestSolution requestSol = _db.RequestSolutions.Find(id);
+            var curId = HttpContext.User.Identity.GetUserId();
+            
+            // получаем текущего пользователя
+            ApplicationUser user = _db.Users.First(m => m.Id == curId);
+            if (requestSol != null && requestSol.Author.Id == user.Id)
+            {
+                requestSol.IsDeleted = true;
+
+                _db.Entry(requestSol).State = EntityState.Modified;
+
+                _db.SaveChanges();
+            }
+            Response.Redirect(Request.UrlReferrer.AbsoluteUri);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }

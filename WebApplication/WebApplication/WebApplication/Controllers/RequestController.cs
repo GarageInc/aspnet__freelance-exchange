@@ -1,4 +1,6 @@
-﻿namespace WebApplication.Controllers
+﻿using WebApplication.Service;
+
+namespace WebApplication.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -16,6 +18,7 @@
     public class RequestController : Controller
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
+        private readonly DocumentService _docService = new DocumentService();
 
         // Вывод всех задач по выбранному критерию
         [AllowAnonymous]// Исключение - могут смотреть все
@@ -196,6 +199,7 @@
 
         // Создание новой заявки
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(Request request, HttpPostedFileBase error)
         {
             var curId = HttpContext.User.Identity.GetUserId();
@@ -209,7 +213,6 @@
             {
                 //получаем время открытия
                 DateTime current = DateTime.Now;
-
                 //Создаем запись о жизненном цикле заявки
                 Lifecycle newLifecycle = new Lifecycle() { Opened = current, IsDeleted = false, CreateDateTime = current};
                 request.Lifecycle = newLifecycle;
@@ -225,18 +228,7 @@
                 // если получен файл
                 if (error != null)
                 {
-                    Document doc = new Document();
-                    doc.Size = error.ContentLength;
-                    // Получаем расширение
-                    string ext = error.FileName.Substring(error.FileName.LastIndexOf('.'));
-                    doc.Type = ext;
-                    // сохраняем файл по определенному пути на сервере
-                    string path = current.ToString(user.Id.GetHashCode()+"dd/MM/yyyy H:mm:ss").Replace(":", "_").Replace("/", ".") + ext;
-                    error.SaveAs(Server.MapPath("~/Files/RequestFiles/" + path));
-                    doc.Url = path;
-
-                    request.Document = doc;
-                    _db.Documents.Add(doc);
+                    request.Document = _docService.CreateDocument(Server.MapPath("~/Files/RequestFiles/"), error);
                 }
                 else
                     request.Document = null;
@@ -270,6 +262,10 @@
 
                 return RedirectToAction("Index");
             }
+
+            // Добавляются категории и предмет
+            ViewBag.Categories = new SelectList(_db.Categories, "Id", "Name");
+            ViewBag.Subjects = new SelectList(_db.Subjects, "Id", "Name");
             return View(request);
         }
 
@@ -358,14 +354,15 @@
         /// Редактирование заявок - назначение исполнителей
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
         [Authorize(Roles = "Moderator, Administrator")]
         public ActionResult Distribute(int? category)
         {
             IEnumerable<Request> requests = null;
             if (category == null || category == 0)
             {
-                requests=_db.Requests.Include(r => r.Author)
+                requests=_db.Requests
+                    .Where(r=>r.IsDeleted==false)
+                    .Include(r => r.Author)
                     .Include(r => r.Lifecycle)
                     .Include(r => r.Executor)
                     .Include(r => r.Document)
@@ -373,11 +370,12 @@
             }
             else
                 requests = _db.Requests.Include(r => r.Author)
+                    .Where(r => r.IsDeleted == false)
+                    .Where(x => x.CategoryId == category)
                     .Include(r => r.Lifecycle)
                     .Include(r => r.Executor)
                     .Include(r => r.Document)
-                    .Include(r=>r.Solvers)
-                    .Where(x => x.CategoryId == category);
+                    .Include(r=>r.Solvers);
             
             var users = _db.Users;
 
@@ -391,10 +389,9 @@
 
             return View("Distribute",requests);
         }
-
-        [HttpPost]
+        
         [Authorize(Roles = "Moderator, Administrator")]
-        public ActionResult Distribute(int? requestId, string executorId)
+        public ActionResult DistributeRequest(int? requestId, string executorId)
         {
             if (requestId == null && executorId.IsEmpty())// == null)
             {

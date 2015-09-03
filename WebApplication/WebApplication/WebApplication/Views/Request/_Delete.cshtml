@@ -8,34 +8,63 @@
     </div>
     <div class="modal-body">
         <dl class="dl-horizontal">
-            <p>
-                <b>Задача № </b>
+            <dt>
+                <b>
+                    Задача №
+                </b>
+            </dt>
+            <dd>
                 @Html.DisplayFor(m => m.Id)
-            </p>
+            </dd>
 
-            <p>
+            <dt>
+                <b>
+                    @Html.DisplayNameFor(m => m.Category.Name)
+                </b>
+            </dt>
+            <dd>
                 @Html.DisplayFor(m => m.Category.Name)
+            </dd>
+
+            <dt>
+                <b>
+                    @Html.DisplayNameFor(m => m.Subject.Name)
+                </b>
+            </dt>
+            <dd>
                 @Html.DisplayFor(m => m.Subject.Name)
-            </p>
+            </dd>
 
-            <p>
-                <b>Название:</b> @Html.DisplayFor(m => m.Name)
-            </p>
+            <dt>
+                <b>
+                    @Html.DisplayNameFor(m => m.Name)
+                </b>
+            </dt>
+            <dd>
+                @Html.DisplayFor(m => m.Name)
+            </dd>
 
-            <p>
-                <b>Описание:</b> @Html.DisplayFor(m => m.Description)
-            </p>
+            <dt>
+                <b>
+                    @Html.DisplayNameFor(m => m.Description)
+                </b>
+            </dt>
+            <dd>
+                @Html.DisplayFor(m => m.Description)
+            </dd>
 
-            <p>
+            <dt>
+            </dt>
+            <dd>
                 @using (Html.BeginForm())
                 {
                     @Html.AntiForgeryToken()
 
                     <div class="form-actions no-color">
-                        <input type="submit" value="Удалить" class="buttons" /> |
+                        <input type="submit" value="Удалить" class="buttons"/>
                     </div>
                 }
-            </p>
+            </dd>
         </dl>
     </div>
 

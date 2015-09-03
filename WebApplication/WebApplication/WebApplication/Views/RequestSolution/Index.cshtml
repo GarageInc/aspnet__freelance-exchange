@@ -1,17 +1,19 @@
 ﻿@model IEnumerable<WebApplication.Models.RequestSolution>
+@using Microsoft.AspNet.Identity
 @using WebApplication.Models
 
 @{
     ViewBag.Title = "Все решения";
+    var userId = User.Identity.GetUserId();
 }
 
-<h2>Все решения</h2>
+<h3>Все решения</h3>
 
 <p>
     @Html.ActionLink("Новое решение", "Create", "RequestSolution", new { @class = "buttonS" })
 </p>
 
-<h2>Список заявок</h2>
+<h3>Список заявок</h3>
 <p>Всего заявок: @(Model.Count<RequestSolution>())</p>
 
 <div id="toolbar">
@@ -53,7 +55,7 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Date)
+                @Html.DisplayNameFor(model => model.CreateDateTime)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Comment)
@@ -85,7 +87,7 @@
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Date)
+                        @Html.DisplayFor(modelItem => item.CreateDateTime)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Comment)
@@ -94,7 +96,13 @@
                         @Html.DisplayFor(modelItem => item.CanDownload)
                     </td>*@
                     <td>
-                        @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
+                        @if (item.Author.Id == userId)
+                        {
+                            <a class="compItem" href='@Url.Action("Delete", "RequestSolution", new {id = item.Id})'>
+                                <img src="../../Content/pictures/delete.png" class="tdImage" title="Удаление заявки" />
+                            </a>
+                            @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { @class = "buttonb" })
+                        }
                     </td>
                 </tr>
             }

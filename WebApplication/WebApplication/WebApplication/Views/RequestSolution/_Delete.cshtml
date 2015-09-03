@@ -1,0 +1,81 @@
+﻿@model WebApplication.Models.RequestSolution
+
+
+<div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal" area-hidden="true">X</button>
+        <h4>Детали удаляемого решения</h4>
+    </div>
+    <div class="modal-body">
+        <dl class="dl-horizontal">
+            <dt>
+                <b>
+                    Решение №
+                </b>
+            </dt>
+            <dd>
+                @Html.DisplayFor(m => m.Id)
+            </dd>
+
+            <dt>
+                <b>
+                     @Html.DisplayNameFor(m => m.Name)
+                </b>
+            </dt>
+            <dd>
+                 @Html.DisplayFor(m => m.Name)
+            </dd>
+
+            <dt>
+                <b>
+                     @Html.DisplayNameFor(m => m.Comment)
+                </b>
+            </dt>
+            <dd>
+                @Html.DisplayFor(m => m.Comment)
+            </dd>
+
+            <dt>
+                <b>
+                     @Html.DisplayNameFor(m => m.CreateDateTime)
+                </b>
+            </dt>
+            <dd>
+                @Html.DisplayFor(m => m.CreateDateTime)
+            </dd>
+
+            <dt>
+                <b>
+                     РОДИТЕЛЬСКАЯ ЗАДАЧА:
+                </b>
+            </dt>
+            <dd>
+                @if (Model.Req != null)
+                {
+                    Html.DisplayFor(m => m.Req.Id);
+                }
+                else
+                {
+                    <text>Ошибка, родительской задачи не установлено</text>
+                }
+            </dd>
+
+            <dt>
+            </dt>
+            <dd>
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-actions no-color">
+                        <input type="submit" value="Удалить" class="buttons" />
+                    </div>
+                }
+            </dd>
+        </dl>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+    </div>
+</div>

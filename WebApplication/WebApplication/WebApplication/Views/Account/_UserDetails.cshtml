@@ -20,11 +20,11 @@
         <dd>
             <p>
                 @{
-                    var yes = ApplicationUserDTO.GetUserAvatar(item.Id).IsEmpty();
+                    var yes = ApplicationUserService.GetUserAvatar(item.Id).IsEmpty();
                     if (!yes)
                     {
                         @Html.Raw("<img style='width:100px;' src=\"../../Files/UserAvatarFiles/"
-                                  + ApplicationUserDTO.GetUserAvatar(item.Id) + "\" />")
+                                  + ApplicationUserService.GetUserAvatar(item.Id) + "\" />")
                     }
                     else
                     {
@@ -38,7 +38,7 @@
         <dt>Карма(статус):</dt>
         <dd>
             <p>
-                @ApplicationUserDTO.GetUserKarma(item.Id)
+                @ApplicationUserService.GetUserKarma(item.Id)
             </p>
         </dd>
         <br />
@@ -46,7 +46,7 @@
         <dt>О себе:</dt>
         <dd>
             <p>
-                @ApplicationUserDTO.GetUserInfo(item.Id)
+                @ApplicationUserService.GetUserInfo(item.Id)
             </p>
         </dd>
         <br />

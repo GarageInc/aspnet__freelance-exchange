@@ -1,0 +1,82 @@
+﻿@model WebApplication.Models.Payment
+
+
+
+
+<div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal" area-hidden="true">X</button>
+        <h4>Детали удаляемой оплаты</h4>
+    </div>
+    <div class="modal-body">
+        <h4>Оплата №@Model.Id</h4>
+        <dl class="dl-horizontal">
+            <dt>
+                <b>
+                    @Html.DisplayNameFor(model => model.Author.Name)
+                </b>
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Author.Name)
+            </dd>
+
+            <dt>
+                <b>
+                    @Html.DisplayNameFor(model => model.Req.Name)
+                </b>
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Req.Name)
+            </dd>
+
+            <dt>
+                <b>
+                    @Html.DisplayNameFor(model => model.Description)
+                </b>
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+
+            <dt>
+                <b>
+                    @Html.DisplayNameFor(model => model.Checked)
+                </b>
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Checked)
+            </dd>
+
+            <dt>
+                <b>
+                    @Html.DisplayNameFor(model => model.Price)
+                </b>
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Price)
+            </dd>
+
+            <dt>
+            </dt>
+            <dd>
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-actions no-color">
+                        <input type="submit" value="Удалить" class="buttons" />
+                    </div>
+                }
+            </dd>
+        </dl>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+    </div>
+</div>

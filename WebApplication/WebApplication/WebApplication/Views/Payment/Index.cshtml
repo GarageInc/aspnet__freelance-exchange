@@ -1,13 +1,19 @@
-﻿@model IEnumerable<WebApplication.Models.Payment>
+﻿@using Microsoft.AspNet.Identity
+@model IEnumerable<WebApplication.Models.Payment>
 
 @{
     ViewBag.Title = "Подтверждение оплат";
+
+    var userId = this.User.Identity.GetUserId();
 }
 
-<h2>Все оплаты</h2>
+<div class="modal fade" id="modDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="dialogContent" class="modal-dialog"></div>
+</div>
+
+<h3>Все оплаты</h3>
 
 <div id="toolbar">
-
     <button id="remove" class="btn btn-warning" disabled>
         <i class="glyphicon glyphicon-remove"></i> Скрыть выбранное
     </button>
@@ -35,37 +41,40 @@
            data-show-multi-sort="true">
 
         <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Author.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Document)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Req)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Checked)
-                </th>
-                <th>
-                    Проверка на пополнение
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Price)
-                </th>
-            </tr>
+        <tr>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Author.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Document)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Req)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Checked)
+            </th>
+            <th>
+                Проверка на пополнение
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>Функционал</th>
+        </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
+                    <td></td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Id)
                     </td>
@@ -75,11 +84,11 @@
                     <td>
                         @if (item.Document != null)
                         {
-                            <a href="/Document/DownloadPaymentFiles/@item.Document.Id"><img src="../../Content/pictures/filey.png" alt='@item.Document.Url' class="tdImage" title="Скачать файл" /></a>
+                            <a href="/Document/DownloadPaymentFiles/@item.Document.Id"><img src="../../Content/pictures/filey.png" alt='@item.Document.Url' class="tdImage" title="Скачать файл"/></a>
                         }
                         else
                         {
-                            <img src="../../Content/pictures/filen.png" alt="без файла изображения" class="tdImage" title="Файл не приложен" />
+                            <img src="../../Content/pictures/filen.png" alt="без файла изображения" class="tdImage" title="Файл не приложен"/>
                         }
                     </td>
                     <td>
@@ -89,7 +98,7 @@
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
-                        @if(item.Checked==true)
+                        @if (item.Checked == true)
                         {
                             <h5>Проверено</h5>
                         }
@@ -104,14 +113,27 @@
                             @Html.Hidden("paymentId", item.Id)
 
                             @Html.DropDownList("status",
-                                        new[] { new SelectListItem() { Text = "Не проверено, в состоянии блокирования", Value = "0" },
-                                        new SelectListItem() { Text = "Проверено, разрешить загрузку решения и скачивание", Value = "1" }});
+                                new[]
+                                {
+                                    new SelectListItem() {Text = "Не проверено, в состоянии блокирования", Value = "0"},
+                                    new SelectListItem() {Text = "Проверено, разрешить загрузку решения и скачивание", Value = "1"}
+                                })
+                            ;
 
-                            <input type="submit" value="Изменить" class="buttons" />
+                            <input type="submit" value="Изменить" class="buttons"/>
                         }
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @if (userId == item.AuthorId)
+                        {
+                            <a class="compItem" href='@Url.Action("Delete", "Payment", new {id = item.Id})'>
+                                <img src="../../Content/pictures/delete.png" class="tdImage" title="Удаление заявки" />
+                            </a>
+                                @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { @class = "buttonb" })
+                        }
                     </td>
                 </tr>
             }
@@ -141,4 +163,19 @@
     @Scripts.Render("~/bundles/bootstrap-table-master/17")
     @Scripts.Render("~/bundles/bootstrap-table-master/18")
     @Scripts.Render("~/bundles/bootstrap-table-master/19")
+
+    <script type="text/javascript">
+            // Модальное окно снизу справа
+            $(function () {
+                $.ajaxSetup({ cache: false });
+                $(".compItem").click(function (e) {
+
+                    e.preventDefault();
+                    $.get(this.href, function (data) {
+                        $('#dialogContent').html(data);
+                        $('#modDialog').modal('show');
+                    });
+                });
+            });
+    </script>
 }

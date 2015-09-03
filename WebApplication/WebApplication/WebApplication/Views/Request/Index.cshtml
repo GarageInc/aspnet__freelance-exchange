@@ -100,7 +100,11 @@
                         <td>
                             @if (item.Author.Id != userId && item.Solvers.Count(x => x.Id == userId) == 0)
                             {
-                                <a href="/Request/AddToSolvers/@item.Id"><img src="../../Content/pictures/addButton.png" class="tdImage" title="Хочу решать" /></a>
+                                <a href="/Request/AddToSolvers/@item.Id"><img src="../../Content/pictures/addButton.png" class="tdImage" title="Хочу решать"/></a>
+                            }
+                            else
+                            {
+                                <text>Нельзя, Вы автор :)</text>
                             }
                         </td>
                         <td><b>@item.Id</b></td>
