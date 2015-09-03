@@ -1,11 +1,14 @@
 ﻿@model IEnumerable<Request>
 @using Microsoft.AspNet.Identity
 @using WebApplication.Models
+@using WebApplication.Service
 
 @{
     ViewBag.Title = "Список моих задач-заявок";
     var userId = this.User.Identity.GetUserId();
+    decimal balance = ApplicationUserService.GetUserBalance(this.User.Identity.GetUserId());
 }
+
 <div class="modal fade" id="modDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div id="dialogContent" class="modal-dialog"></div>
 </div>
@@ -51,6 +54,12 @@
         <thead>
         <tr>
             <th>
+
+            </th>
+            <th>
+                Средства
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
@@ -93,42 +102,56 @@
         @foreach (var item in Model)
         {
             <tr align="center">
+                <td></td>
+                <td>
+                    Ваш баланс: @balance
+                    Стоимость: @item.Price
+                    @if (balance >= item.Price)
+                    {
+                        <span class="badge-success">Недостаточно</span>
+                        @Html.ActionLink("Загрузить оплату", "Create", "Payment")
+                    }
+                    else
+                    {
+                        <span class="badge-success">Средств достаточно</span>
+                    }
+                </td>
                 <td><b>@item.Id</b></td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Category.Name)
                 </td>
                 <td>
-                    @if (item.Status == (int)RequestStatus.Open)
+                    @if (item.Status == (int) RequestStatus.Open)
                     {
                         <span class="label label-success">Открыта</span>
                     }
-                    else if (item.Status == (int)RequestStatus.Distributed)
+                    else if (item.Status == (int) RequestStatus.Distributed)
                     {
                         <span class="label label-warning">Распределена</span>
                     }
-                    else if (item.Status == (int)RequestStatus.Proccesing)
+                    else if (item.Status == (int) RequestStatus.Proccesing)
                     {
                         <span class="label label-important">На решении</span>
                     }
-                    else if (item.Status == (int)RequestStatus.Closed)
+                    else if (item.Status == (int) RequestStatus.Closed)
                     {
                         <span class="label label-inverse">Закрыта</span>
                     }
                 </td>
                 <td>
-                    @if (item.Priority == (int)RequestPriority.Low)
+                    @if (item.Priority == (int) RequestPriority.Low)
                     {
                         <span class="badge badge-low">Низкий</span>
                     }
-                    else if (item.Priority == (int)RequestPriority.Medium)
+                    else if (item.Priority == (int) RequestPriority.Medium)
                     {
                         <span class="badge badge-medium">Средний</span>
                     }
-                    else if (item.Priority == (int)RequestPriority.High)
+                    else if (item.Priority == (int) RequestPriority.High)
                     {
                         <span class="badge badge-high">Высокий</span>
                     }
-                    else if (item.Priority == (int)RequestPriority.Critical)
+                    else if (item.Priority == (int) RequestPriority.Critical)
                     {
                         <span class="badge badge-critical">Критичный</span>
                     }
@@ -147,26 +170,26 @@
                     @Html.DisplayFor(modelItem => item.Deadline)
                 </td>
                 <td>
-                        <a class="compItem" href='@Url.Action("Details", "Request", new {id = item.Id}, null)'>
-                            <img src="../../Content/pictures/info.png" class="tdImage" title="Детали заявки"/>
-                        </a>
+                    <a class="compItem" href='@Url.Action("Details", "Request", new {id = item.Id}, null)'>
+                        <img src="../../Content/pictures/info.png" class="tdImage" title="Детали заявки"/>
+                    </a>
                 </td>
                 <td>
-                        <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = item.AuthorId}, null)'>
-                            <img src="../../Content/pictures/author.png" class="tdImage" title="Автор заявки"/>
-                        </a>
+                    <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = item.AuthorId}, null)'>
+                        <img src="../../Content/pictures/author.png" class="tdImage" title="Автор заявки"/>
+                    </a>
                 </td>
                 <td>
-                        @if (item.Executor != null)
-                        {
-                            <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = item.ExecutorId}, null)'>
-                                <img src="../../Content/pictures/executor.png" class="tdImage" title="Исполнитель заявки"/>
-                            </a>
-                        }
-                        else
-                        {
-                            <h6>Исполнитель не установлен</h6>
-                        }
+                    @if (item.Executor != null)
+                    {
+                        <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = item.ExecutorId}, null)'>
+                            <img src="../../Content/pictures/executor.png" class="tdImage" title="Исполнитель заявки"/>
+                        </a>
+                    }
+                    else
+                    {
+                        <h6>Исполнитель не установлен</h6>
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)
@@ -184,7 +207,7 @@
                             @Html.Hidden("requestId", item.Id)
                             @Html.DropDownList("executorId", item.Solvers as SelectList)
                             <br>
-                            <input type="submit" value="Назначить самому" class="buttonb" />
+                            <input type="submit" value="Назначить самому" class="buttonb"/>
                         }
                     }
                     else
@@ -197,12 +220,12 @@
                     @if (item.Author.Id == userId)
                     {
                         <a class="compItem" href='@Url.Action("Delete", "Request", new {id = item.Id})'>
-                            <img src="../../Content/pictures/delete.png" class="tdImage" title="Удаление заявки" />
+                            <img src="../../Content/pictures/delete.png" class="tdImage" title="Удаление заявки"/>
                         </a>
-                                @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { @class = "buttonb" })
+                        @Html.ActionLink("Редактировать", "Edit", new {id = item.Id}, new {@class = "buttonb"})
                     }
 
-                    @Html.ActionLink("Обсуждение", "Index", "Comment", new { requestId = item.Id }, new { @class = "buttons" })
+                    @Html.ActionLink("Обсуждение", "Index", "Comment", new {requestId = item.Id}, new {@class = "buttons"})
                 </td>
             </tr>
         }

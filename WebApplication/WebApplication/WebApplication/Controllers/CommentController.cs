@@ -22,6 +22,7 @@ namespace WebApplication.Controllers
 
             var request = db.Requests
                 .Where(x=>x.Id==id)
+                .Where(x => x.IsDeleted==false)
                 .Include(x=>x.Document)
                 .Include(x => x.Category)
                 .Include(x => x.Subject)
@@ -49,14 +50,7 @@ namespace WebApplication.Controllers
             }
 
         }
-
-        //public ActionResult Detail()
-        //{
-        //    var model = db.Requests.First();
-        //    ViewData["Request"] = model;
-        //    return PartialView();
-        //}
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public void Add(int requestId, int? parentId, string Text)
@@ -103,7 +97,10 @@ namespace WebApplication.Controllers
                 {
                     Response.Redirect(Request.UrlReferrer.AbsoluteUri);
                 }
-                var node = db.Comments.Where(x => x.Id == nodeId).Single();
+                var node = db.Comments
+                    .Where(x => x.IsDeleted == false)
+                    .Where(x => x.Id == nodeId)
+                    .Single();
                 node.ParentId = newParentId;
                 db.SaveChanges();
             }
@@ -144,7 +141,9 @@ namespace WebApplication.Controllers
                 node.IsDeleted = true;
                 DeleteNodes(db, node.Id);
             }
-            var deleted = db.Comments.Where(x => x.Id == id && !x.IsDeleted).Single();
+            var deleted = db.Comments
+                .Where(x => x.Id == id && !x.IsDeleted)
+                .Single();
             deleted.IsDeleted = true;
         }
 

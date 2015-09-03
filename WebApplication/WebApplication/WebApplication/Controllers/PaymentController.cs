@@ -61,6 +61,62 @@
         }
 
         // GET: Payment/Create
+        public ActionResult AddingFunds()
+        {
+            ViewBag.AuthorId = new SelectList(_db.Users, "Id", "Name");
+
+            return View();
+        }
+
+        // POST: Payment/Create
+        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
+        // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddingFunds([Bind(Include = "Id,Description,Price")] Payment payment, HttpPostedFileBase error)
+        {
+            var curId = this.User.Identity.GetUserId();
+            if (ModelState.IsValid)
+            {
+                // если получен файл
+                var current = DateTime.Now;
+                var user = _db.Users.Find(curId);
+                if (error != null)
+                {
+                    payment.Document = _docService.CreateDocument(Server.MapPath("~/Files/PaymentFiles/"), error);
+                }
+                else
+                    payment.Document = null;
+                
+
+                payment.Author = user;
+                payment.AuthorId = user.Id;
+                payment.IsDeleted = false;
+                payment.CreateDateTime = current;
+                payment.Checked = false;
+
+                payment.Closed = false;
+                payment.AddingFunds = true;
+                payment.ReqSolution = null;
+                payment.ReqSolutionId = null;
+                payment.Req = null;
+                payment.ReqId = null;
+
+                _db.Payments.Add(payment);
+
+                await _db.SaveChangesAsync();
+                return RedirectToAction("MyIndex");
+            }
+
+            ViewBag.AuthorId = new SelectList(_db.Users, "Id", "Name");
+
+            return View(payment);
+        }
+
+
+
+
+        // GET: Payment/Create
         public ActionResult Create()
         {
             var curId = this.User.Identity.GetUserId();
@@ -98,12 +154,15 @@
                 var req = _db.Requests.Find(payment.ReqId);
                 
                 payment.Req = req;
+                payment.ReqId = req.Id;
                 payment.Author = user;
                 payment.AuthorId = user.Id;
                 payment.IsDeleted = false;
                 payment.CreateDateTime = current;
                 payment.Checked = false;
 
+                payment.Closed = false;
+                payment.AddingFunds = false;
                 payment.ReqSolution = null;
                 payment.ReqSolutionId = null;
 
@@ -122,7 +181,8 @@
 
             return View(payment);
         }
-        
+
+      
         /// <summary>
         /// Редактирование
         /// </summary>
@@ -183,7 +243,7 @@
             return View(payment);
         }
 
-        // Удаление заявки
+        // Удаление 
         [HttpGet]
         public ActionResult Delete(int id)
         {
@@ -198,18 +258,21 @@
             }
             return View("Index");
         }
+        
 
-
-        // Удаление заявки
+        // Удаление 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public void DeleteConfirmed(int id)
         {
             Payment payment = _db.Payments.Find(id);
             var curId = HttpContext.User.Identity.GetUserId();
+
             // получаем текущего пользователя
             ApplicationUser user = _db.Users.First(m => m.Id == curId);
-            if (payment != null && payment.Author.Id == user.Id)
+
+            // Если автор совпадает и оплата не проверена администрацией - её ещё удалить можно.
+            if (payment != null && payment.Author.Id == user.Id && !payment.Checked)
             {
                 // Изменим сразу же и заявку, за которую отвечает оплата
                 var request = _db.Requests.Find(payment.ReqId);
@@ -243,7 +306,8 @@
         /// <param name="status"></param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize]        
+        [Authorize]
+        [Authorize(Roles = "Administrator, Moderator")]
         public ActionResult PaymentChangeStatus(int? paymentId, int status)
         {
             var curId = HttpContext.User.Identity.GetUserId();
@@ -262,17 +326,41 @@
                 switch (status)
                 {
                     case 0:
-                        pay.Checked = false;
+                    {
+                        // Т.е. нельзя "опустить" в минус плательщика
+                        if (pay.Checked == true)
+                        {
+                            // Оплата - не проверена
+                            pay.Checked = false;
+                            // Т.е. заявка - не оплачена
+                            req.IsPaid = false;
 
-                        req.IsPaid = false;
-                        req.CanDownload = false;
+                            // Выводим на счет пользователя
+                            user.Balance -= pay.Price;
+                            _db.Entry(user).State = EntityState.Modified;
+                            _db.SaveChanges();
+                        }
+
                         break;
+                    }
+                        
                     case 1:
-                        pay.Checked = true;
+                    {
+                        // Данное действие в любом случае будет первым
+                        if (pay.Checked == false)
+                        {
+                            pay.Checked = true;
 
-                        req.IsPaid = true;
-                        req.CanDownload = true;
+                            req.IsPaid = true;
+
+                            user.Balance += pay.Price;
+                            _db.Entry(user).State = EntityState.Modified;
+                            _db.SaveChanges();
+                        }
+
                         break;
+                    }
+                        
                 }
 
                 _db.Entry(req).State = EntityState.Modified;
@@ -281,6 +369,65 @@
             }
 
             return RedirectToAction("Index");
+        }
+
+        // Удаление заявки
+        [HttpGet]
+        public ActionResult Remittance(int id)
+        {
+            Payment payment = _db.Payments
+                .Where(x => x.Id == id)
+                .Include(x => x.Req)
+                .First();
+
+            Request request = _db.Requests.Find(payment.ReqId);
+            if (payment != null)
+            {
+                return PartialView("_Remittance", request);
+            }
+            return View("Index");
+        }
+
+        [HttpPost, ActionName("Remittance")]
+        [ValidateAntiForgeryToken]
+        public ActionResult RemittanceConfirmed(int requestId, int paymentId)
+        {
+            Request request = _db.Requests.Find(requestId);
+            Payment payment = _db.Payments.Find(paymentId);
+            
+
+            // получаем текущего пользователя
+            ApplicationUser author = _db.Users.First(m => m.Id == request.AuthorId);
+            ApplicationUser executor = _db.Users.First(m => m.Id == request.ExecutorId);
+
+            // Снова проверим - можно ли переводить?
+            if (payment.Closed == false)
+            {
+
+                if (request.Price > author.Balance)
+                {
+                    return Content("Ошибка! Стоимость задачи ВЫШЕ баланса автора!");
+                }
+                else
+                {
+                    // Проведем перевод
+                    executor.Balance += request.Price;
+                    author.Balance -= request.Price;
+
+                    // Объявим операцию перевода закрытой
+                    payment.Closed = true;
+
+                    // Сохраним изменения в базе данных
+                    _db.Entry(author).State=EntityState.Modified;
+                    _db.Entry(executor).State=EntityState.Modified;
+
+                    _db.SaveChanges();
+                }
+
+                return View("Index");
+            }
+
+            return Content("Ошибка! Данная позиция(оплата) уже закрыта!");
         }
     }
 }

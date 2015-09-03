@@ -1,0 +1,75 @@
+﻿@model WebApplication.Models.Payment
+
+@{
+    ViewBag.Title = "Создать оплату за задачу";
+}
+
+<h3>Создать оплату за задачу</h3>
+
+
+@using (Html.BeginForm("Create", "Payment", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <div class="form-horizontal">
+            <h4>Внесение на счет "руками", то есть - оплачено, сфоткано на телефон и загружено на сайт как подтверждение</h4>
+            <h5>Администрация проверит и подтвердит пополнение счета</h5>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-4">
+                    @Html.TextAreaFor(model => model.Description, 3, 100, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+                <text align="justify" class="col-md-6">
+                    Если хотите - напишите свой комментарий(последние 4 номера карты-счета для сравнения, допустим).
+                </text>
+            </div>
+            <hr />
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                </div>
+                <text align="justify" class="col-md-6">
+                    Вносимая стоимость по чеку. 
+                    <br />
+                    Важно! Всё это происходит после проверки транзакции администрацией.
+                </text>
+            </div>
+            <hr />
+
+            <div class="form-group">
+                @Html.Label("Файл(чек, фото и тп)?", new { @class = "col-md-2 control-label" })
+                <div class="col-md-4">
+                    <input type="file" class="form-control" id="error" name="error" value="Сохранить файл" />
+                </div>
+                <text align="justify" class="col-md-6">
+                    Приложите фото чека-перевода, чтобы быстрее произошла транзация. Рекомендуем всё же приложить какой-нибудь файл-подтверждение
+                </text>
+            </div>
+            <hr/>
+
+            <div class="form-group">
+                @Html.Label("Подтвердить отправку?", new { @class = "col-md-2 control-label" })
+
+                <div class="col-md-4">
+                    <input class="buttonS" type="submit" value="Подтвердить сохранение" width="100" />
+                </div>
+            </div>
+        </div>
+
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Назад к списку", "MyIndex", "Payment", new { @class = "buttonb" })
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

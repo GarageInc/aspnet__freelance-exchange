@@ -1,0 +1,48 @@
+﻿@model IEnumerable<WebApplication.Models.RequestSolution>
+
+<div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal" area-hidden="true">X</button>
+        <h4>Детали удаляемой заявки</h4>
+    </div>
+    <div class="modal-body">
+        <table>
+            <thead>
+            <tr>
+                <th></th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Author)
+                </th>
+                <th>
+                    Скачать решение
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td></td>
+                    <td>
+                         @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Author.Name)
+                    </td>
+                    <td>
+                        <a href="/Document/DownloadSolution/@item.Id"><img src="../../Content/pictures/filey.png" class="tdImage" title="Скачать решение" /></a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+            
+        </table>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+    </div>
+</div>

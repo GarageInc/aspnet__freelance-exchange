@@ -42,9 +42,13 @@
            data-sort-order="desk"
            data-page-number="1"
            data-show-multi-sort="true">
-            <thead>
+
+        <thead>
             <tr>
                 <th></th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Closed)
+                </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Id)
                 </th>
@@ -64,58 +68,110 @@
                     @Html.DisplayNameFor(model => model.Checked)
                 </th>
                 <th>
+                    Проверка на пополнение
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.Price)
                 </th>
                 <th>Функционал</th>
             </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td></td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Id)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Author.Name)
-                        </td>
-                        <td>
-                            @if (item.Document != null)
-                            {
-                                <a href="/Document/DownloadPaymentFiles/@item.Document.Id"><img src="../../Content/pictures/filey.png" alt='@item.Document.Url' class="tdImage" title="Скачать файл"/></a>
-                            }
-                            else
-                            {
-                                <img src="../../Content/pictures/filen.png" alt="без файла изображения" class="tdImage" title="Файл не приложен"/>
-                            }
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Req.Id)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Description)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Checked)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Price)
-                        </td>
-                        <td>
-                            @if (userId == item.AuthorId)
-                            {
-                                <a class="compItem" href='@Url.Action("Delete", "Payment", new {id = item.Id})'>
-                                    <img src="../../Content/pictures/delete.png" class="tdImage" title="Удаление заявки" />
-                                </a>
-                                @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { @class = "buttonb" })
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td></td>
+                    <td>
+                        @if (item.Closed)
+                        {
+                            <span class="badge-success">Закрыто администрацией</span>
+
+                        }
+                        else
+                        {
+                            <span class="badge-critical">Перевод не произведён</span>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Author.Name)
+                    </td>
+                    <td>
+                        @if (item.Document != null)
+                        {
+                            <a href="/Document/DownloadPaymentFiles/@item.Document.Id"><img src="../../Content/pictures/filey.png" alt='@item.Document.Url' class="tdImage" title="Скачать файл" /></a>
+                        }
+                        else
+                        {
+                            <img src="../../Content/pictures/filen.png" alt="без файла изображения" class="tdImage" title="Файл не приложен" />
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Req.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @if (item.Checked == true)
+                        {
+                            <h5>Проверено</h5>
+                        }
+                        else
+                        {
+                            <h5>Не проверено</h5>
+                        }
+                    </td>
+                    <td>
+                        @using (Html.BeginForm("PaymentChangeStatus", "Payment"))
+                        {
+                            @Html.Hidden("paymentId", item.Id)
+
+                            @Html.DropDownList("status",
+                                new[]
+                                {
+                                    new SelectListItem() {Text = "Не проверено, в состоянии блокирования", Value = "0"},
+                                    new SelectListItem() {Text = "Проверено", Value = "1"}
+                                })
+                            ;
+
+                            <input type="submit" value="Изменить" class="buttons" />
+                        }
+                    </td>
+                    <td>
+                        @if (item.Checked)
+                        {
+                            <a class="compItem" href='@Url.Action("RemittanceView", "Payment", new {id = item.Id})'>
+                                <img src="../../Content/pictures/delete.png" class="tdImage" title="Открыть окно распределения средств" />
+                            </a>
+                        }
+                        else
+                        {
+                            <text>
+                                Не проверено, окно распределения средств не доступно
+                            </text>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @if (userId == item.AuthorId)
+                        {
+                            <a class="compItem" href='@Url.Action("Delete", "Payment", new {id = item.Id})'>
+                                <img src="../../Content/pictures/delete.png" class="tdImage" title="Удаление заявки" />
+                            </a>
+                            @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { @class = "buttonb" })
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
     </table>
 </div>
+
 @Styles.Render("~/Scripts/bootstrap-table-master/css")
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryui")

@@ -60,9 +60,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Comment)
             </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.CanDownload)
-            </th>*@
             <th></th>
         </tr>
         </thead>
@@ -92,9 +89,6 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Comment)
                     </td>
-                    @*<td>
-                        @Html.DisplayFor(modelItem => item.CanDownload)
-                    </td>*@
                     <td>
                         @if (item.Author.Id == userId)
                         {

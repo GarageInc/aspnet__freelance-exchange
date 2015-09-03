@@ -695,8 +695,7 @@
             }
             return View(user);
         }
-
-
+        
         // ПОДРОБНОСТИ О ПОЛЬЗОВАТЕЛЕ
         public ActionResult UserDetails(string userId)
         {

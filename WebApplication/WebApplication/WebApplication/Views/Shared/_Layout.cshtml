@@ -152,8 +152,9 @@
 
                                 <li class="divider"></li>
 
-                                <li>@Html.ActionLink("Загрузить оплату", "Create", "Payment")</li>
+                                <li>@Html.ActionLink("Загрузить оплату за заявку", "Create", "Payment")</li>
                                 <li>@Html.ActionLink("Я загрузил оплаты", "MyIndex", "Payment")</li>
+                                <li>@Html.ActionLink("Пополнить свой баланс", "AddingFunds", "Payment")</li>
                                 @if (User.IsInRole("Administrator") || User.IsInRole("Modearator"))
                                 {
 

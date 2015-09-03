@@ -611,5 +611,16 @@ namespace WebApplication.Controllers
 
             return RedirectToAction("MyIndex");
         }
+
+        
+        [HttpGet]
+        public ActionResult GetAllSolutions(int id)
+        {
+            var reqSols = _db.RequestSolutions
+                .Where(x => x.IsDeleted == false)
+                .Where(x => x.ReqId == id);
+
+            return PartialView("_GetAllSolutions", reqSols);
+        }
     }
 }

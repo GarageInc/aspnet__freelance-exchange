@@ -1,8 +1,5 @@
 ﻿@model WebApplication.Models.Payment
 
-
-
-
 <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal" area-hidden="true">X</button>
@@ -64,13 +61,21 @@
             <dt>
             </dt>
             <dd>
-                @using (Html.BeginForm())
+                @if (Model.Closed)
                 {
-                    @Html.AntiForgeryToken()
+                    using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
 
-                    <div class="form-actions no-color">
-                        <input type="submit" value="Удалить" class="buttons" />
-                    </div>
+                        <div class="form-actions no-color">
+                            <input type="submit" value="Удалить" class="buttons" />
+                        </div>
+                    }
+
+                }
+                else
+                {
+                    <text>Удалить нельзя, т.к. закрытая и принятая администрацией оплата</text>
                 }
             </dd>
         </dl>

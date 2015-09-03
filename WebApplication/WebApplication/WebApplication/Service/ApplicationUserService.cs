@@ -93,7 +93,16 @@
             var res = db.Users.First(x => x.Id == id).UserInfo;
 
             return res;
+        }
 
+        [Display(Name = "Баланс пользователя")]
+        public static decimal GetUserBalance(string id)
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+
+            var res = db.Users.First(x => x.Id == id).Balance;
+
+            return res;
         }
     }
 }

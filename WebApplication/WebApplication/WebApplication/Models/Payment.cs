@@ -35,7 +35,13 @@ namespace WebApplication.Models
         
         [Display(Name = "Проверено")]
         public virtual bool Checked { get; set; }
-        
+
+        [Display(Name = "Закрыто или Открыто")]
+        public virtual bool Closed { get; set; }
+
+        [Display(Name = "Пополнение баланса")]
+        public virtual bool AddingFunds { get; set; }
+
         [Display(Name = "Автор")]
         public virtual ApplicationUser Author { get; set; }
 

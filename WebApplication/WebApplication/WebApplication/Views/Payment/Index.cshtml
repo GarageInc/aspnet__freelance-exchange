@@ -44,6 +44,9 @@
         <tr>
             <th></th>
             <th>
+                 @Html.DisplayNameFor(model => model.Closed)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
@@ -75,6 +78,17 @@
             {
                 <tr>
                     <td></td>
+                    <td>
+                        @if (item.Closed)
+                        {
+                            <span class="badge-success">Закрыто администрацией</span>
+
+                        }
+                        else
+                        {
+                            <span class="badge-critical">Перевод не произведён</span>
+                        }
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Id)
                     </td>
@@ -116,11 +130,25 @@
                                 new[]
                                 {
                                     new SelectListItem() {Text = "Не проверено, в состоянии блокирования", Value = "0"},
-                                    new SelectListItem() {Text = "Проверено, разрешить загрузку решения и скачивание", Value = "1"}
+                                    new SelectListItem() {Text = "Проверено", Value = "1"}
                                 })
                             ;
 
                             <input type="submit" value="Изменить" class="buttons"/>
+                        }
+                    </td>
+                    <td>
+                        @if (item.Checked)
+                        {
+                            <a class="compItem" href='@Url.Action("RemittanceView", "Payment", new {id = item.Id})'>
+                                <img src="../../Content/pictures/delete.png" class="tdImage" title="Открыть окно распределения средств" />
+                            </a>
+                        }
+                        else
+                        {
+                            <text>
+                                Не проверено, окно распределения средств не доступно
+                            </text>
                         }
                     </td>
                     <td>
@@ -132,7 +160,7 @@
                             <a class="compItem" href='@Url.Action("Delete", "Payment", new {id = item.Id})'>
                                 <img src="../../Content/pictures/delete.png" class="tdImage" title="Удаление заявки" />
                             </a>
-                                @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { @class = "buttonb" })
+                            @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { @class = "buttonb" })
                         }
                     </td>
                 </tr>

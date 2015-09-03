@@ -1,0 +1,74 @@
+﻿@using Microsoft.AspNet.Identity
+@using WebApplication.Models
+@using WebApplication.Service
+@model WebApplication.Models.Request
+
+@{
+    decimal balance = ApplicationUserService.GetUserBalance(this.User.Identity.GetUserId());
+    int paymentId = ViewBag.PaymentId;
+}
+<fieldset>
+    @*Если перевод не закрыт*@ 
+    Оплата №@ViewBag.Number
+    @if (ViewBag.Closed == false)
+    {
+        <label>Стоимость заявки:</label>
+        @Html.LabelFor(model => model.Price)
+        <hr/>
+
+        <label>Автор:</label>
+        <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = Model.AuthorId}, null)'>
+            @Model.Author.Name
+            @Model.Author.Id
+            <img src="../../Content/pictures/author.png" class="tdImage" title="Автор заявки" />
+        </a>
+        <label>Текущий счет автора заявки</label>
+        <label>@balance</label>
+        <hr/>
+
+        <label>Исполнитель:</label>
+        <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = Model.AuthorId}, null)'>
+            @Model.Executor.Name
+            @Model.Executor.Id
+            <img src="../../Content/pictures/executor.png" class="tdImage" title="Автор заявки" />
+        </a>
+        <hr/>
+
+        if (Model.Price > balance)
+        {
+            // Говорим, что у автора не хватает средств
+            <text>
+                Баланс меньше требуемой суммы!
+            </text>
+        }
+        else
+        {
+            // Иначе - делаем возможность перевода
+            using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("requestId",Model.Id)
+                @Html.Hidden("paymentId", paymentId)
+
+                <div class="form-actions no-color">
+                    <input type="submit" value="Перевести от автора к исполнителю" class="buttonS" />
+                </div>
+            }
+        }
+    }
+    else
+    {
+
+    }
+
+
+</fieldset>
+
+
+
+@* Стоимость заявки - нередактируемое свойство *@
+
+@* Внесенные средства. 
+    Их может быть больше требуемого количества, либо меньше требуемого. 
+        Если больше - остаток переводится на баланс отправителя. 
+        Иначе - запрашивается текущее состояние баланса пользователя*@

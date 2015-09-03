@@ -195,7 +195,9 @@
                                 <span class="label label-success">ДА</span>
                                 if (item.CanDownload)
                                 {
-                                    <a href="/Document/DownloadSolution/@item.Id"><img src="../../Content/pictures/filey.png" class="tdImage" title="Скачать решение" /></a>
+                                    <a class="compItem" href='@Url.Action("GetAllSolutions", "Request", new {id = item.Id}, null)'>
+                                        <img src="../../Content/pictures/lifecycle.png" class="tdImage" title="Жизненный цикл заявки" />
+                                    </a>
                                 }
                             }
                             else
