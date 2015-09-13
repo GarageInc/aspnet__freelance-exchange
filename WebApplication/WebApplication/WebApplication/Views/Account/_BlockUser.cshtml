@@ -1,0 +1,32 @@
+﻿@model WebApplication.Models.ApplicationUser
+
+<div>
+    @if (Model.IsBlocked)
+    {
+        using (Html.BeginForm("DownBlockOfUser", "Account"))
+        {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("userId", Model.Id)
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Разблокировать" class="buttonb"/>
+            </div>
+        }
+    }
+    else
+    {
+        using (Html.BeginForm("UpBlockOfUser", "Account"))
+        {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("userId", Model.Id)
+            
+            <textarea class="form-control" required name="blockReason" cols="100" rows="5">Причина блокировки: </textarea>
+            <br/>
+            <input class="form-control" type="datetime-local" aria-required="" name="blockDate" required>
+            <br />
+            <div class="form-actions no-color">
+                <input type="submit" value="Заблокировать" class="buttons" />
+            </div>
+        }
+    }
+</div>

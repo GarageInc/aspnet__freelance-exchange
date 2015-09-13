@@ -1,4 +1,6 @@
 ﻿
+using WebApplication.Models.BaseModel;
+
 namespace WebApplication.Models
 {
     using System.Security.Claims;
@@ -30,6 +32,7 @@ namespace WebApplication.Models
 
         [Display(Name = "Задачи")]
         public virtual ICollection<Request> Requests { get; set; }
+
         [Display(Name = "Решения задач")]
         public virtual ICollection<RequestSolution> RequestSolutions { get; set; }
 
@@ -60,14 +63,19 @@ namespace WebApplication.Models
         [Display(Name = "Комментарии")]
         public virtual ICollection<Comment> Comments { get; set; }
 
-        [Display(Name = "Заблокирован?")]
+        [Display(Name = "Заблокировано?")]
         public  virtual bool IsBlocked { get; set; }
 
-        [Display(Name = "Дата блокировки")]
-        public  virtual DateTime BlockDate { get; set; }
+        [Display(Name = "Дата разблокировки")]
+        public  virtual DateTime BlockForDate { get; set; }
 
         [Display(Name = "Причина блокировки")]
         public  virtual  string BlockReason { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd'/'MM'/'yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Дата блокировки")]
+        public virtual DateTime DateOfBlocking { get; set; }
 
         [Display(Name = "Плюсованные комментарии")]
         public virtual ICollection<Comment> UpComments { get; set; }
@@ -85,7 +93,7 @@ namespace WebApplication.Models
         public virtual ICollection<Requirement> Requirements { get; set; }
 
         [Display(Name = "Подтверждения заявок на вывод средств")]
-        public virtual ICollection<ReqConfirmation> ReqConfirmations { get; set; }
+        public virtual ICollection<RequirementConfirmation> RequirementConfirmations { get; set; }
         
         [Display(Name="Баланс пользователя")]
         public  virtual decimal Balance { get; set; }

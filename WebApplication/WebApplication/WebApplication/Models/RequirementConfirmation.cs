@@ -3,14 +3,8 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public class ReqConfirmation: BaseModel.BaseModel
+    public class RequirementConfirmation: BaseModel.BaseModel
     {
-
-        [Display(Name = "Название")]
-        [Required(ErrorMessage = "Обязательно для заполнения!")]
-        [MaxLength(50, ErrorMessage = "Превышена максимальная длина записи(50 символов)")]
-        public virtual string Name { get; set; }
-
         [Display(Name = "Описание/Пожелания")]
         [Required(ErrorMessage = "Обязательно для заполнения!")]
         [MaxLength(200, ErrorMessage = "Превышена максимальная длина записи(200 символов)")]
@@ -28,10 +22,10 @@
         [Display(Name = "ID Автора")]
         public virtual string AuthorId { get; set; }
         
-        [Display(Name = "ID заявки на вывод средства")]
+        [Display(Name = "ID заявки на вывод средств")]
         public virtual int? RequirementId { get; set; }
 
-        [Display(Name = "Заявка на вывод средства")]
+        [Display(Name = "Заявка на вывод средств")]
         [ForeignKey("RequirementId")]
         public virtual Requirement Requirement { get; set; }
     }

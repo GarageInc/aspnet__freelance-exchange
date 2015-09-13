@@ -27,7 +27,7 @@ namespace WebApplication.Migrations
                         Karma = c.Int(nullable: false),
                         Text = c.String(),
                         ParentId = c.Int(),
-                        ReqId = c.Int(),
+                        RequestId = c.Int(),
                         CreateDateTime = c.DateTime(nullable: false),
                         IsDeleted = c.Boolean(nullable: false),
                         ApplicationUser_Id = c.String(maxLength: 128),
@@ -37,11 +37,11 @@ namespace WebApplication.Migrations
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.AspNetUsers", t => t.ApplicationUser_Id)
                 .ForeignKey("dbo.AspNetUsers", t => t.ApplicationUser_Id1)
-                .ForeignKey("dbo.Requests", t => t.ReqId)
+                .ForeignKey("dbo.Requests", t => t.RequestId)
                 .ForeignKey("dbo.AspNetUsers", t => t.ApplicationUser_Id2)
                 .ForeignKey("dbo.AspNetUsers", t => t.AuthorId)
                 .Index(t => t.AuthorId)
-                .Index(t => t.ReqId)
+                .Index(t => t.RequestId)
                 .Index(t => t.ApplicationUser_Id)
                 .Index(t => t.ApplicationUser_Id1)
                 .Index(t => t.ApplicationUser_Id2);
@@ -58,8 +58,9 @@ namespace WebApplication.Migrations
                         RegistrationDate = c.DateTime(nullable: false),
                         UserInfo = c.String(),
                         IsBlocked = c.Boolean(nullable: false),
-                        BlockDate = c.DateTime(nullable: false),
+                        BlockForDate = c.DateTime(nullable: false),
                         BlockReason = c.String(),
+                        DateOfBlocking = c.DateTime(nullable: false),
                         Balance = c.Decimal(nullable: false, precision: 18, scale: 2),
                         Email = c.String(maxLength: 256),
                         EmailConfirmed = c.Boolean(nullable: false),
@@ -188,8 +189,8 @@ namespace WebApplication.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        ReqSolutionId = c.Int(),
-                        ReqId = c.Int(),
+                        RequestSolutionId = c.Int(),
+                        RequestId = c.Int(),
                         Description = c.String(nullable: false),
                         DocumentId = c.Int(),
                         Checked = c.Boolean(nullable: false),
@@ -202,11 +203,11 @@ namespace WebApplication.Migrations
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Documents", t => t.DocumentId)
-                .ForeignKey("dbo.Requests", t => t.ReqId)
-                .ForeignKey("dbo.RequestSolutions", t => t.ReqSolutionId)
+                .ForeignKey("dbo.Requests", t => t.RequestId)
+                .ForeignKey("dbo.RequestSolutions", t => t.RequestSolutionId)
                 .ForeignKey("dbo.AspNetUsers", t => t.AuthorId)
-                .Index(t => t.ReqSolutionId)
-                .Index(t => t.ReqId)
+                .Index(t => t.RequestSolutionId)
+                .Index(t => t.RequestId)
                 .Index(t => t.DocumentId)
                 .Index(t => t.AuthorId);
             
@@ -267,6 +268,27 @@ namespace WebApplication.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
+                "dbo.RequestSolutions",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Name = c.String(maxLength: 50),
+                        RequestId = c.Int(),
+                        DocumentId = c.Int(),
+                        AuthorId = c.String(maxLength: 128),
+                        Description = c.String(),
+                        CreateDateTime = c.DateTime(nullable: false),
+                        IsDeleted = c.Boolean(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Documents", t => t.DocumentId)
+                .ForeignKey("dbo.Requests", t => t.RequestId)
+                .ForeignKey("dbo.AspNetUsers", t => t.AuthorId)
+                .Index(t => t.RequestId)
+                .Index(t => t.DocumentId)
+                .Index(t => t.AuthorId);
+            
+            CreateTable(
                 "dbo.Subjects",
                 c => new
                     {
@@ -276,27 +298,6 @@ namespace WebApplication.Migrations
                         IsDeleted = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
-            
-            CreateTable(
-                "dbo.RequestSolutions",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(maxLength: 50),
-                        ReqId = c.Int(),
-                        DocumentId = c.Int(),
-                        AuthorId = c.String(maxLength: 128),
-                        Comment = c.String(),
-                        CreateDateTime = c.DateTime(nullable: false),
-                        IsDeleted = c.Boolean(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Documents", t => t.DocumentId)
-                .ForeignKey("dbo.Requests", t => t.ReqId)
-                .ForeignKey("dbo.AspNetUsers", t => t.AuthorId)
-                .Index(t => t.ReqId)
-                .Index(t => t.DocumentId)
-                .Index(t => t.AuthorId);
             
             CreateTable(
                 "dbo.Props",
@@ -328,11 +329,10 @@ namespace WebApplication.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.ReqConfirmations",
+                "dbo.RequirementConfirmations",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(nullable: false, maxLength: 50),
                         Description = c.String(nullable: false, maxLength: 200),
                         DocumentId = c.Int(),
                         AuthorId = c.String(maxLength: 128),
@@ -353,21 +353,21 @@ namespace WebApplication.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(nullable: false, maxLength: 50),
                         Description = c.String(nullable: false, maxLength: 200),
-                        DocumentId = c.Int(),
                         AuthorId = c.String(maxLength: 128),
-                        Status = c.Int(nullable: false),
-                        Blocked = c.Boolean(nullable: false),
-                        BlockedReason = c.String(),
+                        Checked = c.Boolean(nullable: false),
+                        CanDownload = c.Boolean(nullable: false),
+                        Closed = c.Boolean(nullable: false),
+                        IsBlocked = c.Boolean(nullable: false),
+                        BlockForDate = c.DateTime(nullable: false),
+                        BlockReason = c.String(),
+                        DateOfBlocking = c.DateTime(nullable: false),
                         Price = c.Decimal(nullable: false, precision: 18, scale: 2),
                         CreateDateTime = c.DateTime(nullable: false),
                         IsDeleted = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Documents", t => t.DocumentId)
                 .ForeignKey("dbo.AspNetUsers", t => t.AuthorId)
-                .Index(t => t.DocumentId)
                 .Index(t => t.AuthorId);
             
             CreateTable(
@@ -403,26 +403,25 @@ namespace WebApplication.Migrations
             DropForeignKey("dbo.Comments", "ApplicationUser_Id2", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.Requirements", "AuthorId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.RequirementConfirmations", "AuthorId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.RequirementConfirmations", "RequirementId", "dbo.Requirements");
+            DropForeignKey("dbo.RequirementConfirmations", "DocumentId", "dbo.Documents");
             DropForeignKey("dbo.RequestSolutions", "AuthorId", "dbo.AspNetUsers");
             DropForeignKey("dbo.Requests", "ApplicationUser_Id", "dbo.AspNetUsers");
-            DropForeignKey("dbo.ReqConfirmations", "AuthorId", "dbo.AspNetUsers");
-            DropForeignKey("dbo.ReqConfirmations", "RequirementId", "dbo.Requirements");
-            DropForeignKey("dbo.Requirements", "DocumentId", "dbo.Documents");
-            DropForeignKey("dbo.ReqConfirmations", "DocumentId", "dbo.Documents");
             DropForeignKey("dbo.RecallMessages", "ApplicationUser_Id1", "dbo.AspNetUsers");
             DropForeignKey("dbo.Props", "AuthorId", "dbo.AspNetUsers");
             DropForeignKey("dbo.Props", "PropsCategoryId", "dbo.PropsCategories");
             DropForeignKey("dbo.Payments", "AuthorId", "dbo.AspNetUsers");
-            DropForeignKey("dbo.Payments", "ReqSolutionId", "dbo.RequestSolutions");
-            DropForeignKey("dbo.RequestSolutions", "ReqId", "dbo.Requests");
-            DropForeignKey("dbo.RequestSolutions", "DocumentId", "dbo.Documents");
-            DropForeignKey("dbo.Payments", "ReqId", "dbo.Requests");
+            DropForeignKey("dbo.Payments", "RequestSolutionId", "dbo.RequestSolutions");
+            DropForeignKey("dbo.Payments", "RequestId", "dbo.Requests");
             DropForeignKey("dbo.Requests", "SubjectId", "dbo.Subjects");
             DropForeignKey("dbo.AspNetUsers", "Request_Id", "dbo.Requests");
+            DropForeignKey("dbo.RequestSolutions", "RequestId", "dbo.Requests");
+            DropForeignKey("dbo.RequestSolutions", "DocumentId", "dbo.Documents");
             DropForeignKey("dbo.Requests", "LifecycleId", "dbo.Lifecycles");
             DropForeignKey("dbo.Requests", "ExecutorId", "dbo.AspNetUsers");
             DropForeignKey("dbo.Requests", "DocumentId", "dbo.Documents");
-            DropForeignKey("dbo.Comments", "ReqId", "dbo.Requests");
+            DropForeignKey("dbo.Comments", "RequestId", "dbo.Requests");
             DropForeignKey("dbo.Requests", "CategoryId", "dbo.Categories");
             DropForeignKey("dbo.Requests", "AuthorId", "dbo.AspNetUsers");
             DropForeignKey("dbo.Payments", "DocumentId", "dbo.Documents");
@@ -441,15 +440,14 @@ namespace WebApplication.Migrations
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.Requirements", new[] { "AuthorId" });
-            DropIndex("dbo.Requirements", new[] { "DocumentId" });
-            DropIndex("dbo.ReqConfirmations", new[] { "RequirementId" });
-            DropIndex("dbo.ReqConfirmations", new[] { "AuthorId" });
-            DropIndex("dbo.ReqConfirmations", new[] { "DocumentId" });
+            DropIndex("dbo.RequirementConfirmations", new[] { "RequirementId" });
+            DropIndex("dbo.RequirementConfirmations", new[] { "AuthorId" });
+            DropIndex("dbo.RequirementConfirmations", new[] { "DocumentId" });
             DropIndex("dbo.Props", new[] { "AuthorId" });
             DropIndex("dbo.Props", new[] { "PropsCategoryId" });
             DropIndex("dbo.RequestSolutions", new[] { "AuthorId" });
             DropIndex("dbo.RequestSolutions", new[] { "DocumentId" });
-            DropIndex("dbo.RequestSolutions", new[] { "ReqId" });
+            DropIndex("dbo.RequestSolutions", new[] { "RequestId" });
             DropIndex("dbo.Requests", new[] { "ApplicationUser_Id" });
             DropIndex("dbo.Requests", new[] { "LifecycleId" });
             DropIndex("dbo.Requests", new[] { "SubjectId" });
@@ -459,8 +457,8 @@ namespace WebApplication.Migrations
             DropIndex("dbo.Requests", new[] { "DocumentId" });
             DropIndex("dbo.Payments", new[] { "AuthorId" });
             DropIndex("dbo.Payments", new[] { "DocumentId" });
-            DropIndex("dbo.Payments", new[] { "ReqId" });
-            DropIndex("dbo.Payments", new[] { "ReqSolutionId" });
+            DropIndex("dbo.Payments", new[] { "RequestId" });
+            DropIndex("dbo.Payments", new[] { "RequestSolutionId" });
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.ErrorMessages", new[] { "Document_Id" });
             DropIndex("dbo.ErrorMessages", new[] { "AuthorId" });
@@ -477,16 +475,16 @@ namespace WebApplication.Migrations
             DropIndex("dbo.Comments", new[] { "ApplicationUser_Id2" });
             DropIndex("dbo.Comments", new[] { "ApplicationUser_Id1" });
             DropIndex("dbo.Comments", new[] { "ApplicationUser_Id" });
-            DropIndex("dbo.Comments", new[] { "ReqId" });
+            DropIndex("dbo.Comments", new[] { "RequestId" });
             DropIndex("dbo.Comments", new[] { "AuthorId" });
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.Requirements");
-            DropTable("dbo.ReqConfirmations");
+            DropTable("dbo.RequirementConfirmations");
             DropTable("dbo.PropsCategories");
             DropTable("dbo.Props");
-            DropTable("dbo.RequestSolutions");
             DropTable("dbo.Subjects");
+            DropTable("dbo.RequestSolutions");
             DropTable("dbo.Lifecycles");
             DropTable("dbo.Requests");
             DropTable("dbo.Payments");

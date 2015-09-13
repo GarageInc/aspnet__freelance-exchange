@@ -12,7 +12,7 @@
 </div>
 
 <div class="table-responsive" align="center">
-    <table class="table table-bordered table-hover table-condensed"
+    <table class="table table-no-bordered  table-hover table-condensed"
            id="table"
            data-click-to-select="true"
            data-show-columns="true"
@@ -53,7 +53,7 @@
                 Изменить статус
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreateDate)
+                @Html.DisplayNameFor(model => model.CreateDateTime)
             </th>
             <th>
                 Детали
@@ -79,7 +79,7 @@
                     <td>
                         @if (item.ForAdministration)
                         {
-                            <span class="label label-danger">
+                            <span class="label label-info">
                                 @Html.DisplayFor(modelItem => item.Email)    
                             </span>
                         }
@@ -109,17 +109,17 @@
                         }
                         else
                         {
-                            <span class="label label-default">Закрыто</span>
+                            <span class="label label-default">Рассмотрено</span>
                         }
                     </td>
-                    @if ((ViewBag.ErrorStatus as SelectList).Count() > 0)
+                    @if ((ViewBag.ErrorStatus as SelectList).Any())
                     {
                         <td>
                             @using (Html.BeginForm("ChangeErrorMessageStatus", "ErrorMessage", FormMethod.Post, new {@class = "form-horizontal", id = "myForm", role = "form", enctype = "multipart/form-data"}))
                             {
                                 @Html.Hidden("errorMessageId", item.Id)
-                                @Html.DropDownList("errorStatusId", ViewBag.ErrorStatus as SelectList)
-                                <br>
+                                @Html.DropDownList("errorStatusId", ViewBag.ErrorStatus as SelectList,new {@class="form-control-garageinc"})
+                                <hr>
                                 <input type="submit" value="Изменить" class="buttonb"/>
                             }
                         </td>
@@ -131,7 +131,7 @@
                         </td>
                     }
                     <td>
-                        @Html.DisplayFor(modelItem => item.CreateDate)
+                        @Html.DisplayFor(modelItem => item.CreateDateTime)
                     </td>
                     <td>
                         <a class="compItem" href='@Url.Action("Details", "ErrorMessage", new {id = item.Id}, null)'>
@@ -139,8 +139,7 @@
                         </a>
                     </td>
                     <td>
-                        @Html.ActionLink("Детали", "Details", new {id = item.Id}) |
-                        @Html.ActionLink("Удалить", "Delete", new {id = item.Id})
+                        @Html.ActionLink("Удалить", "Delete", new {id = item.Id}, new {@class="buttons"})
                     </td>
                 </tr>
             }

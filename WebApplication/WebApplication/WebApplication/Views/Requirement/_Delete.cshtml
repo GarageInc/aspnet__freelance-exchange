@@ -1,0 +1,90 @@
+﻿@model WebApplication.Models.Requirement
+
+<div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal" area-hidden="true">X</button>
+        <strong>Заявка № @Html.DisplayFor(m => m.Id)</strong>
+    </div>
+    <div class="modal-body">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Author)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Author.Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Checked)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Checked)
+            </dd>
+
+            @if (Model.IsBlocked)
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.IsBlocked)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.IsBlocked)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.BlockReason)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.BlockReason)
+                </dd>
+            }
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Price)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Price)
+            </dd>
+
+            <dt>
+            </dt>
+            <dd>
+                @if (!Model.Closed)
+                {
+                    using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-actions no-color">
+                            <input type="submit" value="Удалить" class="buttons" />
+                        </div>
+                    }
+
+                }
+                else
+                {
+                    <text>Удалить нельзя, т.к. закрытая и принятая администрацией заявка</text>
+                }
+            </dd>
+
+        </dl>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+    </div>
+</div>
+

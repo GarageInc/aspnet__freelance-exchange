@@ -1,0 +1,56 @@
+﻿@model WebApplication.Models.ErrorMessage
+
+<div>
+    <strong>Сообщение об ошибке № @Model.Id</strong>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Author)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Author.Name)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.ErrorStatus)
+        </dt>
+        <dd>
+            @if (Model.ErrorStatus == 0)
+            {
+                <span class="label label-success">Открыто</span>
+            }
+            else
+            {
+                <span class="label label-default">Рассмотрено</span>
+            }
+        </dd>
+
+        @if (Model.ForAdministration)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+        }
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Text)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Text)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateDateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateDateTime)
+        </dd>
+
+    </dl>
+</div>

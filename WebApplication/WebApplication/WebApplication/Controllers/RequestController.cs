@@ -1,7 +1,6 @@
-﻿using WebApplication.Service;
-
-namespace WebApplication.Controllers
+﻿namespace WebApplication.Controllers
 {
+    using System.Data;
     using System;
     using System.Collections.Generic;
     using System.Data.Entity;
@@ -13,6 +12,8 @@ namespace WebApplication.Controllers
     using WebApplication.Models;
     using Microsoft.AspNet.Identity;
     using System.Web.WebPages;
+    using WebApplication.Service;
+    using System.Transactions;
 
     [Authorize]// Только авторизованным
     public class RequestController : Controller
@@ -32,7 +33,9 @@ namespace WebApplication.Controllers
                                         .Include(r => r.Category)  // добавляем категории
                                         .Include(r => r.Lifecycle)  // добавляем жизненный цикл заявок
                                         .Include(r => r.Author) // добавляем данные о пользователях
-                                        .Include(r => r.Solvers);
+                                        .Include(r => r.Solvers)
+                                        .Include(r=>r.Subject)
+                                        .OrderByDescending(r => r.Lifecycle.Opened);
             }
             else
                 allReqs = _db.Requests
@@ -41,8 +44,10 @@ namespace WebApplication.Controllers
                                         .Include(r => r.Category)  // добавляем категории
                                         .Include(r => r.Lifecycle)  // добавляем жизненный цикл заявок
                                         .Include(r => r.Author)         // добавляем данные о пользователях
-                                        .Include(r => r.Solvers);
-            ;
+                                        .Include(r => r.Solvers)
+                                        .Include(r=>r.Subject)
+                                        .OrderByDescending(r => r.Lifecycle.Opened);
+            
             List<Category> categories = _db.Categories.ToList();
 
             //Добавляем в список возможность выбора всех
@@ -72,6 +77,7 @@ namespace WebApplication.Controllers
                                         .Include(r => r.Lifecycle)  // добавляем жизненный цикл заявок
                                         .Include(r => r.Author)         // добавляем данные о пользователях
                                         .Include(r => r.Solvers)
+                                        .Include(r => r.Subject)
                                         .OrderByDescending(r => r.Lifecycle.Opened); // упорядочиваем по дате по убыванию   
             }
             else
@@ -83,6 +89,7 @@ namespace WebApplication.Controllers
                                         .Include(r => r.Lifecycle)  // добавляем жизненный цикл заявок
                                         .Include(r => r.Author)         // добавляем данные о пользователях
                                         .Include(r => r.Solvers)
+                                        .Include(r => r.Subject)
                                         .OrderByDescending(r => r.Lifecycle.Opened); // упорядочиваем по дате по убыванию  ;
 
 
@@ -109,10 +116,19 @@ namespace WebApplication.Controllers
                 return HttpNotFound();
             }
 
+            var payments = _db.Payments
+                                .Where(x => x.RequestId == request.Id)
+                                .Where(x => x.Closed);
+            if (payments.Any())
+            {
+
+                return PartialView("_Content", "Извините, но оплата за данную задачу уже утверждена и заявка не может быть изменена!");
+            }
+
             // Добавляются категории и предмет
             ViewBag.Categories = new SelectList(_db.Categories, "Id", "Name");
             ViewBag.Subjects = new SelectList(_db.Subjects, "Id", "Name");
-            return View(request);
+            return PartialView(request);
         }
 
         // POST: Request/Edit/5
@@ -120,48 +136,64 @@ namespace WebApplication.Controllers
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        // 
         public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Description,CategoryId,SubjectId,Deadline,Priority,Price")] Request request, HttpPostedFileBase error)
         {
             var curId = this.HttpContext.User.Identity.GetUserId();
 
             if (ModelState.IsValid)
             {
-                var requestBase = _db.Requests.Find(request.Id);
-                if (requestBase.Author.Id == curId)
+                try
                 {
-                    if (error != null)
+                    var requestBase = _db.Requests.Find(request.Id);
+                    if (requestBase.Author.Id == curId)
                     {
-                        Document doc = new Document();
-                        doc.Size = error.ContentLength;
-                        // Получаем расширение
-                        string ext = error.FileName.Substring(error.FileName.LastIndexOf('.'));
-                        doc.Type = ext;
-                        // сохраняем файл по определенному пути на сервере
-                        string path = DateTime.Now.ToString(curId.GetHashCode() + "dd/MM/yyyy H:mm:ss").Replace(":", "_").Replace("/", ".") + ext;
-                        error.SaveAs(Server.MapPath("~/Files/RequestFiles/" + path));
-                        doc.Url = path;
+                        using (new TransactionScope(TransactionScopeOption.Required,
+                                new TransactionOptions { IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted }))
+                        {
+                            // Проверим, если оплата по этой задаче уже проверена администрацией и закрыта - то увы, изменить ничего нельзя
+                            var payments = _db.Payments
+                                .Where(x => x.RequestId == request.Id)
+                                .Where(x => x.Closed);
+                            if (payments.Any())
+                            {
 
-                        requestBase.Document = doc;
-                        _db.Documents.Add(doc);
+                                return PartialView("_Content", "Извините, но оплата за данную задачу уже утверждена и заявка не может быть изменена!");
+                            }
+
+                            if (error != null)
+                            {
+                                requestBase.Document = _docService.CreateDocument(Server.MapPath("~/Files/RequestFiles/"), error);
+                            }
+
+                            requestBase.Name = request.Name;
+
+                            requestBase.Category = _db.Categories.Find(request.CategoryId);
+                            requestBase.CategoryId = requestBase.Category.Id;
+
+                            requestBase.Subject = _db.Subjects.Find(request.SubjectId);
+                            requestBase.SubjectId = requestBase.Subject.Id;
+
+                            requestBase.Deadline = request.Deadline;
+                            requestBase.Priority = request.Priority;
+                            requestBase.Description = request.Description;
+                            requestBase.Price = request.Price;
+
+                            _db.Entry(requestBase).State = EntityState.Modified;
+
+                        }
+
+                        await _db.SaveChangesAsync();
+                        return RedirectToAction("MyIndex");
                     }
-                    
-                    requestBase.Name = request.Name;
-                    requestBase.Category = _db.Categories.Find(request.CategoryId);
-                    requestBase.CategoryId = requestBase.Category.Id;
-                    requestBase.Subject = requestBase.Subject;
-                    requestBase.SubjectId = requestBase.Subject.Id;
-                    requestBase.Deadline = request.Deadline;
-                    requestBase.Priority = request.Priority;
-                    requestBase.Description = request.Description;
-                    requestBase.Price = request.Price;
-
-                    _db.Entry(requestBase).State = EntityState.Modified;
-                    await _db.SaveChangesAsync();
-                    return RedirectToAction("MyIndex");
+                    else
+                    {
+                        return PartialView("_Content", "К сожалению, Вы не автор данной задачи и редактировать её не можете");
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    return Content("К сожалению, Вы не автор данной задачи и редактировать её не можете");
+                    return PartialView("_Content", e.Message);
                 }
             }
 
@@ -241,7 +273,7 @@ namespace WebApplication.Controllers
                 request.IsDeleted = false;
                 request.Checked = false;
                 request.CanDownload = false;
-
+                
                 // указываем статус Открыта у заявки
                 request.IsPaid = false;
                 request.Status = (int)RequestStatus.Open;
@@ -257,7 +289,7 @@ namespace WebApplication.Controllers
                 }
                 catch(Exception e)
                 {
-                    return Content(e.Message);
+                    return PartialView("_Content",e.Message);
                 }
 
                 return RedirectToAction("Index");
@@ -318,6 +350,16 @@ namespace WebApplication.Controllers
 
             if (request != null)
             {
+                // Проверим, если оплата по этой задаче уже проверена администрацией и закрыта - то увы, изменить ничего нельзя
+                var payments = _db.Payments
+                    .Where(x => x.RequestId == request.Id)
+                    .Where(x => x.Closed);
+
+                if (payments.Any())
+                {
+                    return PartialView("_Content","Извините, но оплата за данную задачу уже утверждена и заявка не может быть удалена!");
+                }
+
                 //получаем категорию
                 request.Category = _db.Categories.First(m => m.Id == request.CategoryId);
                 return PartialView("_Delete", request);
@@ -340,6 +382,7 @@ namespace WebApplication.Controllers
                 Lifecycle lifecycle = _db.Lifecycles.Find(request.LifecycleId);
                 lifecycle.IsDeleted = true;
                 request.IsDeleted = true;
+                request.DateOfDeleting=DateTime.Now;
 
                 _db.Entry(lifecycle).State = EntityState.Modified;
                 _db.Entry(request).State = EntityState.Modified;
@@ -348,7 +391,6 @@ namespace WebApplication.Controllers
             }
             Response.Redirect(Request.UrlReferrer.AbsoluteUri);
         }
-
 
         /// <summary>
         /// Редактирование заявок - назначение исполнителей
@@ -366,23 +408,28 @@ namespace WebApplication.Controllers
                     .Include(r => r.Lifecycle)
                     .Include(r => r.Executor)
                     .Include(r => r.Document)
+                    .Include(r => r.Subject)
                     .Include(r => r.Solvers);
             }
             else
-                requests = _db.Requests.Include(r => r.Author)
+                requests = _db.Requests
                     .Where(r => r.IsDeleted == false)
                     .Where(x => x.CategoryId == category)
+                    .Include(r => r.Author)
                     .Include(r => r.Lifecycle)
                     .Include(r => r.Executor)
                     .Include(r => r.Document)
+                    .Include(r => r.Subject)
                     .Include(r=>r.Solvers);
-            
+
+            var curId = this.User.Identity.GetUserId();
             var users = _db.Users;
 
             var executors = users.ToList();// Думаю, пока не стоит делать только для обычных пользователей
             ViewBag.Executors = new SelectList(executors, "Id", "Name");
 
             List<Category> categories = _db.Categories.ToList();
+
             //Добавляем в список возможность выбора всех
             categories.Insert(0, new Category { Name = "Все", Id = 0 });
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
@@ -391,20 +438,31 @@ namespace WebApplication.Controllers
         }
         
         [Authorize(Roles = "Moderator, Administrator")]
-        public ActionResult DistributeRequest(int? requestId, string executorId)
+        public ActionResult DistributeRequest(int? requestId, string Id)
         {
-            if (requestId == null && executorId.IsEmpty())// == null)
+            if (requestId == null && Id.IsEmpty())// == null)
             {
                 return RedirectToAction("Distribute");
             }
 
             Request req = _db.Requests.Find(requestId);
-            ApplicationUser ex = _db.Users.Find(executorId);
-            if (req == null && ex == null)
+            ApplicationUser ex = _db.Users.Find(Id);
+            if (req == null || ex == null)
             {
                 return RedirectToAction("Distribute");
             }
-            req.ExecutorId = executorId;
+
+            // Проверим, если оплата по этой задаче уже проверена администрацией и закрыта - то увы, изменить ничего нельзя
+            var payments = _db.Payments
+                .Where(x => x.RequestId == requestId)
+                .Where(x=>x.Closed);
+            if(payments.Any())
+            {
+                return PartialView("_Content","Извините, но оплата за данную задачу уже утверждена и пользователь не может быть изменён!");
+            }
+
+            req.ExecutorId = Id;
+            req.Executor = ex;
 
             req.Status = (int)RequestStatus.Distributed;
             Lifecycle lifecycle = _db.Lifecycles.Find(req.LifecycleId);
@@ -428,11 +486,15 @@ namespace WebApplication.Controllers
 
             if (user != null)
             {
-                var requests = _db.Requests.Include(r => r.Author)
-                                    .Include(r => r.Lifecycle)
-                                    .Include(r => r.Executor)
-                                    .Include(r=>r.Document)
-                                    .Where(r => r.ExecutorId == user.Id);
+                var requests = _db.Requests
+                    .Include(r => r.Author)
+                    .Include(r => r.Lifecycle)
+                    .Include(r => r.Executor)
+                    .Include(r => r.Document)
+                    .Include(r => r.Category)
+                    .Include(r => r.Subject)
+                    .Where(r => r.ExecutorId == user.Id);
+
                 return View(requests);
             }
 
@@ -453,12 +515,13 @@ namespace WebApplication.Controllers
             Request req = _db.Requests.Find(requestId);
             if (req.Executor.Id != curId)
             {
-                return Content("К сожалению, Вы не исполнитель данной заявки и не можете изменить её статус");
+                return PartialView("_Content","К сожалению, Вы не исполнитель данной заявки и не можете изменить её статус");
             }
 
             if (req != null)
             {
                 req.Status = status;
+
                 Lifecycle lifecycle = _db.Lifecycles.Find(req.LifecycleId);
                 if (status == (int)RequestStatus.Open)
                 {
@@ -544,6 +607,8 @@ namespace WebApplication.Controllers
                 if (status == 0)
                 {
                     req.Checked = false;
+                    req.Executor = null;
+                    req.ExecutorId = null;
                 }
                 else if (status == 1)
                 {
@@ -562,11 +627,14 @@ namespace WebApplication.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ActionResult AddToSolvers(string id)
+        public ActionResult AddToSolvers(int id)
         {
             var req = _db.Requests.Find(id);
             var curId = this.HttpContext.User.Identity.GetUserId();
             var thisUser = _db.Users.Find(curId);
+
+            if (req.AuthorId == curId)
+                return PartialView("_Content","Извините, но добавиться к решению собственной задачи нельзя");
 
             if (req.Solvers.Count(x => x.Id == curId) == 0)
             {
@@ -594,13 +662,46 @@ namespace WebApplication.Controllers
             }
 
             Request req = _db.Requests.Find(requestId);
+
+            // Сделаем защиту решателя: нельзя изменить решателя в последний момент, чтобы оплата за задачу перешла ему, в то время как настоящий исполнитель ничего не получит
+            
+            // Если уже назначен пользователь - проверим, загружена ли оплата уже проверенная по этой задаче.
+            // Если оплата присутствует, то она фиксируется как за труды данного решателя и поэтому другой решатель не может быть изменён
+            if (req.ExecutorId != null)
+            {
+                var allPayments = _db.Payments
+                .Where(x => x.IsDeleted == false)
+                .Where(x => x.Checked)
+                .Where(x => x.RequestId == requestId)
+                .Include(x => x.Request);
+
+                if (allPayments.Any())
+                {
+                    return
+                        PartialView("_Content",
+                            "К сожалению, решатель уже установлен и оплата за задачу загружена Вами, Вы не можете изменить решателя"
+                            );
+                }
+            }
+
             ApplicationUser ex = _db.Users.Find(executorId);
-            if (req == null && ex == null)
+
+            if (req == null || ex == null)
             {
                 return RedirectToAction("MyIndex");
             }
-            req.ExecutorId = executorId;
 
+            // Проверим, если оплата по этой задаче уже проверена администрацией и закрыта - то увы, изменить ничего нельзя
+            var payments = _db.Payments
+                .Where(x => x.RequestId == requestId)
+                .Where(x => x.Closed);
+            if (payments.Any())
+            {
+                return PartialView("_Content","Извините, но оплата за данную задачу уже утверждена и пользователь не может быть изменён!");
+            }
+
+            req.ExecutorId = executorId;
+            req.Executor = ex;
             req.Status = (int)RequestStatus.Distributed;
             Lifecycle lifecycle = _db.Lifecycles.Find(req.LifecycleId);
             lifecycle.Distributed = DateTime.Now;
@@ -612,13 +713,18 @@ namespace WebApplication.Controllers
             return RedirectToAction("MyIndex");
         }
 
-        
+        /// <summary>
+        /// Получение все решений по данной заявке
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult GetAllSolutions(int id)
         {
             var reqSols = _db.RequestSolutions
                 .Where(x => x.IsDeleted == false)
-                .Where(x => x.ReqId == id);
+                .Where(x => x.RequestId == id)
+                .Include(x=>x.Author);
 
             return PartialView("_GetAllSolutions", reqSols);
         }

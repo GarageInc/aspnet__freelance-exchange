@@ -6,8 +6,7 @@
 
 <h3>Редактирование решения № @Model.Id</h3>
 
-
-@using (Html.BeginForm())
+@using (Html.BeginForm("Edit", "RequestSolution", FormMethod.Post, new { role = "form", @class = "form-horizontal", enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     
@@ -28,10 +27,10 @@
         <hr />
         
         <div class="form-group">
-            @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
             <text align="justify" class="col-md-6">
                 Напишите свой комментарий/совет к разбору решения. Ведь заказчику ещё нужно будет в нем разобраться.

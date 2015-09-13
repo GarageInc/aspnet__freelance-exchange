@@ -23,7 +23,7 @@
 </div>
 
 <div class="table-responsive">
-    <table class="table table-bordered table-hover table-condensed"
+    <table class="table table-no-bordered  table-hover table-condensed"
            id="table"
            data-click-to-select="true"
            data-show-columns="true"
@@ -46,11 +46,12 @@
         <thead>
             <tr>
                 <th></th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Closed)
-                </th>
+
                 <th>
                     @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Closed)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Author.Name)
@@ -59,7 +60,7 @@
                     @Html.DisplayNameFor(model => model.Document)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Req)
+                    @Html.DisplayNameFor(model => model.Request)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Description)
@@ -68,12 +69,9 @@
                     @Html.DisplayNameFor(model => model.Checked)
                 </th>
                 <th>
-                    Проверка на пополнение
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.Price)
                 </th>
-                <th>Функционал</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -82,21 +80,30 @@
                 <tr>
                     <td></td>
                     <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
                         @if (item.Closed)
                         {
-                            <span class="badge-success">Закрыто администрацией</span>
+                            <label class="label-success">
+                                Переведено
+                                <br/>
+                                Закрыто
+                                <br/>
+                                администрацией
+                            </label>
 
                         }
                         else
                         {
-                            <span class="badge-critical">Перевод не произведён</span>
+                            <label class="label-info">Перевод не произведён, идет проверка администрацией</label>
                         }
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Author.Name)
+                        <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = item.AuthorId}, null)'>
+                            @item.Author.Name
+                            <img src="../../Content/pictures/author.png" class="tdImage" title="Автор заявки" />
+                        </a>
                     </td>
                     <td>
                         @if (item.Document != null)
@@ -109,7 +116,19 @@
                         }
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Req.Id)
+                        @if (item.AddingFunds)
+                        {
+                            <a>
+                                <img src="../../Content/pictures/addingFundsIcon.png" class="tdImage" title="Добавление оплаты" />
+
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="compItem" href='@Url.Action("Details", "Request", new {id = item.RequestId}, null)'>
+                                <img src="../../Content/pictures/info.png" class="tdImage" title="Детали заявки" />
+                            </a>
+                        }
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Description)
@@ -117,53 +136,33 @@
                     <td>
                         @if (item.Checked == true)
                         {
-                            <h5>Проверено</h5>
+                            <h6>Проверено</h6>
                         }
                         else
                         {
-                            <h5>Не проверено</h5>
-                        }
-                    </td>
-                    <td>
-                        @using (Html.BeginForm("PaymentChangeStatus", "Payment"))
-                        {
-                            @Html.Hidden("paymentId", item.Id)
-
-                            @Html.DropDownList("status",
-                                new[]
-                                {
-                                    new SelectListItem() {Text = "Не проверено, в состоянии блокирования", Value = "0"},
-                                    new SelectListItem() {Text = "Проверено", Value = "1"}
-                                })
-                            ;
-
-                            <input type="submit" value="Изменить" class="buttons" />
-                        }
-                    </td>
-                    <td>
-                        @if (item.Checked)
-                        {
-                            <a class="compItem" href='@Url.Action("RemittanceView", "Payment", new {id = item.Id})'>
-                                <img src="../../Content/pictures/delete.png" class="tdImage" title="Открыть окно распределения средств" />
-                            </a>
-                        }
-                        else
-                        {
-                            <text>
-                                Не проверено, окно распределения средств не доступно
-                            </text>
+                            <h6>Не проверено</h6>
                         }
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Price)
                     </td>
                     <td>
-                        @if (userId == item.AuthorId)
+                        @if ((this.User.IsInRole("Administrator") || this.User.IsInRole("Moderator")) || userId == item.AuthorId)
                         {
-                            <a class="compItem" href='@Url.Action("Delete", "Payment", new {id = item.Id})'>
-                                <img src="../../Content/pictures/delete.png" class="tdImage" title="Удаление заявки" />
-                            </a>
-                            @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { @class = "buttonb" })
+                            if (item.Closed)
+                            {
+                                <h6>
+                                    Оплата закрыта
+                                </h6>
+                            }
+                            else
+                            {
+                                <a class="compItem" href='@Url.Action("Delete", "Payment", new {id = item.Id})'>
+                                    <img src="../../Content/pictures/delete.png" class="tdImage" title="Удаление заявки" />
+                                </a>
+                                @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { @class = "buttonb" })
+
+                            }
                         }
                     </td>
                 </tr>

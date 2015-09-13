@@ -57,8 +57,13 @@
                             @*"*@
                         </div>
                         <br/>
-                        <div class="add" title="Ответить" onclick="openAdd(@node.Id)">
-                        </div>
+                        
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="add" title="Ответить" onclick="openAdd(@node.Id)">
+                            </div>
+                        }
+
                         @if (node.Author.Id == this.User.Identity.GetUserId())
                         {
                             <div class="remove">

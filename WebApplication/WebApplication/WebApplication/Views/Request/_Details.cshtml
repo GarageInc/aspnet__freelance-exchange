@@ -1,27 +1,110 @@
-﻿@model WebApplication.Models.Request
+﻿@using WebApplication.Models
+@model WebApplication.Models.Request
 
 
 <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal" area-hidden="true">X</button>
-        <h4>Детали</h4>
+        <strong>Задача № @Html.DisplayFor(m => m.Id)</strong>
     </div>
     <div class="modal-body">
-        <dl class="dl-horizontal">
-            <p>
-                <b>Задача № </b>
-                @Html.DisplayFor(m => m.Id)
-            </p>
-            <p>
+        <dl class="dl-horizontal">       
+            <dt>
+                @Html.DisplayNameFor(m => m.Category)
+                <br/>
+                [@Html.DisplayNameFor(m => m.Subject)]
+            </dt>
+            <dd>
                 @Html.DisplayFor(m => m.Category.Name)
-                @Html.DisplayFor(m => m.Subject.Name)
-            </p>
-            <p>
-                <b>Название:</b> @Html.DisplayFor(m => m.Name)</p>
-            <p>
-                <b>Описание:</b> @Html.DisplayFor(m => m.Description)</p>
-            <p>
-            <p>
+                <br />
+                [@Html.DisplayFor(m => m.Subject.Name)]
+            </dd>
+            <hr/>
+
+            <dt>
+                @Html.DisplayNameFor(m => m.Status)
+                <br />
+                [@Html.DisplayNameFor(m => m.Priority)]
+            </dt>
+            <dd>
+                @if (Model.Status == (int)RequestStatus.Open)
+                {
+                    <span class="label label-success">Открыта</span>
+                }
+                else if (Model.Status == (int)RequestStatus.Distributed)
+                {
+                    <span class="label label-warning">Распределена</span>
+                }
+                else if (Model.Status == (int)RequestStatus.Proccesing)
+                {
+                    <span class="label label-important">На решении</span>
+                }
+                else if (Model.Status == (int)RequestStatus.Closed)
+                {
+                    <span class="label label-inverse">Закрыта</span>
+                }
+
+                <br />
+                @if (Model.Priority == (int)RequestPriority.Low)
+                {
+                    <span class="badge badge-low">[Низкий]</span>
+                }
+                else if (Model.Priority == (int)RequestPriority.Medium)
+                {
+                    <span class="badge badge-medium">[Средний]</span>
+                }
+                else if (Model.Priority == (int)RequestPriority.High)
+                {
+                    <span class="badge badge-high">[Высокий]</span>
+                }
+                else if (Model.Priority == (int)RequestPriority.Critical)
+                {
+                    <span class="badge badge-critical">[Критичный]</span>
+                }
+            </dd>
+            <hr />
+            
+            <dt>
+                @Html.DisplayNameFor(m => m.Price)
+                <br />
+                [@Html.DisplayNameFor(m => m.IsPaid)]
+            </dt>
+            <dd>
+                @Html.DisplayFor(m => m.Price)
+                <br />
+                @if (Model.IsPaid)
+                {
+                    <span class="label label-success">[ДА]</span>
+                }
+                else
+                {
+                    <span class="label label-warning">[НЕТ]</span>
+                }
+            </dd>
+            <hr />
+
+            <dt>
+                @Html.DisplayNameFor(m => m.Name)
+                <br/>
+                @Html.DisplayNameFor(m => m.Description)
+            </dt>
+            <dd>
+                @Html.DisplayFor(m => m.Name)
+                <br/>
+                [@Html.DisplayFor(m => m.Description)]
+            </dd> 
+            <hr />
+                
+            <dt>
+                @Html.DisplayNameFor(m => m.Author)
+                <br/>
+                [@Html.DisplayNameFor(m => m.Executor)]
+            </dt>
+            <dd>
+                @Html.DisplayFor(m => m.Author.Name)
+                <br/>
+                [<span class ="label label-success">@Html.DisplayFor(m => m.Executor.Name)</span>]
+            </dd>
         </dl>
     </div>
     

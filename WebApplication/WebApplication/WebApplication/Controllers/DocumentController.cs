@@ -11,14 +11,15 @@ using WebApplication.Models;
 
 namespace WebApplication.Controllers
 {
-    public class DocumentsController : Controller
+    [Authorize]
+    public class DocumentController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
         // GET: Documents
         public async Task<ActionResult> Index()
         {
-            return View(await db.Documents.ToListAsync());
+            return View(await _db.Documents.ToListAsync());
         }
 
         // GET: Documents/Details/5
@@ -28,7 +29,7 @@ namespace WebApplication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Document document = await db.Documents.FindAsync(id);
+            Document document = await _db.Documents.FindAsync(id);
             if (document == null)
             {
                 return HttpNotFound();
@@ -51,8 +52,8 @@ namespace WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Documents.Add(document);
-                await db.SaveChangesAsync();
+                _db.Documents.Add(document);
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
@@ -66,7 +67,7 @@ namespace WebApplication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Document document = await db.Documents.FindAsync(id);
+            Document document = await _db.Documents.FindAsync(id);
             if (document == null)
             {
                 return HttpNotFound();
@@ -83,8 +84,8 @@ namespace WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(document).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                _db.Entry(document).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(document);
@@ -97,7 +98,7 @@ namespace WebApplication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Document document = await db.Documents.FindAsync(id);
+            Document document = await _db.Documents.FindAsync(id);
             if (document == null)
             {
                 return HttpNotFound();
@@ -110,9 +111,9 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Document document = await db.Documents.FindAsync(id);
-            db.Documents.Remove(document);
-            await db.SaveChangesAsync();
+            Document document = await _db.Documents.FindAsync(id);
+            _db.Documents.Remove(document);
+            await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -120,7 +121,7 @@ namespace WebApplication.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -128,7 +129,7 @@ namespace WebApplication.Controllers
 
         public FileResult DownloadPaymentFiles(int id)
         {
-            var reqDoc = db.Documents.Find(id);//.Document;
+            var reqDoc = _db.Documents.Find(id);//.Document;
 
             byte[] fileBytes = System.IO.File.ReadAllBytes(Server.MapPath("~/Files/PaymentFiles/" + reqDoc.Url));
             string fileName = reqDoc.Id + reqDoc.Type;
@@ -137,16 +138,16 @@ namespace WebApplication.Controllers
 
         public FileResult DownloadRequestSolutionFiles(int id)
         {
-            var reqDoc = db.Documents.Find(id);//.Document;
+            var reqDoc = _db.Documents.Find(id);//.Document;
 
             byte[] fileBytes = System.IO.File.ReadAllBytes(Server.MapPath("~/Files/RequestSolutionFiles/" + reqDoc.Url));
             string fileName = reqDoc.Id + reqDoc.Type;
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
         }
-
+        
         public FileResult DownloadRequestFile(int id)
         {
-            var reqDoc = db.Documents.Find(id);//.Document;
+            var reqDoc = _db.Documents.Find(id);//.Document;
 
             byte[] fileBytes = System.IO.File.ReadAllBytes(Server.MapPath("~/Files/RequestFiles/" + reqDoc.Url));
             string fileName = reqDoc.Id + reqDoc.Type;
@@ -155,7 +156,7 @@ namespace WebApplication.Controllers
 
         public FileResult DownloadErrorMessageFile(int id)
         {
-            var reqDoc = db.Documents.Find(id);//.Document;
+            var reqDoc = _db.Documents.Find(id);//.Document;
 
             byte[] fileBytes = System.IO.File.ReadAllBytes(Server.MapPath("~/Files/ErrorMessageFiles/" + reqDoc.Url));
             string fileName = reqDoc.Id + reqDoc.Type;
@@ -169,9 +170,23 @@ namespace WebApplication.Controllers
         /// <returns></returns>
         public FileResult DownloadSolution(int id)
         {
-            var reqDoc = db.RequestSolutions.First(x => x.Req.Id == id).Document;//...Find(id).Documents.Find(id);//.Document;
+            var reqDoc = _db.Documents.First(x => x.Id == id);//...Find(id).Documents.Find(id);//.Document;
 
             byte[] fileBytes = System.IO.File.ReadAllBytes(Server.MapPath("~/Files/RequestSolutionFiles/" + reqDoc.Url));
+            string fileName = reqDoc.Id + reqDoc.Type;
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+        }
+
+        /// <summary>
+        /// Загрузка подтверждения об оплате
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public FileResult DownloadRequirementConfirmation(int id)
+        {
+            var reqDoc = _db.Documents.First(x=>x.Id==id);//...Find(id).Documents.Find(id);//.Document;
+
+            byte[] fileBytes = System.IO.File.ReadAllBytes(Server.MapPath("~/Files/RequirementConfirmationFiles/" + reqDoc.Url));
             string fileName = reqDoc.Id + reqDoc.Type;
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
         }

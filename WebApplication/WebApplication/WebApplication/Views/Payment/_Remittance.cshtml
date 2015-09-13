@@ -7,62 +7,85 @@
     decimal balance = ApplicationUserService.GetUserBalance(this.User.Identity.GetUserId());
     int paymentId = ViewBag.PaymentId;
 }
-<fieldset>
-    @*Если перевод не закрыт*@ 
-    Оплата №@ViewBag.Number
-    @if (ViewBag.Closed == false)
-    {
-        <label>Стоимость заявки:</label>
-        @Html.LabelFor(model => model.Price)
-        <hr/>
 
-        <label>Автор:</label>
-        <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = Model.AuthorId}, null)'>
-            @Model.Author.Name
-            @Model.Author.Id
-            <img src="../../Content/pictures/author.png" class="tdImage" title="Автор заявки" />
-        </a>
-        <label>Текущий счет автора заявки</label>
-        <label>@balance</label>
-        <hr/>
-
-        <label>Исполнитель:</label>
-        <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = Model.AuthorId}, null)'>
-            @Model.Executor.Name
-            @Model.Executor.Id
-            <img src="../../Content/pictures/executor.png" class="tdImage" title="Автор заявки" />
-        </a>
-        <hr/>
-
-        if (Model.Price > balance)
-        {
-            // Говорим, что у автора не хватает средств
-            <text>
-                Баланс меньше требуемой суммы!
-            </text>
-        }
-        else
-        {
-            // Иначе - делаем возможность перевода
-            using (Html.BeginForm())
+<div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal" area-hidden="true">X</button>
+        <strong>Оплата №@paymentId</strong>
+    </div>
+    <div class="modal-body">
+        <fieldset>
+            
+            @*Если перевод не закрыт*@
+            @if (ViewBag.Closed == false)
             {
-                @Html.AntiForgeryToken()
-                @Html.Hidden("requestId",Model.Id)
-                @Html.Hidden("paymentId", paymentId)
+                    <label>Стоимость заявки:</label>
+                    @Html.LabelFor(model => model.Price)
+                    <hr />
 
-                <div class="form-actions no-color">
-                    <input type="submit" value="Перевести от автора к исполнителю" class="buttonS" />
-                </div>
+                    <label>Автор:</label>
+                    <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = Model.AuthorId}, null)'>
+                        @Model.Author.Name
+                        /
+                        @Model.Author.Id
+                        <img src="../../Content/pictures/author.png" class="tdImage" title="Автор заявки" />
+                    </a>
+                    <br />
+                    <label>Текущий счет автора заявки:</label>
+                    <label>@balance</label>
+                    <hr />
+
+                    if (Model.Executor != null)
+                    {
+                        <label>Исполнитель:</label>
+                        <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = Model.AuthorId}, null)'>
+                            @Model.Executor.Name
+                            /
+                            @Model.Executor.Id
+                            <img src="../../Content/pictures/executor.png" class="tdImage" title="Автор заявки" />
+                        </a>
+                        <hr />
+
+                        if (Model.Price > balance)
+                        {
+                            // Говорим, что у автора не хватает средств
+                            <text>
+                                Баланс меньше требуемой суммы!
+                            </text>
+                        }
+                        else
+                        {
+                            // Иначе - делаем возможность перевода
+                            using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("requestId", Model.Id)
+                                @Html.Hidden("paymentId", paymentId)
+
+                                <div class="form-actions no-color">
+                                    <input type="submit" value="Перевод от автора к исполнителю" class="buttonS" />
+                                </div>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <h6>Не установлен исполнитель, потому перевод пока что невозможен. Выберите исполнителя задачи и пусть он загрузит решение</h6>
+                    }
             }
-        }
-    }
-    else
-    {
+            else
+            {
+                <h5>
+                    Распределение невозможно, оплата/перевод - закрыто безвозвратно.
+                </h5>
+            }
+        </fieldset>
+    </div>
 
-    }
-
-
-</fieldset>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+    </div>
+</div>
 
 
 

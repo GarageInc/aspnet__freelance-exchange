@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
-
-namespace WebApplication.Models.BaseModel
+﻿namespace WebApplication.Models.BaseModel
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+    using System.Web;
+
     public class BaseModel
     {
         [Key]
@@ -18,5 +18,10 @@ namespace WebApplication.Models.BaseModel
         
         [Display(Name = "Удален ли объект")]
         public virtual bool IsDeleted { get; set; }
+
+        [Display(Name = "Дата удаления")]
+        public virtual DateTime? DateOfDeleting { get; set; }
+
+        // Добавить элемент "Архив" - когда и какие изменения были внесены в сущность и, главное, КЕМ. + функция восстановить и т.п.
     }
 }

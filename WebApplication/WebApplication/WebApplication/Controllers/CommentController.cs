@@ -33,7 +33,7 @@ namespace WebApplication.Controllers
             using (db)
             {
                 var comms= db.Comments
-                        .Where(r => r.ReqId == request.Id)
+                        .Where(r => r.RequestId == request.Id)
                         .Where(x => !x.IsDeleted)
                         .Include(x => x.Author);
                 
@@ -72,8 +72,8 @@ namespace WebApplication.Controllers
                 };
 
                 var res = db.Requests.First(x => x.Id == requestId);
-                newComments.Req = res;
-                newComments.ReqId = res.Id;
+                newComments.Request = res;
+                newComments.RequestId = res.Id;
 
 
                 db.Comments.Add(newComments);

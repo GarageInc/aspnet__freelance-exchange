@@ -1,10 +1,6 @@
-﻿using WebApplication.Service;
-
-namespace WebApplication.Controllers
+﻿namespace WebApplication.Controllers
 {
     using System;
-    using System.Collections.Generic;
-    using System.Data;
     using System.Data.Entity;
     using System.Linq;
     using System.Threading.Tasks;
@@ -13,6 +9,7 @@ namespace WebApplication.Controllers
     using System.Web.Mvc;
     using WebApplication.Models;
     using Microsoft.AspNet.Identity;
+    using WebApplication.Service;
 
     [Authorize]
     public class RequestSolutionController : Controller
@@ -61,7 +58,7 @@ namespace WebApplication.Controllers
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Comment,ReqId")] RequestSolution requestSolution, HttpPostedFileBase error)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Description,RequestId")] RequestSolution requestSolution, HttpPostedFileBase error)
         {
             var curId = this.User.Identity.GetUserId();
 
@@ -72,18 +69,18 @@ namespace WebApplication.Controllers
                 if (error != null)
                 {
                     requestSolution.Document = _docService.CreateDocument(Server.MapPath("~/Files/RequestSolutionFiles/"), error);
+                    requestSolution.DocumentId = requestSolution.Document.Id;
                 }
                 else
                     requestSolution.Document = null;
 
-                var req = _db.Requests.Find(requestSolution.ReqId);
-                requestSolution.Req = req;
-                requestSolution.ReqId = req.Id;
+                var req = _db.Requests.Find(requestSolution.RequestId);
+                requestSolution.Request = req;
+                requestSolution.RequestId = req.Id;
                 requestSolution.Author = user;
                 requestSolution.AuthorId = user.Id;
                 requestSolution.IsDeleted = false;
                 requestSolution.CreateDateTime = DateTime.Now;
-                
 
                 _db.RequestSolutions.Add(requestSolution);
 
@@ -120,21 +117,21 @@ namespace WebApplication.Controllers
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Comment")] RequestSolution requestSolution, HttpPostedFileBase error)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Description")] RequestSolution requestSolution, HttpPostedFileBase error)
         {
             if (ModelState.IsValid)
             {
                 var reqS = _db.RequestSolutions.Find(requestSolution.Id);
                 if (error != null)
                 {
-
                     reqS.Document = _docService.CreateDocument(Server.MapPath("~/Files/RequestSolutionFiles/"), error);
+                    reqS.DocumentId = reqS.Document.Id;
                 }
 
                 reqS.Name = requestSolution.Name;
-                reqS.Comment = requestSolution.Comment;
+                reqS.Description = requestSolution.Description;
 
-                _db.Entry(requestSolution).State = EntityState.Modified;
+                _db.Entry(reqS).State = EntityState.Modified;
                 await _db.SaveChangesAsync();
                 return RedirectToAction("MyIndex");
             }
@@ -160,6 +157,15 @@ namespace WebApplication.Controllers
 
             if (requestSol != null)
             {
+                // Проверим, если оплата по этой задаче уже проверена администрацией и закрыта - то увы, изменить ничего нельзя
+                var payments = _db.Payments
+                    .Where(x => x.RequestId == requestSol.RequestId)
+                    .Where(x => x.Closed);
+                if (payments.Any())
+                {
+                    return Content("Извините, но оплата за данное решение уже утверждена и решение  задачи не может быть удалено!");
+                }
+
                 //получаем категорию
                 return PartialView("_Delete", requestSol);
             }

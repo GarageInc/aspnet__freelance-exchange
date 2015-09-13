@@ -14,8 +14,8 @@
         <dd>
             @Html.DisplayFor(modelItem => item.Name)
         </dd>
-        <br/>
 
+        <hr/>
         <dt>Аватар:</dt>
         <dd>
             <p>
@@ -33,51 +33,48 @@
                 }
             </p>
         </dd>
-        <br />
 
-        <dt>Карма(статус):</dt>
+        <hr />
+        <dt>Карма:</dt>
         <dd>
-            <p>
-                @ApplicationUserService.GetUserKarma(item.Id)
-            </p>
+            @ApplicationUserService.GetUserKarma(item.Id)
         </dd>
-        <br />
 
+        <hr />
         <dt>О себе:</dt>
         <dd>
             <p>
                 @ApplicationUserService.GetUserInfo(item.Id)
             </p>
         </dd>
-        <br />
 
+        <hr />
         <dt>
             @Html.DisplayNameFor(modelItem => item.LastVisition)
         </dt>
         <dd>
             @Html.DisplayFor(modelItem => item.LastVisition)
         </dd>
-        <br />
 
+        <hr />
         <dt>
             @Html.DisplayNameFor(modelItem => item.RegistrationDate)
         </dt>
         <dd>
             @Html.DisplayFor(modelItem => item.RegistrationDate)
         </dd>
-        <br />
 
         @if (item.IsBlocked)
         {
             <hr/>
             <dt>
-                @Html.DisplayNameFor(modelItem => item.BlockDate)
+                @Html.DisplayNameFor(modelItem => item.BlockForDate)
             </dt>
             <dd>
-                @Html.DisplayFor(modelItem => item.BlockDate)
+                @Html.DisplayFor(modelItem => item.BlockForDate)
             </dd>
-            <br/>
 
+            <hr/>
             <dt>
                 @Html.DisplayNameFor(modelItem => item.BlockReason)
             </dt>

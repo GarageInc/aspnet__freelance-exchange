@@ -6,43 +6,49 @@
 <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal" area-hidden="true">X</button>
-        <h4>Жизненный цикл</h4>
+        <strong>Жизненный цикл заявки № @Html.DisplayFor(m => m.Id)</strong>
     </div>
     <div class="modal-body">
         <dl class="dl-horizontal">
-            <p>
-                <b>
-                    Заявка № @Html.DisplayFor(m => m.Id)
-                </b>
-            </p>
-            <p>
-                <b>
-                    Открыта:
-                </b>
-                    @Html.DisplayFor(m => m.Opened)
-            </p>
-            <p>
-                <b>
-                    Распределена:
-                </b> 
+            <dt>
+                 @Html.DisplayNameFor(m => m.Opened)
+            </dt>
+            <dd>
+                @Html.DisplayFor(m => m.Opened)
+            </dd>
+            <hr/>
+
+            <dt>
+                @Html.DisplayNameFor(m => m.Distributed)
+            </dt>
+            <dd>
                 @Html.DisplayFor(m => m.Distributed)
-            </p>
-            <p>
-                <b>
-                    В процессе:
-                </b>
-                 @Html.DisplayFor(m => m.Proccesing)
-            </p>
-            <p>
-                <b>
-                    На проверке:
-                </b> 
+            </dd>
+            <hr />
+
+            <dt>
+                @Html.DisplayNameFor(m => m.Proccesing)
+            </dt>
+            <dd>
+                @Html.DisplayFor(m => m.Proccesing)
+            </dd>
+            <hr />
+
+            <dt>
+                @Html.DisplayNameFor(m => m.Checking)
+            </dt>
+            <dd>
                 @Html.DisplayFor(m => m.Checking)
-            </p>
-            <p>
-                <b>Закрыта:</b>
+            </dd>
+            <hr />
+
+            <dt>
+                @Html.DisplayNameFor(m => m.Closed)
+            </dt>
+            <dd>
                 @Html.DisplayFor(m => m.Closed)
-            </p>
+            </dd>
+
         </dl>
     </div>
 </div>

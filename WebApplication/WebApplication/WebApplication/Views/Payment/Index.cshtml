@@ -19,155 +19,220 @@
     </button>
 </div>
 
-<div class="table-responsive">
-    <table class="table table-bordered table-hover table-condensed"
-           id="table"
-           data-click-to-select="true"
-           data-show-columns="true"
-           data-search="true"
-           data-show-refresh="true"
-           data-show-export="true"
-           data-pagination="true"
-           data-toolbar="#toolbar"
-           data-minimum-count-columns="2"
-           data-show-pagination-switch="true"
-           data-id-field="id"
-           data-page-size="6"
-           data-page-list="[6,10, 25, 50, 100, ALL]"
-           data-response-handler="responseHandler"
-           data-flat="true"
-           data-sort-order="desk"
-           data-page-number="1"
-           data-show-multi-sort="true">
+@if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
+{
+    <div class="table-responsive">
+        <table class="table table-no-bordered  table-hover table-condensed"
+               id="table"
+               data-click-to-select="true"
+               data-show-columns="true"
+               data-search="true"
+               data-show-refresh="true"
+               data-show-export="true"
+               data-pagination="true"
+               data-toolbar="#toolbar"
+               data-minimum-count-columns="2"
+               data-show-pagination-switch="true"
+               data-id-field="id"
+               data-page-size="6"
+               data-page-list="[6,10, 25, 50, 100, ALL]"
+               data-response-handler="responseHandler"
+               data-flat="true"
+               data-sort-order="desk"
+               data-page-number="1"
+               data-show-multi-sort="true">
 
-        <thead>
-        <tr>
-            <th></th>
-            <th>
-                 @Html.DisplayNameFor(model => model.Closed)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Author.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Document)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Req)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Checked)
-            </th>
-            <th>
-                Проверка на пополнение
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>Функционал</th>
-        </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+            <thead>
                 <tr>
-                    <td></td>
-                    <td>
-                        @if (item.Closed)
-                        {
-                            <span class="badge-success">Закрыто администрацией</span>
+                    <th></th>
 
-                        }
-                        else
-                        {
-                            <span class="badge-critical">Перевод не произведён</span>
-                        }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Author.Name)
-                    </td>
-                    <td>
-                        @if (item.Document != null)
-                        {
-                            <a href="/Document/DownloadPaymentFiles/@item.Document.Id"><img src="../../Content/pictures/filey.png" alt='@item.Document.Url' class="tdImage" title="Скачать файл"/></a>
-                        }
-                        else
-                        {
-                            <img src="../../Content/pictures/filen.png" alt="без файла изображения" class="tdImage" title="Файл не приложен"/>
-                        }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Req.Id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @if (item.Checked == true)
-                        {
-                            <h5>Проверено</h5>
-                        }
-                        else
-                        {
-                            <h5>Не проверено</h5>
-                        }
-                    </td>
-                    <td>
-                        @using (Html.BeginForm("PaymentChangeStatus", "Payment"))
-                        {
-                            @Html.Hidden("paymentId", item.Id)
-
-                            @Html.DropDownList("status",
-                                new[]
-                                {
-                                    new SelectListItem() {Text = "Не проверено, в состоянии блокирования", Value = "0"},
-                                    new SelectListItem() {Text = "Проверено", Value = "1"}
-                                })
-                            ;
-
-                            <input type="submit" value="Изменить" class="buttons"/>
-                        }
-                    </td>
-                    <td>
-                        @if (item.Checked)
-                        {
-                            <a class="compItem" href='@Url.Action("RemittanceView", "Payment", new {id = item.Id})'>
-                                <img src="../../Content/pictures/delete.png" class="tdImage" title="Открыть окно распределения средств" />
-                            </a>
-                        }
-                        else
-                        {
-                            <text>
-                                Не проверено, окно распределения средств не доступно
-                            </text>
-                        }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Price)
-                    </td>
-                    <td>
-                        @if (userId == item.AuthorId)
-                        {
-                            <a class="compItem" href='@Url.Action("Delete", "Payment", new {id = item.Id})'>
-                                <img src="../../Content/pictures/delete.png" class="tdImage" title="Удаление заявки" />
-                            </a>
-                            @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { @class = "buttonb" })
-                        }
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Id)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Closed)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Author)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Document)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Request)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Price)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Checked)
+                    </th>
+                    <th>
+                        Проверка счета
+                    </th>
+                    <th>
+                        Фиксация перевода
+                    </th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td></td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @if (item.Closed)
+                            {
+                                <label class="label-success">
+                                    Переведено
+                                    <br />
+                                    Закрыто
+                                    <br/>
+                                    администрацией
+                                </label>
+
+                            }
+                            else
+                            {
+                                <label class="label-info">Перевод не произведён, идет проверка администрацией</label>
+                            }
+                        </td>
+                        <td>
+                            <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = item.AuthorId}, null)'>
+                                <img src="../../Content/pictures/author.png" class="tdImage" title="Автор заявки"/>
+                                <br/>
+                                @item.Author.Name
+                            </a>
+                        </td>
+                        <td>
+                            @if (item.Document != null)
+                            {
+                                <a href="/Document/DownloadPaymentFiles/@item.Document.Id"><img src="../../Content/pictures/filey.png" alt='@item.Document.Url' class="tdImage" title="Скачать файл" /></a>
+                            }
+                            else
+                            {
+                                <img src="../../Content/pictures/filen.png" alt="без файла изображения" class="tdImage" title="Файл не приложен" />
+                            }
+                        </td>
+                        <td>
+                            @if (item.AddingFunds)
+                            {
+                                <a>
+                                    <img src="../../Content/pictures/addingFundsIcon.png" class="tdImage" title="Добавление оплаты" />
+
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="compItem" href='@Url.Action("Details", "Request", new {id = item.RequestId}, null)'>
+                                    <img src="../../Content/pictures/info.png" class="tdImage" title="Детали заявки" />
+                                </a>
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @if (item.Checked == true)
+                            {
+                                <h6>Проверено</h6>
+                            }
+                            else
+                            {
+                                <h6>Не проверено</h6>
+                            }
+                        </td>
+                        <td>
+                            @if (item.Closed)
+                            {
+                                <h6>Оплата закрыта</h6>
+                            }
+                            else
+                            {
+                                using (Html.BeginForm("PaymentChangeStatus", "Payment"))
+                                 {
+                                     @Html.Hidden("paymentId", item.Id)
+
+                                     @Html.DropDownList("status",
+                                         new[]
+                                         {
+                                             new SelectListItem() {Text = "Не проверено", Value = "0"},
+                                             new SelectListItem() {Text = "Проверено", Value = "1"}
+                                         }, new { @class = "form-control-garageinc" })
+
+                                     <input type="submit" value="Изменить" class="buttons"/>
+                                 }
+                            }
+                        </td>
+                        <td>
+                            @if (item.Checked)
+                            {
+                                if (item.Closed)
+                                {
+                                    <h6>Переведено</h6>
+                                }
+                                else
+                                {
+                                    if (item.AddingFunds)
+                                    {
+                                        <h6>Перевод проверен оператором</h6>
+                                        @Html.ActionLink("Закрыть оплату", "ClosePayment", "Payment", new { id = item.Id }, new { @class = "buttons" })
+                                    }
+                                    else
+                                    {
+                                        <a class="compItem" href='@Url.Action("Remittance", "Payment", new {id = item.Id})'>
+                                            <img src="../../Content/pictures/downloadSolution.png" class="tdImage" title="Открыть окно распределения средств" />
+                                        </a>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <h6>
+                                    Не проверено, окно распределения средств не доступно
+                                </h6>
+                            }
+                        </td>
+                        <td>
+                            @if ((this.User.IsInRole("Administrator") || this.User.IsInRole("Moderator")) || userId == item.AuthorId)
+                            {
+                                if (item.Closed)
+                                {
+                                    <h6>
+                                        Оплата закрыта
+                                    </h6>
+                                }
+                                else
+                                {
+                                    <a class="compItem" href='@Url.Action("Delete", "Payment", new {id = item.Id})'>
+                                        <img src="../../Content/pictures/delete.png" class="tdImage" title="Удаление заявки" />
+                                    </a>
+                                    @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { @class = "buttonb" })
+
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <h5>У Вас нет прав на доступ к этой страницу</h5>
+}
+
 
 @Styles.Render("~/Scripts/bootstrap-table-master/css")
 @section Scripts {

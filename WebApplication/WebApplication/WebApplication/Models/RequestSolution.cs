@@ -12,11 +12,11 @@ namespace WebApplication.Models
         public virtual string Name { get; set; }
 
         [Display(Name = "ID заявки")]
-        public virtual int? ReqId { get; set; }
+        public virtual int? RequestId { get; set; }
 
         [Display(Name = "Заявка")]
-        [ForeignKey("ReqId")]
-        public virtual Request Req { get; set; }
+        [ForeignKey("RequestId")]
+        public virtual Request Request { get; set; }
 
         [Display(Name = "Файл")]
         public virtual Document Document { get; set; }
@@ -31,6 +31,6 @@ namespace WebApplication.Models
         public virtual string AuthorId { get; set; }
         
         [Display(Name = "Комментарии")]
-        public virtual string Comment { get; set; }
+        public virtual string Description { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace WebApplication.Models
         
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Requirement> Requirements { get; set; }
-        public DbSet<ReqConfirmation> ReqConfirmations { get; set; }
+        public DbSet<RequirementConfirmation> RequirementConfirmations { get; set; }
 
         public static ApplicationDbContext Create()
         {
@@ -57,9 +57,10 @@ namespace WebApplication.Models
             modelBuilder.Entity<ApplicationUser>().HasMany(c => c.UpRecalls);
             modelBuilder.Entity<ApplicationUser>().HasMany(c => c.DownRecalls);
             modelBuilder.Entity<ApplicationUser>().HasMany(c => c.Requirements);
-            modelBuilder.Entity<ApplicationUser>().HasMany(c => c.ReqConfirmations);
+            modelBuilder.Entity<ApplicationUser>().HasMany(c => c.RequirementConfirmations);
 
             modelBuilder.Entity<Request>().HasMany(c => c.Comments);
+            modelBuilder.Entity<Request>().HasMany(c => c.RequestSolutions);
             
             //modelBuilder.Entity<Request>().HasMany(c => c.Documents);
             //modelBuilder.Entity<RequestSolution>().HasMany(c => c.Documents);

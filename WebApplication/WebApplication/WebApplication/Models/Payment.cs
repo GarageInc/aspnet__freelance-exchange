@@ -10,18 +10,18 @@ namespace WebApplication.Models
     public class Payment : BaseModel.BaseModel
     {
         [Display(Name = "ID решения")]
-        public virtual int? ReqSolutionId { get; set; }
+        public virtual int? RequestSolutionId { get; set; }
 
         [Display(Name = "Решение")]
-        [ForeignKey("ReqSolutionId")]
-        public virtual RequestSolution ReqSolution { get; set; }
+        [ForeignKey("RequestSolutionId")]
+        public virtual RequestSolution RequestSolution { get; set; }
 
         [Display(Name = "ID задачи")]
-        public virtual int? ReqId { get; set; }
+        public virtual int? RequestId { get; set; }
 
-        [Display(Name = "Задача, за которую оплачивается")]
-        [ForeignKey("ReqId")]
-        public virtual Request Req { get; set; }
+        [Display(Name = "Задача")]
+        [ForeignKey("RequestId")]
+        public virtual Request Request { get; set; }
         
         [Display(Name ="Описание/Комментарий")]
         [Required(ErrorMessage = "Обязательно для заполнения!")]
@@ -36,7 +36,7 @@ namespace WebApplication.Models
         [Display(Name = "Проверено")]
         public virtual bool Checked { get; set; }
 
-        [Display(Name = "Закрыто или Открыто")]
+        [Display(Name = "Закрыто / Открыто")]
         public virtual bool Closed { get; set; }
 
         [Display(Name = "Пополнение баланса")]

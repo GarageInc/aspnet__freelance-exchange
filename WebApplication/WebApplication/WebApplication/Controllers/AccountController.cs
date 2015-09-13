@@ -24,7 +24,9 @@
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        ApplicationDbContext _db;
+        readonly ApplicationDbContext _db;
+        private readonly DocumentService _docService = new DocumentService();
+
         public AccountController()
         {
             _db = new ApplicationDbContext();
@@ -77,7 +79,7 @@
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public  ActionResult Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
@@ -86,23 +88,30 @@
 
             // Сбои при входе не приводят к блокированию учетной записи
             // Чтобы ошибки при вводе пароля инициировали блокирование учетной записи, замените на shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var user = _db.Users.FirstOrDefault(x => x.Email == model.Email && x.Password == model.Password);
+           
+            // Если нельзя заходить - то всё, заблокирован
+            if (!ValidateUser(user))
+            {
+                string text = user.BlockReason;
+                text += "\nДата окончания блокировки: ";
+                text += user.BlockForDate;
+                text += "\nЕсли причина блокировки неясна, то - отпишите нам, пожалуйста, по кнопке в правом нижнем углу. С уважением, администрация GarageInc";
+                return Content(text);
+            }
+
+            var result =  SignInManager.PasswordSignIn(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
                     {
-                        if(this.User!=null)
-                        {
-                            var curId = this.User.Identity.GetUserId();
-                            var user = _db.Users.Where(x => x.Id ==curId).FirstOrDefault();
                             if (user != null)
                             {
                                 user.LastVisition = DateTime.Now;
                                 _db.Entry(user).State = EntityState.Modified;
                                 _db.SaveChanges();
                             }
-                        }
-                        
+                     
                         return RedirectToLocal(returnUrl);
 
                     }
@@ -173,46 +182,32 @@
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Register(RegisterViewModel model, HttpPostedFileBase avatar)
+        public ActionResult Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                //получаем время открытия
-                DateTime current = DateTime.Now;
-
-                var newAvatar = new Document();
-                if (avatar!=null)
-                {
-                    newAvatar.Size = avatar.ContentLength;
-                    // Получаем расширение
-                    string ext = avatar.FileName.Substring(avatar.FileName.LastIndexOf('.'));
-                    newAvatar.Type = ext;
-                    // сохраняем файл по определенному пути на сервере
-                    string path = current.ToString(this.User.Identity.GetUserId().GetHashCode() + "dd/MM/yyyy H:mm:ss").Replace(":", "_").Replace("/", ".") + ext;
-                    avatar.SaveAs(Server.MapPath("~/Files/UserAvatarFiles/" + path));
-                    newAvatar.Url = path;
-                    _db.SaveChanges();
-                }
-
+                var curDate = DateTime.Now;
                 var user = new ApplicationUser {
-                    UserName = model.Email, Name = model.Name, Password=model.Password, Email = model.Email,LastVisition=DateTime.Now, RegistrationDate = DateTime.Now, UserInfo="user",
-                    BlockDate = DateTime.Now, IsBlocked = true,
+                    UserName = model.Email,
+                    Name = model.Name,
+                    Password =model.Password,
+                    Email = model.Email,
+                    LastVisition = curDate,
+                    RegistrationDate = curDate,
+                    UserInfo ="user",
+                    DateOfBlocking = curDate,
+                    BlockForDate = curDate,
+                    IsBlocked = false,
                     BlockReason="",
                     Balance = 0
                 };
                
                 var result = UserManager.Create(user, model.Password);
                 
+                // Пока что всех делаем администраторами, потом, конечно, это стоит убрать
                 UserManager.AddToRole(user.Id, "Administrator");
                 if (result.Succeeded)
                 {
-                    if(avatar!=null)
-                    {
-                        var newUser = _db.Users.First(x => x.Id == user.Id);
-                        newUser.Avatar.Add(newAvatar);
-                        _db.Entry(newUser).State = EntityState.Modified;
-                        _db.SaveChanges();
-                    }
                     SignInManager.SignIn(user, isPersistent:false, rememberBrowser:false);
                     
                     // Дополнительные сведения о том, как включить подтверждение учетной записи и сброс пароля, см. по адресу: http://go.microsoft.com/fwlink/?LinkID=320771
@@ -426,6 +421,21 @@
                     return View("ExternalLoginFailure");
                 }
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                //var user = new ApplicationUser
+                //{
+                //    UserName = model.Email,
+                //    Name = model.Name,
+                //    Password = model.Password,
+                //    Email = model.Email,
+                //    LastVisition = curDate,
+                //    RegistrationDate = curDate,
+                //    UserInfo = "user",
+                //    DateOfBlocking = curDate,
+                //    BlockForDate = curDate,
+                //    IsBlocked = false,
+                //    BlockReason = "",
+                //    Balance = 0
+                //};
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -573,19 +583,22 @@
         /// <returns></returns>
         [HttpPost]
         [Authorize(Roles = "Administrator")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(RegisterViewModel model)
         {
+            var curDate = DateTime.Now;
             var user = new ApplicationUser
             {
                 UserName = model.Email,
                 Name = model.Name,
                 Password = model.Password,
                 Email = model.Email,
-                LastVisition = DateTime.Now,
-                RegistrationDate = DateTime.Now,
+                LastVisition = curDate,
+                RegistrationDate = curDate,
                 UserInfo = "user",
-                BlockDate = DateTime.Now,
-                IsBlocked = true,
+                BlockForDate = curDate,
+                DateOfBlocking = curDate,
+                IsBlocked = false,
                 BlockReason = "",
                 Balance=0
             };
@@ -870,6 +883,61 @@
             return View("Index");
         }
 
+
+        /// <summary>
+        /// Разблокирование пользователя
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "Moderator, Administrator")]
+        public void DownBlockOfUser(string userId)
+        {
+            var user = _db.Users.Find(userId);
+            if (user.IsBlocked)
+            {
+                user.IsBlocked = false;
+
+                _db.Entry(user).State = EntityState.Modified;;
+                _db.SaveChanges();
+            }
+
+            Response.Redirect(Request.UrlReferrer.AbsoluteUri);
+        }
+        /// <summary>
+        /// Блокирование пользователя
+        /// </summary>
+        /// <param name="userId"></param>
+        [Authorize(Roles = "Moderator, Administrator")]
+        public void UpBlockOfUser(string userId, string blockReason, DateTime blockDate)
+        {
+            var user = _db.Users.Find(userId);
+            if (!user.IsBlocked)
+            {
+                user.IsBlocked = true;
+                user.BlockReason = blockReason;
+                user.BlockForDate = blockDate;
+                user.DateOfBlocking = DateTime.Now; ;
+
+                _db.Entry(user).State = EntityState.Modified; ;
+                _db.SaveChanges();
+            }
+
+            Response.Redirect(Request.UrlReferrer.AbsoluteUri);
+        }
+
+        /// <summary>
+        /// Валидация пользователя при входе в систему
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public bool ValidateUser(ApplicationUser user)
+        {
+            var currentDate = DateTime.Now;
+
+            bool validated = !(user.BlockForDate > currentDate);
+            
+            return validated;
+        }
     }
 }
 

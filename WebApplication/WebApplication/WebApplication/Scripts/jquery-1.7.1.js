@@ -7233,7 +7233,7 @@ jQuery.extend({
 			// Deferreds
 			deferred = jQuery.Deferred(),
 			completeDeferred = jQuery.Callbacks( "once memory" ),
-			// Status-dependent callbacks
+			// Checked-dependent callbacks
 			statusCode = s.statusCode || {},
 			// ifModified key
 			ifModifiedKey,
@@ -7401,7 +7401,7 @@ jQuery.extend({
 				deferred.rejectWith( callbackContext, [ jqXHR, statusText, error ] );
 			}
 
-			// Status-dependent callbacks
+			// Checked-dependent callbacks
 			jqXHR.statusCode( statusCode );
 			statusCode = undefined;
 
@@ -7428,7 +7428,7 @@ jQuery.extend({
 		jqXHR.error = jqXHR.fail;
 		jqXHR.complete = completeDeferred.add;
 
-		// Status-dependent callbacks
+		// Checked-dependent callbacks
 		jqXHR.statusCode = function( map ) {
 			if ( map ) {
 				var tmp;

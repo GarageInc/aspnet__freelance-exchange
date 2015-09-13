@@ -3135,7 +3135,7 @@ $(function(){
         value: 2,    
         source: [
               {value: 1, text: 'Active'},
-              {value: 2, text: 'Blocked'},
+              {value: 2, text: 'IsBlocked'},
               {value: 3, text: 'Deleted'}
            ]
     });

@@ -1,0 +1,44 @@
+﻿@using WebApplication.Models
+@model WebApplication.Models.RequirementConfirmation
+
+
+<div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal" area-hidden="true">X</button>
+        <strong>Задача № @Html.DisplayFor(m => m.Id)</strong>
+    </div>
+    <div class="modal-body">
+        <dl class="dl-horizontal">
+            
+            <dt>
+                @Html.DisplayNameFor(m => m.Description)
+            </dt>
+            <dd>
+                [@Html.DisplayFor(m => m.Description)]
+            </dd>
+            <hr />
+
+            <dt>
+                @Html.DisplayNameFor(m => m.Author)
+            </dt>
+            <dd>
+                @Html.DisplayFor(m => m.Author.Name)
+            </dd>
+
+            <dd>
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-actions no-color">
+                        <input type="submit" value="Удалить" class="buttons" />
+                    </div>
+                }
+            </dd>
+        </dl>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+    </div>
+</div>

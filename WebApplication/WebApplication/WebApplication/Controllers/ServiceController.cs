@@ -181,52 +181,67 @@ namespace WebApplication.Controllers
 
         public void UpdateDatabase()
         {
-            var current = DateTime.Now;;
-            db.Categories.Add(new Category {IsDeleted = false, CreateDateTime = current, Name = "Сайт / программа" });
-            db.Categories.Add(new Category {IsDeleted = false, CreateDateTime = current, Name = "Домашние задачи" });
-            db.Categories.Add(new Category {IsDeleted = false, CreateDateTime = current, Name = "Контрольная" });
-            db.Categories.Add(new Category {IsDeleted = false, CreateDateTime = current, Name = "Реферат" });
-            db.Categories.Add(new Category {IsDeleted = false, CreateDateTime = current, Name = "Эссе" });
-            db.Categories.Add(new Category {IsDeleted = false, CreateDateTime = current, Name = "Перевод" });
-            db.Categories.Add(new Category {IsDeleted = false, CreateDateTime = current, Name = "Чертежи" });
-            db.Categories.Add(new Category {IsDeleted = false, CreateDateTime = current, Name = "Отчет по практике" });
-            db.Categories.Add(new Category {IsDeleted = false, CreateDateTime = current, Name = "ДИПЛОМ" });
-            db.Categories.Add(new Category {IsDeleted = false, CreateDateTime = current, Name = "КУРСОВАЯ РАБОТА" });
-            db.Categories.Add(new Category {IsDeleted = false, CreateDateTime = current, Name = "Доработка" });
-            db.Categories.Add(new Category {IsDeleted = false, CreateDateTime = current, Name = "Другое" });
-            db.Categories.Add(new Category {IsDeleted = false, CreateDateTime = current, Name = "АНТИПЛАГИАТ" });
+            var current = DateTime.Now;
 
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "ПРОГРАММИРОВАНИЕ" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Математика" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Экономика" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Бухучет" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Химия" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Физика" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Чертежи" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Право" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Сопромат" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Иностранный язык" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Гидравлика" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Электротехника" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Филология / Журналистика" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "История / Политология / Культурология" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Психология / Педагогика / Логопедия" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Геология / Горно-нефтяное дело" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Автодорожное" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Философия / КСЕ" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Социология" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Биология / Экология" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Медицина" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "БЖД" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "География" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Другое" });
-            db.Subjects.Add(new Subject {IsDeleted = false, CreateDateTime = current, Name = "Повышение оригинальности" });
+            if (!db.Categories.Any())
+            {
+                db.Categories.Add(new Category { IsDeleted = false, CreateDateTime = current, Name = "Сайт / программа" });
+                db.Categories.Add(new Category { IsDeleted = false, CreateDateTime = current, Name = "Домашние задачи" });
+                db.Categories.Add(new Category { IsDeleted = false, CreateDateTime = current, Name = "Контрольная" });
+                db.Categories.Add(new Category { IsDeleted = false, CreateDateTime = current, Name = "Реферат" });
+                db.Categories.Add(new Category { IsDeleted = false, CreateDateTime = current, Name = "Эссе" });
+                db.Categories.Add(new Category { IsDeleted = false, CreateDateTime = current, Name = "Перевод" });
+                db.Categories.Add(new Category { IsDeleted = false, CreateDateTime = current, Name = "Чертежи" });
+                db.Categories.Add(new Category { IsDeleted = false, CreateDateTime = current, Name = "Отчет по практике" });
+                db.Categories.Add(new Category { IsDeleted = false, CreateDateTime = current, Name = "ДИПЛОМ" });
+                db.Categories.Add(new Category { IsDeleted = false, CreateDateTime = current, Name = "КУРСОВАЯ РАБОТА" });
+                db.Categories.Add(new Category { IsDeleted = false, CreateDateTime = current, Name = "Доработка" });
+                db.Categories.Add(new Category { IsDeleted = false, CreateDateTime = current, Name = "Другое" });
+                db.Categories.Add(new Category { IsDeleted = false, CreateDateTime = current, Name = "АНТИПЛАГИАТ" });
 
-            db.PropsCategories.Add(new PropsCategory { IsDeleted = false, CreateDateTime = current, Name = "Карта Сбербанка'", Info = "Желательно указать так же срок действия карты и владельца, бывает, что это спрашивается на кассе при пополнении" });
-            db.PropsCategories.Add(new PropsCategory { IsDeleted = false, CreateDateTime = current, Name = "Номер телефона", Info = "Желательно указать оператор и лучше использовать при суммах менее 200р" });
-            db.PropsCategories.Add(new PropsCategory { IsDeleted = false, CreateDateTime = current, Name = "QIWI Кошелек", Info = "Желательно использовать при суммах менее 200р" });
+                db.SaveChanges();
+            }
 
-            db.SaveChanges();
+            if (!db.Subjects.Any())
+            {
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "ПРОГРАММИРОВАНИЕ" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Математика" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Экономика" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Бухучет" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Химия" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Физика" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Чертежи" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Право" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Сопромат" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Иностранный язык" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Гидравлика" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Электротехника" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Филология / Журналистика" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "История / Политология / Культурология" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Психология / Педагогика / Логопедия" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Геология / Горно-нефтяное дело" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Автодорожное" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Философия / КСЕ" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Социология" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Биология / Экология" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Медицина" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "БЖД" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "География" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Другое" });
+                db.Subjects.Add(new Subject { IsDeleted = false, CreateDateTime = current, Name = "Повышение оригинальности" });
+
+                db.SaveChanges();
+            }
+
+            if (!db.PropsCategories.Any())
+            {
+                db.PropsCategories.Add(new PropsCategory { IsDeleted = false, CreateDateTime = current, Name = "Карта Сбербанка'", Info = "Желательно указать так же срок действия карты и владельца, бывает, что это спрашивается на кассе при пополнении" });
+                db.PropsCategories.Add(new PropsCategory { IsDeleted = false, CreateDateTime = current, Name = "Номер телефона", Info = "Желательно указать оператор и лучше использовать при суммах менее 200р" });
+                db.PropsCategories.Add(new PropsCategory { IsDeleted = false, CreateDateTime = current, Name = "QIWI Кошелек", Info = "Желательно использовать при суммах менее 200р" });
+
+                db.SaveChanges();
+            }
+
         }
     }
 }

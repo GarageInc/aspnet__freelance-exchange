@@ -9,23 +9,20 @@
         <h4>Оплата №@Model.Id</h4>
         <dl class="dl-horizontal">
             <dt>
-                <b>
-                    @Html.DisplayNameFor(model => model.Author.Name)
-                </b>
+                    @Html.DisplayNameFor(model => model.Author)
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.Author.Name)
             </dd>
 
             <dt>
                 <b>
-                    @Html.DisplayNameFor(model => model.Req.Name)
+                    @Html.DisplayNameFor(model => model.Request)
                 </b>
             </dt>
 
             <dd>
-                @Html.DisplayFor(model => model.Req.Name)
+                @Html.DisplayFor(model => model.Request.Name)
             </dd>
 
             <dt>
@@ -61,7 +58,7 @@
             <dt>
             </dt>
             <dd>
-                @if (Model.Closed)
+                @if (!Model.Closed)
                 {
                     using (Html.BeginForm())
                     {

@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WebApplication.Models;
+using WebApplication.Service;
 
 namespace WebApplication.Controllers
 {
@@ -17,7 +18,8 @@ namespace WebApplication.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         ApplicationDbContext db;
-        
+        private readonly DocumentService _docService = new DocumentService();
+
         public ManageController()
         {
             db = new ApplicationDbContext();
@@ -413,20 +415,15 @@ namespace WebApplication.Controllers
         {
             if (error != null)
             {
+
+                var newAvatar = _docService.CreateDocument(Server.MapPath("~/Files/UserAvatarFiles/"), error);
+
                 var curId = this.User.Identity.GetUserId();
                 var user = db.Users.First(x => x.Id == curId);
-
-                var newAvatar = new Document { Size = error.ContentLength };
-
-                // Получаем расширение
-                string ext = error.FileName.Substring(error.FileName.LastIndexOf('.'));
-                newAvatar.Type = ext;
-                // сохраняем файл по определенному пути на сервере
-                string path = DateTime.Now.ToString(this.User.Identity.GetUserId().GetHashCode() + "dd/MM/yyyy H:mm:ss").Replace(":", "_").Replace("/", ".") + ext;
-                error.SaveAs(Server.MapPath("~/Files/UserAvatarFiles/" + path));
-                newAvatar.Url = path;
-
+                
                 user.Avatar.Add(newAvatar);
+
+
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
             }

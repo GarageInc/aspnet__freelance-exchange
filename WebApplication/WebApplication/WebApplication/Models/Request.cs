@@ -32,7 +32,7 @@ namespace WebApplication.Models
         [Display(Name = "Решает")]
         public virtual ApplicationUser Executor { get; set; }
 
-        [Display(Name = "ID исполнителя задачи")]
+        [Display(Name = "ID исполнителя")]
         public virtual string ExecutorId { get; set; }
 
         [DataType(DataType.Date)]
@@ -80,15 +80,18 @@ namespace WebApplication.Models
         [Display(Name="Захотевшие решать")]
         public virtual ICollection<ApplicationUser> Solvers { get; set; }
         
-        [Display(Name = "Допуск(проверено ли администрацией)")]
+        [Display(Name = "Допуск")]
         public virtual bool Checked { get; set; }
         
-        [Display(Name = "Можно скачивать решение?")]
+        [Display(Name = "Есть решение?")]
         public bool CanDownload { get; set; }
 
         [Display(Name = "Комментарии")]
         public virtual ICollection<Comment> Comments { get; set; }
         
+        [Display(Name = "Все решения")]
+        public virtual ICollection<RequestSolution> RequestSolutions { get; set; }
+
         [Display(Name = "Решение нужно онлайн")]
         public virtual  bool IsOnline { get; set; }
     }

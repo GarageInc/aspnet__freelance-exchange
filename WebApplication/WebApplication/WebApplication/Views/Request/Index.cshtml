@@ -15,9 +15,15 @@
 <p>Всего заявок: @(Model.Count<Request>())</p>
 <div>
     <form method="post" action="/Request/Index">
-        <label>Предмет</label>
-        @Html.DropDownList("category", ViewBag.Categories as SelectList)
-        <input type="submit" value="Фильтр" class="buttonb" />
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+            
+            @Html.DropDownList("category", ViewBag.Categories as SelectList, new { @class = "form-control-garageinc" })
+
+            <input type="submit" value="Фильтр" class="buttonb" />
+            
+        </div>
+       
     </form>
 </div>
 
@@ -30,7 +36,7 @@
 </div>
 
 <div class="table-responsive">
-        <table class="table table-bordered table-hover table-condensed"
+        <table class="table table-no-bordered  table-hover table-condensed"
                id="table"
                data-click-to-select="true"
                data-show-columns="true"
@@ -56,14 +62,15 @@
                     <th data-field="id">
                         @Html.DisplayNameFor(model => model.Id)
                     </th>
-                    <th data-field="category" data-sortable="true">
+                    <th>
                         @Html.DisplayNameFor(model => model.Category)
+                        <br />
+                        [@Html.DisplayNameFor(model => model.Subject)]
                     </th>
                     <th data-sortable="true">
                         @Html.DisplayNameFor(model => model.Status)
-                    </th>
-                    <th data-sortable="true">
-                        @Html.DisplayNameFor(model => model.Priority)
+                        <br />
+                        [@Html.DisplayNameFor(model => model.Priority)]
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Document)
@@ -82,9 +89,8 @@
                     </th>
                     <th data-sortable="true">
                         @Html.DisplayNameFor(model => model.Price)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.IsPaid)
+                        <br />
+                        [@Html.DisplayNameFor(model => model.IsPaid)]
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Lifecycle)
@@ -98,18 +104,25 @@
                     <tr>
                         <td></td>
                         <td>
-                            @if (item.Author.Id != userId && item.Solvers.Count(x => x.Id == userId) == 0)
+                            @if (item.Solvers.Count(x => x.Id == userId) > 0)
+                            {
+                                <span class="label label-success">Уже добавился</span>
+                            }
+                            else if (item.Author.Id != userId)
                             {
                                 <a href="/Request/AddToSolvers/@item.Id"><img src="../../Content/pictures/addButton.png" class="tdImage" title="Хочу решать"/></a>
                             }
                             else
                             {
-                                <text>Нельзя, Вы автор :)</text>
+                                <span class="label label-info" > Вы автор </span>
                             }
+
                         </td>
                         <td><b>@item.Id</b></td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Category.Name)
+                            <br />
+                            [@Html.DisplayFor(modelItem => item.Subject.Name)]
                         </td>
                         <td>
                             @if (item.Status == (int)RequestStatus.Open)
@@ -122,29 +135,29 @@
                             }
                             else if (item.Status == (int)RequestStatus.Proccesing)
                             {
-                                <span class="label label-important">На решении</span>
+                                <span class="label label-info">На решении</span>
                             }
                             else if (item.Status == (int)RequestStatus.Closed)
                             {
-                                <span class="label label-inverse">Закрыта</span>
+                                <span class="label label-primary">Закрыта</span>
                             }
-                        </td>
-                        <td>
+
+                            <br />
                             @if (item.Priority == (int)RequestPriority.Low)
                             {
-                                <span class="badge badge-low">Низкий</span>
+                                <span class="badge badge-low">[Низкий]</span>
                             }
                             else if (item.Priority == (int)RequestPriority.Medium)
                             {
-                                <span class="badge badge-medium">Средний</span>
+                                <span class="badge badge-medium">[Средний]</span>
                             }
                             else if (item.Priority == (int)RequestPriority.High)
                             {
-                                <span class="badge badge-high">Высокий</span>
+                                <span class="badge badge-high">[Высокий]</span>
                             }
                             else if (item.Priority == (int)RequestPriority.Critical)
                             {
-                                <span class="badge badge-critical">Критичный</span>
+                                <span class="badge badge-critical">[Критичный]</span>
                             }
                         </td>
                         <td>
@@ -167,58 +180,63 @@
                         </td>
                         <td>
                             <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = item.AuthorId}, null)'>
+                                <img src="../../Content/pictures/author.png" class="tdImage" title="Автор заявки"/>
+                                <br/>
                                 @item.Author.Name
-                                <img src="../../Content/pictures/author.png" class="tdImage" title="Автор заявки" />
                             </a>
                         </td>
                         <td>
-                            <div>
                                 @if (item.Executor != null)
                                 {
                                     <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = item.ExecutorId}, null)'>
-                                        @item.Executor.Name
                                         <img src="../../Content/pictures/executor.png" class="tdImage" title="Исполнитель заявки" />
+                                        <br/>
+                                        @item.Executor.Name
                                     </a>
                                 }
                                 else
                                 {
-                                    <h6>Исполнитель не установлен</h6>
+                                    <h6>Исполнитель пока не указан</h6>
                                 }
-                            </div>
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Price)
-                        </td>
-                        <td>
+                            <br />
                             @if (item.IsPaid)
                             {
-                                <span class="label label-success">ДА</span>
-                                if (item.CanDownload)
+                                <span class="label label-success">Оплачено</span>
+                                <br/>
+                                if (item.CanDownload && item.RequestSolutions.Any())
                                 {
                                     <a class="compItem" href='@Url.Action("GetAllSolutions", "Request", new {id = item.Id}, null)'>
-                                        <img src="../../Content/pictures/lifecycle.png" class="tdImage" title="Жизненный цикл заявки" />
+                                        <img src="../../Content/pictures/lifecycle.png" class="tdImage" title="Посмотреть решения этой задачи"/>
                                     </a>
+                                }
+                                else
+                                {
+                                    <h6>Решение ещё не загружено</h6>
                                 }
                             }
                             else
                             {
-                                <span class="label label-warning">НЕТ</span>
+                                <span class="label label-warning">Не оплачено</span>
+                                <span class="label label-warning">Решение не доступно</span>
                             }
                         </td>
                         <td>
-                            <div>
                                 <a class="compItem" href='@Url.Action("Lifecycle", "Request", new {id = item.LifecycleId}, null)'>
                                     <img src="../../Content/pictures/lifecycle.png" class="tdImage" title="Жизненный цикл заявки" />
                                 </a>
-                            </div>
                         </td>
                         <td>
                             @if (item.Author.Id == userId)
                             {
                                 <a class="compItem" href='@Url.Action("Delete", "Request", new {id = item.Id})'>
-                                    <img src="../../Content/pictures/delete.png" class="tdImage" title="Удаление заявки" />
+                                    <img src="../../Content/pictures/delete.png" class="tdImage" title="Удаление заявки"/>
                                 </a>
-                                @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { @class = "buttonb" })
+                                <br/>
+                                @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { @class = "compItem" })
+                                <br />
                             }
 
                             @Html.ActionLink("Обсуждение", "Index", "Comment", new { requestId = item.Id }, new { @class = "buttons" })

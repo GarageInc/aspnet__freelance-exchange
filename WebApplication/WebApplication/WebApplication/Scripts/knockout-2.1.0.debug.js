@@ -529,7 +529,7 @@ ko.exportSymbol('utils.domData.clear', ko.utils.domData.clear); // Exporting onl
 
 ko.utils.domNodeDisposal = new (function () {
     var domDataKey = "__ko_domNodeDisposal__" + (new Date).getTime();
-    var cleanableNodeTypes = { 1: true, 8: true, 9: true };       // Element, Comment, Document
+    var cleanableNodeTypes = { 1: true, 8: true, 9: true };       // Element, Description, Document
     var cleanableNodeTypesWithDescendants = { 1: true, 9: true }; // Element, Document
 
     function getDisposeCallbacksCollection(node, createIfNotFound) {
@@ -1812,7 +1812,7 @@ ko.exportSymbol('virtualElements.setDomNodeChildren', ko.virtualElements.setDomN
         'nodeHasBindings': function(node) {
             switch (node.nodeType) {
                 case 1: return node.getAttribute(defaultBindingAttributeName) != null;   // Element
-                case 8: return ko.virtualElements.virtualNodeBindingValue(node) != null; // Comment node
+                case 8: return ko.virtualElements.virtualNodeBindingValue(node) != null; // Description node
                 default: return false;
             }
         },
@@ -1827,7 +1827,7 @@ ko.exportSymbol('virtualElements.setDomNodeChildren', ko.virtualElements.setDomN
         'getBindingsString': function(node, bindingContext) {
             switch (node.nodeType) {
                 case 1: return node.getAttribute(defaultBindingAttributeName);   // Element
-                case 8: return ko.virtualElements.virtualNodeBindingValue(node); // Comment node
+                case 8: return ko.virtualElements.virtualNodeBindingValue(node); // Description node
                 default: return null;
             }
         },

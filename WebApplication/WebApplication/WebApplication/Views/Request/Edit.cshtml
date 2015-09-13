@@ -1,135 +1,124 @@
 ﻿@model WebApplication.Models.Request
 
-@{
-    ViewBag.Title = "Редактирование заявки";
-}
+<small>
 
-
-
-@using (Html.BeginForm("Edit", "Request", FormMethod.Post, new { role = "form", @class = "form-horizontal", enctype = "multipart/form-data" }))
-{
-         @Html.AntiForgeryToken()
+    @using (Html.BeginForm("Edit", "Request", FormMethod.Post, new { role = "form", @class = "form-horizontal", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
 
         <div class="form-horizontal">
-        <h4>Редактирование заявки</h4>
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <fieldset>
+                @Html.HiddenFor(model => model.Id)
 
-            <div class="form-group">
-                @Html.Label("Тип/категория", new {@class = "col-md-2 control-label"})
-                <div class="col-md-4">
-                    @Html.DropDownListFor(model => model.CategoryId, ViewBag.Categories as SelectList, new {@class = "form-control"})
+                <div class="form-group">
+                    @Html.Label("Тип/категория", new { @class = "col-md-2 control-label" })
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.CategoryId, ViewBag.Categories as SelectList, new { @class = "form-control" })
+                    </div>
+                    <span align="justify" class="col-md-6">
+                        Выбрать в предложенном списке, если отсутствует, указать другое
+                    </span>
                 </div>
-                <text align="justify" class="col-md-6">
-                    Выбрать в предложенном списке, если отсутствует, указать другое
-                </text>
-            </div>
-            <hr/>
-            
-            <div class="form-group">
-                @Html.Label("Направление/предмет", new {@class = "col-md-2 control-label"})
-                <div class="col-md-4">
-                    @Html.DropDownListFor(model => model.SubjectId, ViewBag.Subjects as SelectList, new {@class = "form-control"})
+                <hr />
+
+                <div class="form-group">
+                    @Html.Label("Направление/предмет", new { @class = "col-md-2 control-label" })
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.SubjectId, ViewBag.Subjects as SelectList, new { @class = "form-control" })
+                    </div>
+                    <span align="justify" class="col-md-6">
+                        Выбрать в предложенном списке, если отсутствует, указать другое
+                    </span>
                 </div>
-                <text align="justify" class="col-md-6">
-                    Выбрать в предложенном списке, если отсутствует, указать другое
-                </text>
-            </div>
-            <hr/>
+                <hr />
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Name, htmlAttributes: new {@class = "control-label col-md-2"})
-                <div class="col-md-4">
-                    @Html.EditorFor(model => model.Name, new {htmlAttributes = new {@class = "form-control"}})
-                    @Html.ValidationMessageFor(model => model.Name, "", new {@class = "text-danger"})
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                    <span align="justify" class="col-md-6">
+                        Указать точную тему/название работы. Если темы нет, опишите суть задания в произвольной форме (например, контрольная работа по менеджменту)
+                    </span>
                 </div>
-                <text align="justify" class="col-md-6">
-                    Указать точную тему/название работы. Если темы нет, опишите суть задания в произвольной форме (например, контрольная работа по менеджменту)
-                </text>
-            </div>
-            <hr/>
+                <hr />
 
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Description, htmlAttributes: new {@class = "control-label col-md-2"})
-                <div class="col-md-4">
-                    @Html.TextAreaFor(model => model.Description, 3, 100, new {htmlAttributes = new {@class = "form-control textarea"}})
-                    @Html.ValidationMessageFor(model => model.Description, "", new {@class = "text-danger"})
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.TextAreaFor(model => model.Description, 3, 100, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                    <span align="justify" class="col-md-6">
+                        Написать все, что должен знать менеджер и автор про ваш заказ (желательно написать дополнительные требования Вашего преподавателя и Ваши пожелания по заказу)
+                    </span>
                 </div>
-                <text align="justify" class="col-md-6">
-                    Написать все, что должен знать менеджер и автор про ваш заказ (желательно написать дополнительные требования Вашего преподавателя и Ваши пожелания по заказу)
-                </text>
-            </div>
-            <hr />
+                <hr />
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Deadline, htmlAttributes: new {@class = "control-label col-md-2"})
-                <div class="col-md-4">
-                    @Html.EditorFor(model => model.Deadline, new {htmlAttributes = new {@class = "form-control"}})
-                    @Html.ValidationMessageFor(model => model.Deadline, "", new {@class = "text-danger"})
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Deadline, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.Deadline, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Deadline, "", new { @class = "text-danger" })
+                    </div>
+                    <span align="justify" class="col-md-6">
+                        Укажите срок с запасом в 1-2 дня до сдачи работы преподавателю. Если заказ срочный (менее 5 дней) – укажите средний срок сдачи работы и напишите об этом дополнительно в комментариях
+                    </span>
                 </div>
-                <text align="justify" class="col-md-6">
-                    Укажите срок с запасом в 1-2 дня до сдачи работы преподавателю. Если заказ срочный (менее 5 дней) – укажите средний срок сдачи работы и напишите об этом дополнительно в комментариях
-                </text>
-            </div>
-            <hr />
+                <hr />
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Priority, new {@class = "col-md-2 control-label"})
-                <div class="col-md-4">
-                    @Html.DropDownListFor(model => model.Priority, new[]
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Priority, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.Priority, new[]
                     {
                         new SelectListItem() {Text = "Низкий", Value = "1"},
                         new SelectListItem() {Text = "Средний", Value = "2"},
                         new SelectListItem() {Text = "Высокий", Value = "3"},
                         new SelectListItem() {Text = "Критичный", Value = "4"}
-                    }, new {@class = "form-control"})
+                    }, new { @class = "form-control" })
+                    </div>
+                    <span align="justify" class="col-md-6">
+                        Если задание очень срочное - поставьте "Критичный", иначе же - определитесь по своим планам-предположениям. Чем выше приоритет, тем быстрее администрация и решатели увидят Ваш заказ
+                    </span>
                 </div>
-                <text align="justify" class="col-md-6">
-                    Если задание очень срочное - поставьте "Критичный", иначе же - определитесь по своим планам-предположениям. Чем выше приоритет, тем быстрее администрация и решатели увидят Ваш заказ
-                </text>
-            </div>
-            <hr />
+                <hr />
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Price, new {@class = "col-md-2 control-label"})
-                <div class="col-md-4">
-                    @Html.EditorFor(model => model.Price, new {@class = "form-control"})
-                    @Html.ValidationMessageFor(model => model.Price, "", new {@class = "text-danger"})
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Price, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.Price, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                    </div>
+                    <span align="justify" class="col-md-6">
+                        Напишите приблизительную цену, на которую Вы рассчитываете. Если же она изменится - всегда можно отредактировать заявку.
+                        @Html.ActionLink("Посмотреть цены", "Price", "Home")
+                    </span>
                 </div>
-                <text align="justify" class="col-md-6">
-                    Напишите приблизительную цену, на которую Вы рассчитываете. Если же она изменится - всегда можно отредактировать заявку.
-                    @Html.ActionLink("Посмотреть цены", "Price", "Home")
-                </text>
-            </div>
-            <hr />
+                <hr />
 
-            <div class="form-group">
-                @Html.Label("Приложенный файл?", new {@class = "col-md-2 control-label"})
-                <div class="col-md-4">
-                    <input type="file" class="form-control" id="error" name="error" value="Сохранить файл"/>
+                <div class="form-group">
+                    @Html.Label("Приложенный файл?", new { @class = "col-md-2 control-label" })
+                    <div class="col-md-4">
+                        <input type="file" class="form-control" id="error" name="error" value="Сохранить файл" />
+                    </div>
+                    <span align="justify" class="col-md-6">
+                        Если не нужно изменить файл - не прикрепляйте, сохранится старый. Иначе прикрепите методичку, если есть, или задание в электронном виде
+                    </span>
                 </div>
-                <text align="justify" class="col-md-6">
-                    Если не нужно изменить файл - не прикрепляйте, сохранится старый. Иначе прикрепите методичку, если есть, или задание в электронном виде
-                </text>
-            </div>
-            <hr />
+                <hr />
 
-            <div class="form-group">
-                @Html.Label("Подтвердить отправку?", new {@class = "col-md-2 control-label"})
+                <div class="form-group">
+                    @Html.Label("Подтвердить редактирование?", new { @class = "col-md-2 control-label" })
 
-                <div class="col-md-4">
-                    <input class="buttonS" type="submit" value="Сохранить" width="100"/>
+                    <div class="col-md-4">
+                        <input type="submit" value="Сохранить" width="100" />
+                    </div>
                 </div>
-            </div>
-            <hr />
-    </div>
-}
-
-<div>
-    @Html.ActionLink("Назад к общему списку", "Index", null, new {@class="buttonb"})
-</div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+            </fieldset>
+        </div>
+    }
+</small>

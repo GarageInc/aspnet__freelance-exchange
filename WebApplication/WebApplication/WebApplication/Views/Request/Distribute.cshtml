@@ -13,9 +13,9 @@
 <p>Всего нераспределенных заявок: @(Model.Count<Request>(x=>x.Executor==null))</p>
 <div>
     <form method="post" action="/Request/Distribute">
-        <label>Предмет</label>
-        @Html.DropDownList("category", ViewBag.Categories as SelectList)
-        <input type="submit" value="Фильтр" class="buttonb" />
+        <span class="glyphicon glyphicon-search"></span>
+        @Html.DropDownList("category", ViewBag.Categories as SelectList, new {@class="form-control-garageinc"})
+        <input  type="submit" value="Фильтр" class="buttonb" />
     </form>
 </div>
 <br />
@@ -27,7 +27,7 @@
 </div>
 
 <div class="table-responsive">
-<table class="table table-bordered table-hover table-condensed"
+<table class="table table-no-bordered  table-hover table-condensed"
        id="table"
        data-click-to-select="true"
        data-show-columns="true"
@@ -54,12 +54,13 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Category)
+            <br/>
+            [@Html.DisplayNameFor(model => model.Subject)]
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Status)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Priority)
+            <br/>
+            [@Html.DisplayNameFor(model => model.Priority)]
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Document)
@@ -75,32 +76,23 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Price)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsPaid)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Lifecycle)
+            <br/>
+            [@Html.DisplayNameFor(model => model.IsPaid)]
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Checked)
         </th>
-
-        <th>
-
-        </th>
-
         <th>
             Исполнитель
         </th>
         <th>
-            Исполнитель из общего списка
+            Общий список
         </th>
         <th>
-            Исполнитель из желающих
+            Желающие
         </th>
 
-        <th>Функционал</th>
+        <th></th>
     </tr>
     </thead>
 
@@ -112,6 +104,8 @@
                 <td><b>@item.Id</b></td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Category.Name)
+                    <br/>
+                    [@Html.DisplayFor(modelItem => item.Subject.Name)]
                 </td>
                 <td>
                     @if (item.Status == (int) RequestStatus.Open)
@@ -130,23 +124,23 @@
                     {
                         <span class="label label-inverse">Закрыта</span>
                     }
-                </td>
-                <td>
-                    @if (item.Priority == (int) RequestPriority.Low)
+
+                    <br />
+                    @if (item.Priority == (int)RequestPriority.Low)
                     {
-                        <span class="badge badge-low">Низкий</span>
+                        <span class="badge badge-low">[Низкий]</span>
                     }
-                    else if (item.Priority == (int) RequestPriority.Medium)
+                    else if (item.Priority == (int)RequestPriority.Medium)
                     {
-                        <span class="badge badge-medium">Средний</span>
+                        <span class="badge badge-medium">[Средний]</span>
                     }
-                    else if (item.Priority == (int) RequestPriority.High)
+                    else if (item.Priority == (int)RequestPriority.High)
                     {
-                        <span class="badge badge-high">Высокий</span>
+                        <span class="badge badge-high">[Высокий]</span>
                     }
-                    else if (item.Priority == (int) RequestPriority.Critical)
+                    else if (item.Priority == (int)RequestPriority.Critical)
                     {
-                        <span class="badge badge-critical">Критичный</span>
+                        <span class="badge badge-critical">[Критичный]</span>
                     }
                 </td>
                 <td>
@@ -170,25 +164,21 @@
                 <td>
                     <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = item.AuthorId}, null)'>
                         <img src="../../Content/pictures/author.png" class="tdImage" title="Автор заявки"/>
+                        <br/>
+                        @item.Author.Name
                     </a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
+                    <br/>
                     @if (item.IsPaid)
                     {
-                        <span class="label label-success">ДА</span>
+                        <span class="label label-success">[ДА]</span>
                     }
                     else
                     {
-                        <span class="label label-warning">НЕТ</span>
+                        <span class="label label-warning">[НЕТ]</span>
                     }
-                </td>
-                <td>
-                    <a class="compItem" href='@Url.Action("Lifecycle", "Request", new {id = item.LifecycleId}, null)'>
-                        <img src="../../Content/pictures/lifecycle.png" class="tdImage" title="Жизненный цикл заявки"/>
-                    </a>
                 </td>
                 <td>
                     @if (item.Checked)
@@ -199,8 +189,6 @@
                     {
                         <h6>Не проверено</h6>
                     }
-                </td>
-                <td>
                     @using (Html.BeginForm("DistributeChangeStatus", "Request"))
                     {
                         @Html.Hidden("requestId", item.Id)
@@ -209,17 +197,19 @@
                             {
                                 new SelectListItem() {Text = "Не проверено", Value = "0"},
                                 new SelectListItem() {Text = "Проверено", Value = "1"}
-                            })
-
-                        <input type="submit" value="Изменить" class="buttons"/>
+                            }, new { @class = "form-control-garageinc" })
+                        <hr/>
+                        <input type="submit" value="Изменить" class="buttons" />
                     }
-                </td>
+                 </td>
+               
                 <td>
                     @if (item.Executor != null)
                     {
-                        <a class="compItem" href='@Url.Action("Executor", "Request", new {id = item.ExecutorId}, null)'>
-                            @item.Executor.Name
+                        <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = item.ExecutorId}, null)'>
                             <img src="../../Content/pictures/executor.png" class="tdImage" title="Исполнитель заявки"/>
+                            <br />
+                            @item.Executor.Name
                         </a>
                     }
                     else
@@ -235,8 +225,8 @@
                             using (Html.BeginForm("DistributeRequest", "Request", "POST"))
                             {
                                 @Html.Hidden("requestId", item.Id)
-                                @Html.DropDownList("executorId", ViewBag.Executors as SelectList)
-                                <br>
+                                @Html.DropDownList("Id", ViewBag.Executors as SelectList, new { @class = "form-control-garageinc" })
+                                <hr>
                                 <input type="submit" value="Назначить" class="buttonb"/>
                             }
                         }
@@ -255,11 +245,12 @@
                     {
                         if ((item.Solvers).Any())
                         {
-                            using (Html.BeginForm("Distribute", "Request", "POST"))
+                            using (Html.BeginForm("DistributeRequest", "Request"))
                             {
                                 @Html.Hidden("requestId", item.Id)
-                                @Html.DropDownList("executorId", item.Solvers as SelectList)
-                                <br>
+                                
+                                 @Html.DropDownList("Id", new SelectList(item.Solvers, "Id", "Name"), new { @name = "Id",@class="form-control-garageinc" })
+                                <hr>
                                 <input type="submit" value="Назначить" class="buttonb"/>
                             }
                         }
@@ -274,7 +265,9 @@
                     }
                 </td>
                 <td>
-                    @Html.ActionLink("Удалить", "Delete", new {id = item.Id})
+                    <a class="compItem" href='@Url.Action("Delete", "Request", new {id = item.Id})'>
+                        <img src="../../Content/pictures/delete.png" class="tdImage" title="Удаление заявки" />
+                    </a>
                 </td>
             </tr>
         }
@@ -317,6 +310,5 @@
                 });
             });
         });
-
     </script>
 }

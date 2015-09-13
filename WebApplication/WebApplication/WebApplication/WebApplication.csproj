@@ -72,6 +72,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -178,28 +179,32 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
-    <Compile Include="Controllers\DocumentsController.cs" />
+    <Compile Include="Controllers\DocumentController.cs" />
     <Compile Include="Controllers\ErrorMessageController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\PropsController.cs" />
     <Compile Include="Controllers\RecallMessageController.cs" />
-    <Compile Include="Controllers\ReqConfirmationController.cs" />
     <Compile Include="Controllers\RequestController.cs" />
     <Compile Include="Controllers\RequestSolutionController.cs" />
+    <Compile Include="Controllers\RequirementConfirmationController.cs" />
     <Compile Include="Controllers\RequirementController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201509031710212_Initial.cs" />
-    <Compile Include="Migrations\201509031710212_Initial.Designer.cs">
-      <DependentUpon>201509031710212_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201509072024345_Initial.cs" />
+    <Compile Include="Migrations\201509072024345_Initial.Designer.cs">
+      <DependentUpon>201509072024345_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509102010389_Initial1.cs" />
+    <Compile Include="Migrations\201509102010389_Initial1.Designer.cs">
+      <DependentUpon>201509102010389_Initial1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BaseModel\BaseModel.cs" />
-    <Compile Include="Models\ReqConfirmation.cs" />
+    <Compile Include="Models\RequirementConfirmation.cs" />
     <Compile Include="Models\Requirement.cs" />
     <Compile Include="Models\ServiceModels\AccountViewModels.cs" />
     <Compile Include="Models\Repo\ApplicationDbContext.cs" />
@@ -1240,7 +1245,6 @@
     <Content Include="Scripts\bootstrap-table-master\src\extensions\toolbar\README.md" />
     <Content Include="Scripts\bootstrap-table-master\src\locale\bootstrap-table-en-US.js.template" />
     <Content Include="Scripts\bootstrap-table-master\src\locale\README.md" />
-    <Content Include="examples\bootstrap_table\data.json" />
     <Content Include="Content\FortAwesome\.gitignore" />
     <Content Include="Content\FortAwesome\.npmignore" />
     <Content Include="Content\FortAwesome\bower.json" />
@@ -1580,7 +1584,7 @@
     <Content Include="Views\Request\Distribute.cshtml" />
     <Content Include="Views\Request\ChangeStatus.cshtml" />
     <Content Include="Views\ErrorMessage\Create.cshtml" />
-    <Content Include="Views\ErrorMessage\_Details.cshtml" />
+    <Content Include="Views\ErrorMessage\_Delete.cshtml" />
     <Content Include="Views\ErrorMessage\Index.cshtml" />
     <Content Include="Views\Account\Create.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
@@ -1588,7 +1592,6 @@
     <Content Include="Views\ErrorMessage\_Message.cshtml" />
     <Content Include="Views\Payment\Create.cshtml" />
     <Content Include="Views\Payment\_Delete.cshtml" />
-    <Content Include="Views\Payment\Details.cshtml" />
     <Content Include="Views\Payment\Edit.cshtml" />
     <Content Include="Views\Payment\Index.cshtml" />
     <Content Include="Views\Payment\MyIndex.cshtml" />
@@ -1605,7 +1608,7 @@
     <Content Include="Views\RequestSolution\MyIndex.cshtml" />
     <Content Include="Views\Request\Message.cshtml" />
     <Content Include="Views\Home\Price.cshtml" />
-    <Content Include="Views\Home\RulesAndPayment.cshtml" />
+    <Content Include="Views\Home\Forum.cshtml" />
     <Content Include="Views\Home\Relax.cshtml" />
     <Content Include="Views\Home\Example.cshtml" />
     <Content Include="Views\Service\AddPropsCategory.cshtml" />
@@ -1624,18 +1627,22 @@
     <Content Include="Views\Account\_UserDetails.cshtml" />
     <Content Include="Views\Account\UserDetails.cshtml" />
     <Content Include="Views\Requirement\Create.cshtml" />
-    <Content Include="Views\Requirement\Delete.cshtml" />
-    <Content Include="Views\Requirement\Details.cshtml" />
+    <Content Include="Views\Requirement\_Delete.cshtml" />
     <Content Include="Views\Requirement\Edit.cshtml" />
     <Content Include="Views\Requirement\Index.cshtml" />
-    <Content Include="Views\ReqConfirmation\Create.cshtml" />
-    <Content Include="Views\ReqConfirmation\Delete.cshtml" />
-    <Content Include="Views\ReqConfirmation\Details.cshtml" />
-    <Content Include="Views\ReqConfirmation\Edit.cshtml" />
-    <Content Include="Views\ReqConfirmation\Index.cshtml" />
     <Content Include="Views\Payment\_Remittance.cshtml" />
     <Content Include="Views\Payment\AddingFunds.cshtml" />
     <Content Include="Views\Request\_GetAllSolutions.cshtml" />
+    <Content Include="Views\Account\_BlockUser.cshtml" />
+    <Content Include="Views\Requirement\MyIndex.cshtml" />
+    <Content Include="Views\RequirementConfirmation\_Create.cshtml" />
+    <Content Include="Views\RequirementConfirmation\_Delete.cshtml" />
+    <Content Include="Views\RequirementConfirmation\Edit.cshtml" />
+    <Content Include="Views\RequirementConfirmation\Index.cshtml" />
+    <Content Include="Views\Requirement\_RequirementBlockedDetails.cshtml" />
+    <Content Include="Views\Requirement\_GetAllRequirementConfirmations.cshtml" />
+    <Content Include="Views\Requirement\_BlockRequirement.cshtml" />
+    <Content Include="Views\Request\_Content.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\themes\" />
@@ -1643,6 +1650,7 @@
     <Folder Include="Files\PaymentFiles\" />
     <Folder Include="Files\RequestFiles\" />
     <Folder Include="Files\RequestSolutionFiles\" />
+    <Folder Include="Files\RequirementConfirmationFiles\" />
     <Folder Include="Files\UserAvatarFiles\" />
     <Folder Include="Scripts\jquery.mb.YTPlayer-master\" />
     <Folder Include="Scripts\jquery.tubular.1.0.1\" />
@@ -1656,8 +1664,11 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201509031710212_Initial.resx">
-      <DependentUpon>201509031710212_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201509072024345_Initial.resx">
+      <DependentUpon>201509072024345_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509102010389_Initial1.resx">
+      <DependentUpon>201509102010389_Initial1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -1,75 +1,238 @@
-﻿@model IEnumerable<WebApplication.Models.Requirement>
+﻿@using Microsoft.AspNet.Identity
+@using WebApplication.Models
+@model IEnumerable<WebApplication.Models.Requirement>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Заявки на перевод";
+    var curId = this.User.Identity.GetUserId();
 }
 
-<h2>Index</h2>
+<div class="modal fade" id="modDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="dialogContent" class="modal-dialog"></div>
+</div>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Новая заявка", "Create", null, new {@class="buttons"})
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Author.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Document.Url)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Blocked)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.BlockedReason)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Price)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Author.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Document.Url)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Blocked)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BlockedReason)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
+<h2>Список заявок</h2>
+<p>Всего заявок: @(Model.Count<Requirement>())</p>
+
+<br />
+<div id="toolbar">
+    <button id="remove" class="btn btn-warning" disabled>
+        <i class="glyphicon glyphicon-remove"></i> Скрыть выбранное
+    </button>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-no-bordered  table-hover table-condensed"
+           id="table"
+           data-click-to-select="true"
+           data-show-columns="true"
+           data-search="true"
+           data-show-refresh="true"
+           data-show-export="true"
+           data-pagination="true"
+           data-toolbar="#toolbar"
+           data-minimum-count-columns="2"
+           data-show-pagination-switch="true"
+           data-id-field="id"
+           data-page-size="6"
+           data-page-list="[6,10, 25, 50, 100, ALL]"
+           data-response-handler="responseHandler"
+           data-flat="true"
+           data-sort-order="desk"
+           data-page-number="1"
+           data-show-multi-sort="true">
+        <thead>
+        <tr>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                Подтверждения от администрации
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Author)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Checked)
+            </th>
+            <th>
+                Проверка счета
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td> </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @if (item.Closed)
+                    {
+                        <span class="label label-success">Закрыто</span>
+                        if (item.CanDownload)
+                        {
+                            <a class="compItem" href='@Url.Action("GetAllRequirementConfirmations", "Requirement", new {id = item.Id}, null)'>
+                                <img src="../../Content/pictures/lifecycle.png" class="tdImage" title="Подтверждения о переводе" />
+                            </a>
+                        }
+                        else
+                        {
+                            <h6>Подтверждение(я) ещё не загружено(ы)</h6>
+                        }
+                    }
+                    else
+                    {
+                        <span class="label label-warning">Не проверено, подтверждение(я) не доступно(ы)</span>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @if (item.IsBlocked)
+                    {
+                        <h6>Заблокировано</h6>
+                        <br/>
+                        @Html.DisplayFor(modelItem => item.BlockReason)
+                    }
+                    else
+                    {
+                        <h6>Нет</h6>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @if (item.Checked == true)
+                    {
+                        <h6>Проверено</h6>
+                        <h6>Всего подтверждений: @item.RequirementConfirmations.Count()</h6>
+                        @Html.ActionLink("Добавить подтверждение", "Create", "RequirementConfirmation", new {id = item.Id}, new { @class = "compItem" })
+                    }
+                    else
+                    {
+                        <h6>Не проверено</h6>
+
+                    }
+                </td>
+                <td>
+                    @if (item.Closed)
+                    {
+                        <h6>Оплата закрыта</h6>
+                    }
+                    else
+                    {
+                        using (Html.BeginForm("RequirementChangeStatus", "Requirement"))
+                        {
+                            @Html.Hidden("requirementId", item.Id)
+
+                             @Html.DropDownList("status",
+                                         new[]
+                                         {
+                                             new SelectListItem() {Text = "Не проверено", Value = "0"},
+                                             new SelectListItem() {Text = "Проверено", Value = "1"}
+                                         }
+                                         ,new {@class="form-control-garageinc"})
+                            <hr/>
+
+                            <input type="submit" value="Изменить" class="buttons" />
+                        }
+                    }
+                </td>
+                <td>
+                    @if (item.Closed == false && (item.AuthorId == curId || (User.IsInRole("Administrator") || User.IsInRole("Moderator"))))
+                    {
+                        <a class="compItem" href='@Url.Action("Delete", "Requirement", new {id = item.Id})'>
+                            <img src="../../Content/pictures/delete.png" class="tdImage" title="Удаление заявки"/>
+                        </a>
+                        <br/>
+                        @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { @class = "buttonb" })
+                        @Html.ActionLink("ЗАКРЫТЬ", "Close", new { id = item.Id }, new { @class = "buttons" })
+                    }
+                    else
+                    {
+                        <h6>Выведено, закрыто</h6>
+                    }
+
+                    @if (item.IsBlocked)
+                    {
+                        <h6>Заблокировано</h6>
+                        <a class="compItem" href='@Url.Action("RequirementBlockedDetails", "Requirement", new {id = item.Id}, null)'>
+                            <img src="../../Content/pictures/info.png" class="tdImage" title="Подробности блокировки"/>
+                        </a>
+                        if (item.Closed == false)
+                        {
+                            @Html.ActionLink("Разблокировать", "DownBlockRequirement", "Requirement", new { id = item.Id }, new { @class = "buttons" })
+                        }
+                    }
+                    else
+                    {
+                        <h6>Не блокировано</h6>
+                        if (item.Closed == false)
+                        {
+                            @Html.ActionLink("Заблокировать", "BlockRequirement", "Requirement", new { id = item.Id }, new { @class = "compItem" })
+                        }
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+@Styles.Render("~/Scripts/bootstrap-table-master/css")
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/bootstrap-table-master/1")
+    @Scripts.Render("~/bundles/bootstrap-table-master/2")
+    @Scripts.Render("~/bundles/bootstrap-table-master/3")
+    @Scripts.Render("~/bundles/bootstrap-table-master/4")
+    @Scripts.Render("~/bundles/bootstrap-table-master/5")
+    @Scripts.Render("~/bundles/bootstrap-table-master/6")
+    @Scripts.Render("~/bundles/bootstrap-table-master/7")
+    @Scripts.Render("~/bundles/bootstrap-table-master/8")
+    @Scripts.Render("~/bundles/bootstrap-table-master/9")
+    @Scripts.Render("~/bundles/bootstrap-table-master/10")
+    @Scripts.Render("~/bundles/bootstrap-table-master/11")
+    @Scripts.Render("~/bundles/bootstrap-table-master/12")
+    @Scripts.Render("~/bundles/bootstrap-table-master/13")
+    @Scripts.Render("~/bundles/bootstrap-table-master/14")
+    @Scripts.Render("~/bundles/bootstrap-table-master/15")
+    @Scripts.Render("~/bundles/bootstrap-table-master/16")
+    @Scripts.Render("~/bundles/bootstrap-table-master/17")
+    @Scripts.Render("~/bundles/bootstrap-table-master/18")
+    @Scripts.Render("~/bundles/bootstrap-table-master/19")
+
+    <script type="text/javascript">
+        // Модальное окно снизу справа
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".compItem").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
+            });
+        });
+    </script>
 }
-
-</table>

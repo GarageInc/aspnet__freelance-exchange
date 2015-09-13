@@ -1,0 +1,42 @@
+﻿@model WebApplication.Models.Requirement
+
+<div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal" area-hidden="true">X</button>
+        <strong>Заявка № @Html.DisplayFor(m => m.Id)</strong>
+    </div>
+    <div class="modal-body">
+        @if (Model.IsBlocked)
+        {
+            using (Html.BeginForm("DownBlockRequirement", "Requirement"))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("Id", Model.Id)
+
+                <div class="form-actions no-color">
+                    <input type="submit" value="Разблокировать" class="buttonb" />
+                </div>
+            }
+        }
+        else
+        {
+            using (Html.BeginForm("UpBlockRequirement", "Requirement"))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("requirementId", Model.Id)
+
+                <textarea class="form-control" required name="blockReason" cols="100" rows="5">Причина блокировки: </textarea>
+                <br />
+                <input class="form-control" type="datetime-local" aria-required="" name="blockDate" required>
+                <br />
+                <div class="form-actions no-color">
+                    <input type="submit" value="Заблокировать" class="buttons" />
+                </div>
+            }
+        }
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+    </div>
+</div>

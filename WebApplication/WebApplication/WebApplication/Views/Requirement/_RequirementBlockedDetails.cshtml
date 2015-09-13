@@ -1,0 +1,42 @@
+﻿@model WebApplication.Models.Requirement
+
+<div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal" area-hidden="true">X</button>
+        <strong>Заявка № @Html.DisplayFor(m => m.Id)</strong>
+    </div>
+    <div class="modal-body">
+        <dl class="dl-horizontal">
+            @if (Model.IsBlocked)
+            {
+                <dt>
+                    @Html.DisplayNameFor(m => m.DateOfBlocking)
+                    <br />
+                    [@Html.DisplayNameFor(m => m.BlockForDate)]
+                </dt>
+                <dd>
+                    @Html.DisplayFor(m => m.DateOfBlocking)
+                    <br />
+                    [@Html.DisplayFor(m => m.BlockForDate)]
+                </dd>
+                <hr />
+
+                <dt>
+                    @Html.DisplayNameFor(m => m.BlockReason)
+                </dt>
+                <dd>
+                    [@Html.DisplayFor(m => m.BlockReason)]
+                </dd>
+            }
+            else
+            {
+                <h6>Заявка не блокирована</h6>
+            }
+           
+        </dl>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+    </div>
+</div>

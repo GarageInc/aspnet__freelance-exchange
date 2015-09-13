@@ -8,48 +8,32 @@ using System.Web.Mvc;
 using WebApplication.Models;
 using Microsoft.AspNet.Identity;
 using System.Web.WebPages;
+using WebApplication.Service;
 
 namespace WebApplication.Controllers
 {
     [Authorize]
     public class ErrorMessageController : Controller
     {
-        private ApplicationDbContext _db = new ApplicationDbContext();
+        private readonly ApplicationDbContext _db = new ApplicationDbContext();
+        private readonly DocumentService _docService = new DocumentService();
 
         // GET: ErrorMessage
         [Authorize(Roles = "Administrator, Moderator")]
         public async Task<ActionResult> Index()
         {
-
             var errorMessages = _db.ErrorMessages
-                .Include(e => e.Author)
-                .Include(r=>r.Document)
+                .Where(r=>r.IsDeleted==false)
+                .Include(r => r.Author)
+                .Include(r => r.Document)
                 .OrderByDescending(r => r.CreateDateTime);
-            var errorStatus = new[] { new { Id = 0, Name = "Открыто" }, new { Id = 1, Name = "Закрыто" } };
+
+            var errorStatus = new[] {new {Id = 0, Name = "Открыто"}, new {Id = 1, Name = "Закрыто"}};
             ViewBag.ErrorStatus = new SelectList(errorStatus, "Id", "Name");
 
             return View(await errorMessages.ToListAsync());
         }
-        
-        // POST: ErrorMessage/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(int id)
-        {
-            ErrorMessage errorMessage = await _db.ErrorMessages.FindAsync(id);
-            _db.ErrorMessages.Remove(errorMessage);
-            await _db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
 
         [HttpGet]
         public ActionResult Create()
@@ -75,7 +59,7 @@ namespace WebApplication.Controllers
             ErrorMessage erM;
             if (user != null)
             {
-                erM= new ErrorMessage
+                erM = new ErrorMessage
                 {
                     Author = user,
                     AuthorId = user.Id,
@@ -95,20 +79,7 @@ namespace WebApplication.Controllers
             // если получен файл
             if (error != null)
             {
-                DateTime current = DateTime.Now;
-
-                Document doc = new Document();
-                doc.Size = error.ContentLength;
-                // Получаем расширение
-                string ext = error.FileName.Substring(error.FileName.LastIndexOf('.'));
-                doc.Type = ext;
-                // сохраняем файл по определенному пути на сервере
-                string path = current.ToString(user.Id.GetHashCode()+"dd/MM/yyyy H:mm:ss").Replace(":", "_").Replace("/", ".") + ext;
-                error.SaveAs(Server.MapPath("~/Files/ErrorMessageFiles/" + path));
-                doc.Url = path;
-
-                erM.Document = doc;
-                _db.Documents.Add(doc);
+                erM.Document = _docService.CreateDocument(Server.MapPath("~/Files/ErrorMessageFiles/"), error);
             }
             else
                 erM.Document = null;
@@ -125,14 +96,14 @@ namespace WebApplication.Controllers
             }
             else
                 erM.ForAdministration = false;
-            
+
             // Добавляем заявку с возможно приложенными документами
             _db.ErrorMessages.Add(erM);
             user.ErrorMessages.Add(erM);
             _db.Entry(user).State = EntityState.Modified;
-            
+
             _db.SaveChanges();
-            Response.Redirect(Request.UrlReferrer.AbsoluteUri);                
+            Response.Redirect(Request.UrlReferrer.AbsoluteUri);
         }
 
 
@@ -142,10 +113,9 @@ namespace WebApplication.Controllers
         /// <returns></returns>
         [HttpPost]
         [Authorize(Roles = "Administrator, Moderator")]
-        [Authorize]
         public ActionResult ChangeErrorMessageStatus(int? errorMessageId, string errorStatusId)
         {
-            if (errorMessageId == null && errorStatusId.IsEmpty())// == null)
+            if (errorMessageId == null && errorStatusId.IsEmpty()) // == null)
             {
                 return RedirectToAction("Index");
             }
@@ -165,16 +135,57 @@ namespace WebApplication.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Details(int id)
+        /// <summary>
+        /// Удаление ошибки
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Moderator")]
+        public ActionResult Delete(int id)
         {
-            ErrorMessage erMes = _db.ErrorMessages.Find(id);
+            var errorMessage = _db.ErrorMessages
+                .Where(r => r.IsDeleted == false)
+                .Where(x => x.Id == id)
+                .Include(e => e.Author)
+                .Include(r => r.Document)
+                .First();
 
-            if (erMes != null)
+            if (errorMessage != null)
             {
-                return PartialView("_Details", erMes);
+                return PartialView("_Delete", errorMessage);
             }
             return View("Index");
         }
 
+        /// Удаление заявки
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator, Moderator")]
+        public void DeleteConfirmed(int id)
+        {
+            ErrorMessage errorMessage = _db.ErrorMessages.Find(id);
+
+            if (errorMessage != null)
+            {
+                errorMessage.IsDeleted = true;
+
+                _db.Entry(errorMessage).State = EntityState.Modified;
+
+                _db.SaveChanges();
+            }
+
+            Response.Redirect(Request.UrlReferrer.AbsoluteUri);
+        }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

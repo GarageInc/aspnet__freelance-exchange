@@ -1,11 +1,17 @@
 ﻿@model IEnumerable<Request>
+@using Microsoft.AspNet.Identity
 @using WebApplication.Models
 @{
     ViewBag.Title = "Список заявок-задач";
+    var userId = this.User.Identity.GetUserId();
 }
 
 <h2>Изменить статус заявки</h2>
 <p>Всего заявок: @(Model.Count<Request>())</p>
+
+<div class="modal fade" id="modDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="dialogContent" class="modal-dialog"></div>
+</div>
 
 <div id="toolbar">
     <button id="remove" class="btn btn-warning" disabled>
@@ -14,7 +20,7 @@
 </div>
 
 <div class="table-responsive">
-    <table class="table table-bordered table-hover table-condensed"
+    <table class="table table-no-bordered  table-hover table-condensed"
            id="table"
            data-click-to-select="true"
            data-show-columns="true"
@@ -34,139 +40,200 @@
            data-page-number="1"
            data-show-multi-sort="true">
         <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Priority)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Document)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Deadline)
-            </th>
-            <th>
-                Детали
-            </th>
-            <th>
-                Текущий статус
-            </th>
-            <th>
+            <tr>
+                <th>
 
-            </th>
-        </tr>
+                </th>
+                <th>
+                    Текущий статус
+                </th>
+                <th>
+                    Изменить
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                    <br />
+                    [@Html.DisplayNameFor(model => model.IsPaid)]
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Category)
+                    <br />
+                    [@Html.DisplayNameFor(model => model.Subject)]
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                    <br />
+                    [@Html.DisplayNameFor(model => model.Priority)]
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Document)
+                </th>
+                <th>
+                    Дата создания
+                </th>
+                <th>
+                    Детали
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Author)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Lifecycle)
+                </th>
+                <th></th>
+            </tr>
         </thead>
         <tbody>
-
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    <b>@item.Id</b>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @if (item.Status == (int) RequestStatus.Open)
-                    {
-                        <span class="label label-success">Открыта</span>
-                    }
-                    else if (item.Status == (int) RequestStatus.Distributed)
-                    {
-                        <span class="label label-warning">Распределена</span>
-                    }
-                    else if (item.Status == (int) RequestStatus.Proccesing)
-                    {
-                        <span class="label label-important">На решении</span>
-                    }
-                    else if (item.Status == (int) RequestStatus.Closed)
-                    {
-                        <span class="label label-inverse">Закрыта</span>
-                    }
-                </td>
-                <td>
-                    @if (item.Priority == (int) RequestPriority.Low)
-                    {
-                        <span class="badge badge-low">Низкий</span>
-                    }
-                    else if (item.Priority == (int) RequestPriority.Medium)
-                    {
-                        <span class="badge badge-medium">Средний</span>
-                    }
-                    else if (item.Priority == (int) RequestPriority.High)
-                    {
-                        <span class="badge badge-high">Высокий</span>
-                    }
-                    else if (item.Priority == (int) RequestPriority.Critical)
-                    {
-                        <span class="badge badge-critical">Критичный</span>
-                    }
-                </td>
-                <td>
-                    @if (item.Document != null)
-                    {
-                        <a href="/Document/DownloadRequestFile/@item.Document.Id"><img src="../../Content/pictures/filey.png" alt='@item.Document.Url' class="tdImage" title="Скачать файл"/></a>
-                    }
-                    else
-                    {
-                        <img src="../../Content/pictures/filen.png" alt="без файла изображения" class="tdImage" title="Файл не приложен"/>
-                    }
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Deadline)
-                </td>
-                <td>
-                    <a class="openDialog" data-dialog-id="infoDialog" data-dialog-title="Описание заявки"
-                       href="/Request/Details/@item.Id">
-                        <img src="../../Content/pictures/info.png" class="tdImage" title="Описание заявки"/>
-                    </a>
-                </td>
-                <td>
-                    @if (item.Status == (int) RequestStatus.Open)
-                    {
-                        <h6>Создана</h6>
-                    }
-                    @if (item.Status == (int) RequestStatus.Distributed)
-                    {
-                        <h6>Распределена</h6>
-                    }
-                    @if (item.Status == (int) RequestStatus.Proccesing)
-                    {
-                        <h6>Решается</h6>
-                    }
-                    @if (item.Status == (int) RequestStatus.Closed)
-                    {
-                        <h6>Закрыта</h6>
-                    }
-                </td>
-                <td>
-                    @using (Html.BeginForm())
-                    {
-                        @Html.Hidden("requestId", item.Id)
-                        if (item.Status >= (int) RequestStatus.Distributed)
+            @foreach (var item in Model)
+            {
+                <tr align="center">
+                    <td></td>
+                    <td>
+                        @if (item.Status == (int)RequestStatus.Open)
                         {
-                            @Html.DropDownList("status", new[]
+
+                            <span class="label label-warning">Создана</span>
+                        }
+                        @if (item.Status == (int)RequestStatus.Distributed)
+                        {
+
+                            <span class="label label-info">Распределена</span>
+                        }
+                        @if (item.Status == (int)RequestStatus.Proccesing)
+                        {
+                            <span class="label label-default">Решается</span>
+                        }
+                        @if (item.Status == (int)RequestStatus.Closed)
+                        {
+                            <span class="label label-success">Закрыта</span>
+                        }
+                    </td>
+                    <td>
+                        @using (Html.BeginForm())
+                        {
+                            @Html.Hidden("requestId", item.Id)
+                            if (item.Status >= (int)RequestStatus.Distributed)
+                            {
+                                @Html.DropDownList("status", new[]
                             {
                                 new SelectListItem() {Text = "Распределена", Value = "2"},
                                 new SelectListItem() {Text = "Решается", Value = "3"},
                                 new SelectListItem() {Text = "Закрыта", Value = "4"}
-                            })
+                            }, new { @class = "form-control-garageinc" })
+                            }
+
+                            <input type="submit" value="Изменить статус" class="buttons" />
+                        }
+                    </td>
+                    <td><b>@item.Id</b></td>
+                    <td>
+                        @if (item.IsPaid)
+                        {
+                            <span class="label label-success">Оплачено</span>
+                            if (item.CanDownload)
+                            {
+                                <a class="compItem" href='@Url.Action("GetAllSolutions", "Request", new {id = item.Id}, null)'>
+                                    <img src="../../Content/pictures/lifecycle.png" class="tdImage" title="Посмотреть решения этой задачи" />
+                                </a>
+                            }
+                            else
+                            {
+                                <h6>Решение ещё не загружено</h6>
+                            }
+                        }
+                        else
+                        {
+                            <span class="label label-warning">Не оплачено</span>
+                            <span class="label label-warning">Решение не доступно</span>
+                        }
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Category.Name)
+                        <br />
+                        [@Html.DisplayFor(modelItem => item.Subject.Name)]
+                    </td>
+                    <td>
+                        @if (item.Status == (int)RequestStatus.Open)
+                        {
+                            <span class="label label-success">Открыта</span>
+                        }
+                        else if (item.Status == (int)RequestStatus.Distributed)
+                        {
+                            <span class="label label-warning">Распределена</span>
+                        }
+                        else if (item.Status == (int)RequestStatus.Proccesing)
+                        {
+                            <span class="label label-info">На решении</span>
+                        }
+                        else if (item.Status == (int)RequestStatus.Closed)
+                        {
+                            <span class="label label-primary">Закрыта</span>
                         }
 
-                        <input type="submit" value="Изменить статус"/>
-                    }
-                </td>
-            </tr>
-        }
+                        <br />
+                        @if (item.Priority == (int)RequestPriority.Low)
+                        {
+                            <span class="badge badge-low">[Низкий]</span>
+                        }
+                        else if (item.Priority == (int)RequestPriority.Medium)
+                        {
+                            <span class="badge badge-medium">[Средний]</span>
+                        }
+                        else if (item.Priority == (int)RequestPriority.High)
+                        {
+                            <span class="badge badge-high">[Высокий]</span>
+                        }
+                        else if (item.Priority == (int)RequestPriority.Critical)
+                        {
+                            <span class="badge badge-critical">[Критичный]</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.Document != null)
+                        {
+                            <a href="/Download/DownloadRequestFile/@item.Id"><img src="../../Content/pictures/filey.png" alt='@item.Document.Url' class="tdImage" title="Скачать файл" /></a>
+                        }
+                        else
+                        {
+                            <img src="../../Content/pictures/filen.png" alt="без файла изображения" class="tdImage" title="Файл не приложен" />
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Deadline)
+                    </td>
+                    <td>
+                        <a class="compItem" href='@Url.Action("Details", "Request", new {id = item.Id}, null)'>
+                            <img src="../../Content/pictures/info.png" class="tdImage" title="Детали заявки" />
+                        </a>
+                    </td>
+                    <td>
+                            <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = item.ExecutorId}, null)'>
+                                <img src="../../Content/pictures/author.png" class="tdImage" title="Автор заявки" />
+                            </a>
+                    </td>
+                    <td>
+                        <a class="compItem" href='@Url.Action("Lifecycle", "Request", new {id = item.LifecycleId}, null)'>
+                            <img src="../../Content/pictures/lifecycle.png" class="tdImage" title="Жизненный цикл заявки" />
+                        </a>
+                    </td>
+                    <td>
+                        @if (item.Author.Id == userId)
+                        {
+                            <a class="compItem" href='@Url.Action("Delete", "Request", new {id = item.Id})'>
+                                <img src="../../Content/pictures/delete.png" class="tdImage" title="Удаление заявки" />
+                            </a>
+                            @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { @class = "buttonb" })
+                        }
+
+                        @Html.ActionLink("Обсуждение", "Index", "Comment", new { requestId = item.Id }, new { @class = "buttons" })
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>

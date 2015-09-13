@@ -28,11 +28,11 @@
 
             <dt>
                 <b>
-                     @Html.DisplayNameFor(m => m.Comment)
+                     @Html.DisplayNameFor(m => m.Description)
                 </b>
             </dt>
             <dd>
-                @Html.DisplayFor(m => m.Comment)
+                @Html.DisplayFor(m => m.Description)
             </dd>
 
             <dt>
@@ -50,9 +50,9 @@
                 </b>
             </dt>
             <dd>
-                @if (Model.Req != null)
+                @if (Model.Request != null)
                 {
-                    Html.DisplayFor(m => m.Req.Id);
+                    Html.DisplayFor(m => m.Request.Id);
                 }
                 else
                 {

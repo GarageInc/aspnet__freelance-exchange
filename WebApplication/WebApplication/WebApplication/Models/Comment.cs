@@ -6,7 +6,6 @@
 
     public class Comment: BaseModel.BaseModel
     {
-        
         [Display(Name = "Автор")]
         public virtual ApplicationUser Author { get; set; }
 
@@ -23,12 +22,10 @@
         public virtual int? ParentId { get; set; } //Идентификатор родительской новости
         
         [Display(Name = "ID заявки")]
-        public virtual int? ReqId { get; set; }
+        public virtual int? RequestId { get; set; }
 
         [Display(Name = "Заявка")]
-        [ForeignKey("ReqId")]
-        public virtual Request Req { get; set; }
-
-        
+        [ForeignKey("RequestId")]
+        public virtual Request Request { get; set; }
     }
 }
