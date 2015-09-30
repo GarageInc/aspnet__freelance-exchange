@@ -113,11 +113,12 @@
                         if (balance >= item.Price)
                         {
                             <span class="badge-success">Средств достаточно</span>
+                            @Html.ActionLink("Оплатить с баланса", "PayFromBalance", "Payment", new { id = @item.Id}, new { @class = "buttonb" })
                         }
                         else
                         {
-                            <span class="badge-success">Недостаточно</span>
-                            @Html.ActionLink("Загрузить оплату", "Create", "Payment")
+                            <span class="badge-success">Недостаточно средств</span>
+                            @Html.ActionLink("Загрузить оплату", "Create", "Payment", new { }, new { @class="buttonb"})
                         }
                     }
                 </td>

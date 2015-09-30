@@ -53,22 +53,18 @@
 
             return View(allReqs.ToList());
         }
-
-
-        /// <summary>
-        /// Получение заявок текущего пользователя
-        /// </summary>
-        /// <returns></returns>
+                
         public ActionResult MyIndex(int? category)
         {
             var currentId = HttpContext.User.Identity.GetUserId();
 
             ApplicationUser user = _db.Users.FirstOrDefault(m => m.Id == currentId);
-            IEnumerable<Request> allReqs = null;
+            IEnumerable<Request> requests = null;
+
             if (category == null || category == 0)
             {
 
-                allReqs = _db.Requests.Where(r => r.Author.Id == user.Id)
+                requests = _db.Requests.Where(r => r.Author.Id == user.Id)
                                         .Where(r => !r.IsDeleted)
                                         .Include(r => r.Category)  // добавляем категории
                                         .Include(r => r.Lifecycle)  // добавляем жизненный цикл заявок
@@ -78,7 +74,7 @@
                                         .OrderByDescending(r => r.Lifecycle.Opened); // упорядочиваем по дате по убыванию   
             }
             else
-                allReqs = _db.Requests
+                requests = _db.Requests
                                         .Where(x => x.CategoryId == category)
                                         .Where(r => r.Author.Id == user.Id)
                                         .Where(r => !r.IsDeleted) //получаем заявки для текущего пользователя
@@ -95,7 +91,7 @@
             categories.Insert(0, new Category { Name = "Все", Id = 0 });
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
 
-            return View(allReqs.ToList());
+            return View(requests.ToList());
         }
         
         [HttpGet]
@@ -105,21 +101,22 @@
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Request request = await _db.Requests.FindAsync(id);
             if (request == null)
             {
                 return HttpNotFound();
             }
 
-            var payments = _db.Payments
+            var closedPayments = _db.Payments
                                 .Where(x => x.RequestId == request.Id)
                                 .Where(x => x.Closed);
-            if (payments.Any())
+
+            if (closedPayments.Any())
             {
                 return View("_Content", "Извините, но оплата за данную задачу уже утверждена и заявка не может быть изменена!");
             }
-
-            // Добавляются категории и предмет
+            
             ViewBag.Categories = new SelectList(_db.Categories, "Id", "Name");
             ViewBag.Subjects = new SelectList(_db.Subjects, "Id", "Name");
             return View(request);
@@ -130,16 +127,25 @@
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // 
         public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Description,CategoryId,SubjectId,Deadline,Priority,Price")] Request request, HttpPostedFileBase error)
         {
-            var curId = this.HttpContext.User.Identity.GetUserId();
+            if (request == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
+            var curId = this.HttpContext.User.Identity.GetUserId();
+           
             if (ModelState.IsValid)
             {
                 try
                 {
                     var requestBase = _db.Requests.Find(request.Id);
+                    if (requestBase == null)
+                    {
+                        return HttpNotFound();
+                    }
+
                     if (requestBase.Author.Id == curId)
                     {
                         using (var transaction = _db.Database.BeginTransaction())
@@ -150,9 +156,9 @@
                                 var payments = _db.Payments
                                     .Where(x => x.RequestId == request.Id)
                                     .Where(x => x.Closed);
+
                                 if (payments.Any())
                                 {
-
                                     return PartialView("_Content", "Извините, но оплата за данную задачу уже утверждена и заявка не может быть изменена!");
                                 }
 
@@ -162,13 +168,10 @@
                                 }
 
                                 requestBase.Name = request.Name;
-
                                 requestBase.Category = _db.Categories.Find(request.CategoryId);
                                 requestBase.CategoryId = requestBase.Category.Id;
-
                                 requestBase.Subject = _db.Subjects.Find(request.SubjectId);
                                 requestBase.SubjectId = requestBase.Subject.Id;
-
                                 requestBase.Deadline = request.Deadline;
                                 requestBase.Priority = request.Priority;
                                 requestBase.Description = request.Description;
@@ -218,18 +221,10 @@
         [HttpGet]
         public ActionResult Create()
         {
-            var curId = HttpContext.User.Identity.GetUserId();
-            ApplicationUser user = _db.Users.FirstOrDefault(m => m.Id == curId);
+            ViewBag.Categories = new SelectList(_db.Categories, "Id", "Name");
+            ViewBag.Subjects = new SelectList(_db.Subjects, "Id", "Name");
 
-            if (user != null)
-            {
-                ViewBag.Categories = new SelectList(_db.Categories, "Id", "Name");
-                ViewBag.Subjects = new SelectList(_db.Subjects, "Id", "Name");
-
-                return View();
-            }
-
-            return RedirectToAction("LogOff", "Account");
+            return View();
         }
         
         [HttpPost]
@@ -238,43 +233,39 @@
         {         
             if (ModelState.IsValid)
             {
-                var curId = HttpContext.User.Identity.GetUserId();
-                ApplicationUser user = _db.Users.FirstOrDefault(m => m.Id == curId);
-                
-                DateTime current = DateTime.Now;
-                Lifecycle newLifecycle = new Lifecycle() { Opened = current, IsDeleted = false, CreateDateTime = current};
-                                
-                request.Author = user;
-                request.AuthorId = user.Id;
-                
-                if (error != null)
-                {
-                    request.Document = _docService.CreateDocument(Server.MapPath("~/Files/RequestFiles/"), error);
-                }
-                else
-                    request.Document = null;
-
-                var cat = _db.Categories.Find(request.CategoryId);
-                request.Category = cat;
-
-                var sub = _db.Subjects.Find(request.SubjectId);
-                request.Subject = sub;
-                request.CreateDateTime = DateTime.Now;
-                request.IsDeleted = false;
-                request.Checked = false;
-                request.CanDownload = false;
-                
-                // указываем статус Открыта у заявки
-                request.IsPaid = false;
-                request.Status = (int)RequestStatus.Open;
-
-                // Добавляем заявку с возможно приложенными документамиusing (var transaction = _db.Database.BeginTransaction())
-
                 using (var transaction = _db.Database.BeginTransaction())
                 {
                     try
                     {
-                        //Добавляем жизненный цикл заявки
+                        var curId = HttpContext.User.Identity.GetUserId();
+                        ApplicationUser user = _db.Users.FirstOrDefault(m => m.Id == curId);
+
+                        DateTime current = DateTime.Now;
+                        Lifecycle newLifecycle = new Lifecycle() { Opened = current, IsDeleted = false, CreateDateTime = current };
+
+                        request.Author = user;
+                        request.AuthorId = user.Id;
+
+                        if (error != null)
+                        {
+                            request.Document = _docService.CreateDocument(Server.MapPath("~/Files/RequestFiles/"), error);
+                        }
+                        else
+                            request.Document = null;
+
+                        var cat = _db.Categories.Find(request.CategoryId);
+                        request.Category = cat;
+
+                        var sub = _db.Subjects.Find(request.SubjectId);
+                        request.Subject = sub;
+                        request.CreateDateTime = DateTime.Now;
+                        request.IsDeleted = false;
+                        request.Checked = false;
+                        request.CanDownload = false;
+
+                        request.IsPaid = false;
+                        request.Status = (int)RequestStatus.Open;
+                        
                         _db.Lifecycles.Add(newLifecycle);
                         request.Lifecycle = newLifecycle;
                         request.LifecycleId = newLifecycle.Id;
@@ -297,19 +288,12 @@
 
                 return RedirectToAction("Index");
             }
-
-            // Добавляются категории и предмет
+            
             ViewBag.Categories = new SelectList(_db.Categories, "Id", "Name");
             ViewBag.Subjects = new SelectList(_db.Subjects, "Id", "Name");
             return View(request);
         }
-
-
-        /// <summary>
-        /// Просмотр подробных сведений о заявке
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+                
         [AllowAnonymous]
         public ActionResult Details(int id)
         {
@@ -324,10 +308,10 @@
                 request.Category = _db.Categories.First(m => m.Id == request.CategoryId);
                 return PartialView("_Details", request);
             }
-            return View("Index");
+
+            return PartialView("_Content","Произошла неведомая ошибка в выборе задачи!");
         }
-
-
+        
         [AllowAnonymous]
         public ActionResult Lifecycle(int id)
         {
@@ -338,7 +322,7 @@
                 return PartialView("_Lifecycle", lifecycle);
             }
 
-            return View("Index");
+            return PartialView("_Content", "Произошла неведомая ошибка в выборе задачи!");
         }
         
         // Удаление заявки
@@ -353,6 +337,15 @@
 
             if (request != null)
             {
+                var curId = this.User.Identity.GetUserId();
+                var user = _db.Users.Find(curId);
+
+                if (request.AuthorId != user.Id)
+                {
+                    return PartialView("_Content", "Извините, но Вы не автор данной заявки!");
+                }
+
+
                 // Проверим, если оплата по этой задаче уже проверена администрацией и закрыта - то увы, изменить ничего нельзя
                 var payments = _db.Payments
                     .Where(x => x.RequestId == request.Id)
@@ -367,7 +360,7 @@
                 request.Category = _db.Categories.First(m => m.Id == request.CategoryId);
                 return PartialView("_Delete", request);
             }
-            return View("Index");
+            return RedirectToAction("Index");
         }
 
 
@@ -382,15 +375,16 @@
 
             if (request != null && request.Author.Id == user.Id)
             {
-                Lifecycle lifecycle = _db.Lifecycles.Find(request.LifecycleId);
-                lifecycle.IsDeleted = true;
-                request.IsDeleted = true;
-                request.DateOfDeleting=DateTime.Now;
 
                 using (var transaction = _db.Database.BeginTransaction())
                 {
                     try
                     {
+                        Lifecycle lifecycle = _db.Lifecycles.Find(request.LifecycleId);
+                        lifecycle.IsDeleted = true;
+                        request.IsDeleted = true;
+                        request.DateOfDeleting = DateTime.Now;
+
                         _db.Entry(lifecycle).State = EntityState.Modified;
                         _db.Entry(request).State = EntityState.Modified;
 
@@ -404,13 +398,14 @@
                     }
                 }
             }
+            else
+            {
+                throw new Exception("Вы не автор данной заявки либо произошла какая-то другая неведомая ошибка");
+            }
+            
             Response.Redirect(Request.UrlReferrer.AbsoluteUri);
         }
-
-        /// <summary>
-        /// Редактирование заявок - назначение исполнителей
-        /// </summary>
-        /// <returns></returns>
+        
         [Authorize(Roles = "Moderator, Administrator")]
         public ActionResult Distribute(int? category)
         {
@@ -436,16 +431,12 @@
                     .Include(r => r.Document)
                     .Include(r => r.Subject)
                     .Include(r=>r.Solvers);
-
-            var curId = this.User.Identity.GetUserId();
-            var users = _db.Users;
-
-            var executors = users.ToList();// Думаю, пока не стоит делать только для обычных пользователей
+            
+            var executors = _db.Users.ToList();// Думаю, пока не стоит делать только для обычных пользователей
             ViewBag.Executors = new SelectList(executors, "Id", "Name");
 
             List<Category> categories = _db.Categories.ToList();
-
-            //Добавляем в список возможность выбора всех
+            
             categories.Insert(0, new Category { Name = "Все", Id = 0 });
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
 

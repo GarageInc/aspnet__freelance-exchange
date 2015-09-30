@@ -71,6 +71,7 @@ namespace WebApplication.Models
         public virtual int? LifecycleId { get; set; }
 
         [Display(Name ="Цена")]
+        [Required(ErrorMessage = "Обязательно для заполнения!")]
         [Range(typeof(decimal), "5,0", "100000,6", ErrorMessage = "Наименьшая цена - 5 рублей, в качестве разделителя дробной и целой части используется запятая")]
         public virtual decimal Price { get; set; }
 

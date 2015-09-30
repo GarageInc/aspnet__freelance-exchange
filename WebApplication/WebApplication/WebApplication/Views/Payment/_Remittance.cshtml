@@ -14,39 +14,58 @@
         <strong>Оплата №@paymentId</strong>
     </div>
     <div class="modal-body">
-        <fieldset>
-            
+        <dl class="dl-horizontal">
+
             @*Если перевод не закрыт*@
             @if (ViewBag.Closed == false)
             {
-                    <label>Стоимость заявки:</label>
-                    @Html.LabelFor(model => model.Price)
-                    <hr />
+                <dt>
+                    Стоимость заявки:
+                </dt>
+                <dd>
+                    @Html.DisplayFor(modelItem => Model.Price)
+                </dd>
+                <hr />
 
-                    <label>Автор:</label>
+                <dt>
+                    Автор:
+                </dt>
+                <dd>
                     <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = Model.AuthorId}, null)'>
                         @Model.Author.Name
                         /
                         @Model.Author.Id
                         <img src="../../Content/pictures/author.png" class="tdImage" title="Автор заявки" />
                     </a>
-                    <br />
-                    <label>Текущий счет автора заявки:</label>
-                    <label>@balance</label>
-                    <hr />
+                </dd>
+                <hr />
 
-                    if (Model.Executor != null)
-                    {
-                        <label>Исполнитель:</label>
+                <dt>
+                    Текущий счет автора заявки:
+                </dt>
+                <dd>
+                    @balance
+                </dd>
+                <hr />
+
+
+                if (Model.Executor != null)
+                {
+                    <dt>
+                        Исполнитель:
+                    </dt>
+                    <dd>
                         <a class="compItem" href='@Url.Action("UserDetailsModal", "Account", new {id = Model.AuthorId}, null)'>
                             @Model.Executor.Name
                             /
                             @Model.Executor.Id
                             <img src="../../Content/pictures/executor.png" class="tdImage" title="Автор заявки" />
                         </a>
-                        <hr />
+                    </dd>
+                    <hr />
 
-                        if (Model.Price > balance)
+                    <dd>
+                        @if (Model.Price > balance)
                         {
                             // Говорим, что у автора не хватает средств
                             <text>
@@ -67,19 +86,22 @@
                                 </div>
                             }
                         }
-                    }
-                    else
-                    {
+                    </dd>
+                }
+                else
+                {
+                    <dd>
                         <h6>Не установлен исполнитель, потому перевод пока что невозможен. Выберите исполнителя задачи и пусть он загрузит решение</h6>
-                    }
+                    </dd>
+                }
             }
             else
             {
-                <h5>
+                <dd>
                     Распределение невозможно, оплата/перевод - закрыто безвозвратно.
-                </h5>
+                </dd>
             }
-        </fieldset>
+            </dl>
     </div>
 
     <div class="modal-footer">

@@ -75,7 +75,6 @@
                 else
                     payment.Document = null;
                 
-
                 payment.Author = user;
                 payment.AuthorId = user.Id;
                 payment.IsDeleted = false;
@@ -100,7 +99,52 @@
             return View(payment);
         }
 
-        
+        public void PayFromBalance(int id)
+        {
+            var curId = this.User.Identity.GetUserId();
+            var user = _db.Users.Find(curId); 
+
+            var request = _db.Requests.Find(id);
+
+            if(request.AuthorId!=user.Id)
+            {
+                throw new Exception("Вы не Автор данной задачи!");
+            }
+            else
+            {
+                if(request.Price>=user.Balance)
+                {
+                    throw new Exception("Цена за задачу выше Вашего баланса. Пополните свой баланс");
+                }
+                else
+                {
+                    using (var transaction = _db.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            user.Balance -= request.Price;
+                            request.IsPaid = true;
+
+                            _db.Entry(user).State = EntityState.Modified;
+                            _db.Entry(request).State = EntityState.Modified;
+
+                            _db.SaveChanges();
+                            transaction.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            throw new Exception(ex.Message);
+                        }
+                    }
+
+
+                }
+
+                Response.Redirect(Request.UrlReferrer.AbsoluteUri);
+            }
+        }
+
         public ActionResult Create()
         {
             var curId = this.User.Identity.GetUserId();
@@ -113,7 +157,7 @@
 
             return View();
         }
-
+        
         // POST: Payment/Create
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -143,7 +187,6 @@
                 payment.IsDeleted = false;
                 payment.CreateDateTime = current;
                 payment.Checked = false;
-
                 payment.Closed = false;
                 payment.AddingFunds = false;
                 payment.RequestSolution = null;
@@ -354,7 +397,6 @@
                 // Если это простой перевод
                 if (pay.RequestId == null)
                 {
-
                     switch (status)
                     {
                         case 0:
@@ -502,10 +544,8 @@
 
                     // Объявим операцию перевода закрытой
                     payment.Closed = true;
-
-                    // Пишем, что решения могут быть скачаны
-
-                    // Делаем так, что решение можно загружать.
+                    
+                    // Делаем так, что решение можно скачать(.CanUpload).
                     var req = _db.Requests.Find(payment.RequestId);
                     req.CanDownload = true;
                     _db.Entry(req).State = EntityState.Modified;
@@ -517,7 +557,7 @@
                     _db.SaveChanges();
                 }
 
-                return View("Index");
+                return RedirectToAction("Index");
             }
 
             return Content("Ошибка! Данная позиция(оплата) уже закрыта!");

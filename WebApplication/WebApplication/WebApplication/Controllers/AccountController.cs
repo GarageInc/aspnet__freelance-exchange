@@ -86,10 +86,10 @@
                 return View(model);
             }
 
-            // Сбои при входе не приводят к блокированию учетной записи
-            // Чтобы ошибки при вводе пароля инициировали блокирование учетной записи, замените на shouldLockout: true
             var user = _db.Users.FirstOrDefault(x => x.Email == model.Email && x.Password == model.Password);
-           
+            if(user==null)
+                return View("Lockout");
+
             // Если нельзя заходить - то всё, заблокирован
             if (!ValidateUser(user))
             {
@@ -1047,7 +1047,11 @@
         {
             var currentDate = DateTime.Now;
 
-            bool validated = !(user.BlockForDate > currentDate);
+            bool validated = true;
+            if(user.IsBlocked)
+            {
+                validated = !(user.BlockForDate > currentDate);
+            }
             
             return validated;
         }

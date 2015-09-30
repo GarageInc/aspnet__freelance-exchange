@@ -31,6 +31,8 @@ namespace WebApplication.Controllers
                 var user = db.Users.Find(curId);
                 contact.Author = user;
                 contact.AuthorId = user.Id;
+                contact.IsDeleted = false;
+                contact.CreateDateTime = DateTime.Now;
 
                 db.Contacts.Add(contact);
                 await db.SaveChangesAsync();

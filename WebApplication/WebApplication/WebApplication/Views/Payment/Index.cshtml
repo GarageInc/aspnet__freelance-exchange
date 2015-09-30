@@ -50,6 +50,9 @@
                         @Html.DisplayNameFor(model => model.Id)
                     </th>
                     <th>
+                        @Html.DisplayNameFor(model => model.CreateDateTime)
+                    </th>
+                    <th>
                         @Html.DisplayNameFor(model => model.Closed)
                     </th>
                     <th>
@@ -88,6 +91,9 @@
                             @Html.DisplayFor(modelItem => item.Id)
                         </td>
                         <td>
+                            @Html.DisplayFor(modelItem => item.CreateDateTime)
+                        </td>
+                        <td>
                             @if (item.Closed)
                             {
                                 <label class="label-success">
@@ -97,7 +103,6 @@
                                     <br/>
                                     администрацией
                                 </label>
-
                             }
                             else
                             {
