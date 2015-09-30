@@ -43,7 +43,7 @@
 
             </div>
 
-            <div class="alert-block">
+            <div class="alert-block" >
                 @using (Html.BeginForm("Create", "ErrorMessage", FormMethod.Post, new {enctype = "multipart/form-data"}))
                 {
                     @Html.Hidden("forAdm", 1)
@@ -53,8 +53,7 @@
                         <br/>
                         <input class="form-control" type="file" id="error" name="error" value="Прикрепить файл"/>
                         <br/>
-                        <input type="submit" value="Отправить" id="messageButton" class="buttons"/>
-                          
+                        <input type="submit" value="Отправить" class="buttons"/>                          
                 }
             </div>
         </li>
@@ -64,6 +63,9 @@
 
 
 <div id="feedbackP">
+    <div class="buttons" id="qwe">
+
+    </div>
     @using (Html.BeginForm("Create", "ErrorMessage", FormMethod.Post, new {enctype = "multipart/form-data"}))
     {
         @Html.Hidden("forAdm", 0)
@@ -254,15 +256,16 @@
     <a href="#top">▲ Наверх</a>
 </div>
 
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/helpdesk")
-@Scripts.Render("~/bundles/jqueryui")
-@Scripts.Render("~/bundles/bootstrap")
-@RenderSection("scripts", required: false)
+    @Scripts.Render("~/bundles/jquery") 
+    @Scripts.Render("~/bundles/helpdesk")
+    @Scripts.Render("~/bundles/noty")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
 
-<script type="text/javascript">
-    // Используй Note.js для окошек
-    
-</script>
+    <script type="text/javascript">
+   
+    </script>
+
 </body>
 </html>

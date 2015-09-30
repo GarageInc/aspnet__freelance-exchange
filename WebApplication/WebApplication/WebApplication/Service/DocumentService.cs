@@ -41,13 +41,28 @@ namespace WebApplication.Service
             }
             if (curId.IsEmpty())
                 curId = "AVATAR";
-           
-            // сохраняем файл по определенному пути на сервере
-            string url = "user"+ curId +"_"+ current.ToString(userIdHach + "dd/MM/yyyy H:mm:ss").Replace(":", "_").Replace("/", ".").Replace(" ", "_") + ext;
-            error.SaveAs(path+url);
-            doc.Url = url;
 
-            _db.Documents.Add(doc);
+            using (var transaction = _db.Database.BeginTransaction())
+            {
+                try
+                {
+                    // сохраняем файл по определенному пути на сервере
+                    string url = "user" + curId + "_" + current.ToString(userIdHach + "dd/MM/yyyy H:mm:ss").Replace(":", "_").Replace("/", ".").Replace(" ", "_") + ext;
+                    error.SaveAs(path + url);
+                    doc.Url = url;
+
+                    _db.Documents.Add(doc);
+
+                    _db.SaveChanges();
+
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    throw new Exception(ex.Message);
+                }
+            }
 
             return doc;
         }

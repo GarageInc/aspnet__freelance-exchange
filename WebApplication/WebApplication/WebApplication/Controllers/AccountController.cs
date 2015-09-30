@@ -107,9 +107,23 @@
                     {
                             if (user != null)
                             {
-                                user.LastVisition = DateTime.Now;
-                                _db.Entry(user).State = EntityState.Modified;
-                                _db.SaveChanges();
+                                using (var transaction = _db.Database.BeginTransaction())
+                                {
+                                    try
+                                    {
+                                        user.LastVisition = DateTime.Now;
+                                        _db.Entry(user).State = EntityState.Modified;
+
+                                        _db.SaveChanges();
+
+                                        transaction.Commit();
+                                    }
+                                    catch (Exception error)
+                                    {
+                                        transaction.Rollback();
+                                        return PartialView("_Content", error.Message);
+                                    }
+                                }
                             }
                      
                         return RedirectToLocal(returnUrl);
@@ -675,7 +689,20 @@
                 // Сохраним изменения
                 _db.Entry(userCurrent).State = EntityState.Modified;
 
-                _db.SaveChanges();
+                using (var transaction = _db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        _db.SaveChanges();
+
+                        transaction.Commit();
+                    }
+                    catch (Exception error)
+                    {
+                        transaction.Rollback();
+                        return PartialView("_Content", error.Message);
+                    }
+                }
 
                 return RedirectToAction("Index");
             }
@@ -689,9 +716,24 @@
         [Authorize(Roles = "Administrator")]
         public ActionResult Delete(string id)
         {
-            ApplicationUser user = _db.Users.Find(id);
-            _db.Users.Remove(user);
-            _db.SaveChanges();
+            using (var transaction = _db.Database.BeginTransaction())
+            {
+                try
+                {
+                    ApplicationUser user = _db.Users.Find(id);
+                    _db.Users.Remove(user);
+
+                    _db.SaveChanges();
+
+                    transaction.Commit();
+                }
+                catch (Exception error)
+                {
+                    transaction.Rollback();
+                    return PartialView("_Content", error.Message);
+                }
+            }
+
             return RedirectToAction("Index");
         }
 
@@ -738,30 +780,40 @@
         [ValidateAntiForgeryToken]
         public void Add(string userId, int? parentId, string Text)
         {
-            using (_db)
-            {
-                var curId = this.HttpContext.User.Identity.GetUserId();
-                var author = _db.Users.Find(curId);
-                var user = _db.Users.Find(userId);
-
-                var newRecallMessages = new RecallMessage()
+                using (var transaction = _db.Database.BeginTransaction())
                 {
-                    ParentId = parentId,
-                    Text = Text,
-                    Author = author,
-                    AuthorId = author.Id,
-                    CreateDateTime = DateTime.Now,
-                    Karma = 0,
-                    IsDeleted = false,
-                    AboutSite = false,
-                    User= user,
-                    UserId = user.Id
-                };
+                    try
+                    {
+                        var curId = this.HttpContext.User.Identity.GetUserId();
+                        var author = _db.Users.Find(curId);
+                        var user = _db.Users.Find(userId);
 
-                _db.RecallMessages.Add(newRecallMessages);
-                _db.SaveChanges();
-            }
+                        var newRecallMessages = new RecallMessage()
+                        {
+                            ParentId = parentId,
+                            Text = Text,
+                            Author = author,
+                            AuthorId = author.Id,
+                            CreateDateTime = DateTime.Now,
+                            Karma = 0,
+                            IsDeleted = false,
+                            AboutSite = false,
+                            User = user,
+                            UserId = user.Id
+                        };
 
+                        _db.RecallMessages.Add(newRecallMessages);
+                        _db.SaveChanges();
+
+                        transaction.Commit();
+                    }
+                    catch (Exception error)
+                    {
+                        transaction.Rollback();
+                        throw new Exception(error.Message);
+                    }
+                }
+                
             Response.Redirect(Request.UrlReferrer.AbsoluteUri);
         }
 
@@ -773,16 +825,29 @@
             {
                 Response.Redirect(Request.UrlReferrer.AbsoluteUri);
             }
-            using (_db)
-            {
+            
                 if (newParentId.HasValue && ContainsChilds(_db, nodeId, newParentId.Value))
                 {
                     Response.Redirect(Request.UrlReferrer.AbsoluteUri);
                 }
-                var node = _db.RecallMessages.Where(x => x.Id == nodeId).Single();
-                node.ParentId = newParentId;
-                _db.SaveChanges();
-            }
+
+            using (var transaction = _db.Database.BeginTransaction())
+            {
+                try
+                {
+                    var node = _db.RecallMessages.Where(x => x.Id == nodeId).Single();
+                    node.ParentId = newParentId;
+                    _db.SaveChanges();
+
+                    transaction.Commit();
+                }
+                catch (Exception error)
+                {
+                    transaction.Rollback();
+                    throw new Exception(error.Message);
+                }
+            }           
+            
             Response.Redirect(Request.UrlReferrer.AbsoluteUri);
         }
 
@@ -803,12 +868,22 @@
 
         public void DeleteRecall(string id)
         {
-            using (_db)
+            using (var transaction = _db.Database.BeginTransaction())
             {
-                DeleteNodes(_db, int.Parse(id));
-                _db.SaveChanges();
-            }
+                try
+                {
+                    DeleteNodes(_db, int.Parse(id));
+                    _db.SaveChanges();
 
+                    transaction.Commit();
+                }
+                catch (Exception error)
+                {
+                    transaction.Rollback();
+                    throw new Exception(error.Message);
+                }
+            }
+            
             Response.Redirect(Request.UrlReferrer.AbsoluteUri);
         }
 
@@ -833,15 +908,28 @@
 
             if (!user.UpRecalls.Where(x => x.Id == id).Any())
             {
-                com.Karma++;
+                using (var transaction = _db.Database.BeginTransaction())
+                {
+                    try
+                    {
 
-                user.UpRecalls.Add(com);
-                user.DownRecalls.Remove(com);
+                        com.Karma++;
 
-                _db.Entry(user).State = EntityState.Modified; ;
-                _db.Entry(com).State = EntityState.Modified;
-                _db.SaveChanges();
+                        user.UpRecalls.Add(com);
+                        user.DownRecalls.Remove(com);
 
+                        _db.Entry(user).State = EntityState.Modified; ;
+                        _db.Entry(com).State = EntityState.Modified;
+                        _db.SaveChanges();
+
+                        transaction.Commit();
+                    }
+                    catch (Exception error)
+                    {
+                        transaction.Rollback();
+                        throw new Exception(error.Message);
+                    }
+                }
             }
 
             Response.Redirect(Request.UrlReferrer.AbsoluteUri);
@@ -864,7 +952,6 @@
                 _db.Entry(user).State = EntityState.Modified; ;
                 _db.Entry(com).State = EntityState.Modified;
                 _db.SaveChanges();
-
             }
 
             Response.Redirect(Request.UrlReferrer.AbsoluteUri);
@@ -895,10 +982,23 @@
             var user = _db.Users.Find(userId);
             if (user.IsBlocked)
             {
-                user.IsBlocked = false;
+                using (var transaction = _db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        user.IsBlocked = false;
 
-                _db.Entry(user).State = EntityState.Modified;;
-                _db.SaveChanges();
+                        _db.Entry(user).State = EntityState.Modified; ;
+                        _db.SaveChanges();
+
+                        transaction.Commit();
+                    }
+                    catch (Exception error)
+                    {
+                        transaction.Rollback();
+                        throw new Exception(error.Message);
+                    }
+                }
             }
 
             Response.Redirect(Request.UrlReferrer.AbsoluteUri);
@@ -913,13 +1013,26 @@
             var user = _db.Users.Find(userId);
             if (!user.IsBlocked)
             {
-                user.IsBlocked = true;
-                user.BlockReason = blockReason;
-                user.BlockForDate = blockDate;
-                user.DateOfBlocking = DateTime.Now; ;
+                using (var transaction = _db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        user.IsBlocked = true;
+                        user.BlockReason = blockReason;
+                        user.BlockForDate = blockDate;
+                        user.DateOfBlocking = DateTime.Now; ;
 
-                _db.Entry(user).State = EntityState.Modified; ;
-                _db.SaveChanges();
+                        _db.Entry(user).State = EntityState.Modified; ;
+                        _db.SaveChanges();
+
+                        transaction.Commit();
+                    }
+                    catch (Exception error)
+                    {
+                        transaction.Rollback();
+                        throw new Exception(error.Message);
+                    }
+                }
             }
 
             Response.Redirect(Request.UrlReferrer.AbsoluteUri);

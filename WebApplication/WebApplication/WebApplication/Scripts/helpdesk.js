@@ -201,7 +201,7 @@ jQuery('#top').hover(
 // Кнопка по отправке сообщения об ошибке
 $(function () {
     $.ajaxSetup({ cache: false });
-    $("#messageButton").click(function (e) {
+    $("#qwe").click(function (e) {
         var n = noty({
             layout: 'centerLeft', // Положение уведомлялки (top, topLeft, topCenter, topRight, centerLeft, center, centerRight, bottomLeft, bottomCenter, bottomRight, bottom) 
             theme: 'relax', // Тема по-умолчанию 

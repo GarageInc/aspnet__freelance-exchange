@@ -13,16 +13,14 @@
     using Microsoft.AspNet.Identity;
     using System.Web.WebPages;
     using WebApplication.Service;
-    using System.Transactions;
 
-    [Authorize]// Только авторизованным
+    [Authorize]
     public class RequestController : Controller
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
         private readonly DocumentService _docService = new DocumentService();
-
-        // Вывод всех задач по выбранному критерию
-        [AllowAnonymous]// Исключение - могут смотреть все
+        
+        [AllowAnonymous]
         public ActionResult Index(int? category)
         {
             IEnumerable<Request> allReqs = null;
@@ -30,9 +28,9 @@
             {
                 allReqs = _db.Requests
                                         .Where(r => !r.IsDeleted)
-                                        .Include(r => r.Category)  // добавляем категории
-                                        .Include(r => r.Lifecycle)  // добавляем жизненный цикл заявок
-                                        .Include(r => r.Author) // добавляем данные о пользователях
+                                        .Include(r => r.Category) 
+                                        .Include(r => r.Lifecycle) 
+                                        .Include(r => r.Author) 
                                         .Include(r => r.Solvers)
                                         .Include(r=>r.Subject)
                                         .OrderByDescending(r => r.Lifecycle.Opened);
@@ -41,16 +39,15 @@
                 allReqs = _db.Requests
                                         .Where(x => x.CategoryId == category)
                                         .Where(r => !r.IsDeleted)
-                                        .Include(r => r.Category)  // добавляем категории
-                                        .Include(r => r.Lifecycle)  // добавляем жизненный цикл заявок
-                                        .Include(r => r.Author)         // добавляем данные о пользователях
+                                        .Include(r => r.Category) 
+                                        .Include(r => r.Lifecycle) 
+                                        .Include(r => r.Author)    
                                         .Include(r => r.Solvers)
                                         .Include(r=>r.Subject)
                                         .OrderByDescending(r => r.Lifecycle.Opened);
             
             List<Category> categories = _db.Categories.ToList();
-
-            //Добавляем в список возможность выбора всех
+            
             categories.Insert(0, new Category { Name = "Все", Id = 0 });
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
 
@@ -65,7 +62,7 @@
         public ActionResult MyIndex(int? category)
         {
             var currentId = HttpContext.User.Identity.GetUserId();
-            // получаем текущего пользователя
+
             ApplicationUser user = _db.Users.FirstOrDefault(m => m.Id == currentId);
             IEnumerable<Request> allReqs = null;
             if (category == null || category == 0)
@@ -94,15 +91,13 @@
 
 
             List<Category> categories = _db.Categories.ToList();
-
-            //Добавляем в список возможность выбора всех
+            
             categories.Insert(0, new Category { Name = "Все", Id = 0 });
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
 
             return View(allReqs.ToList());
         }
-
-        // Редактировать заявку
+        
         [HttpGet]
         public async Task<ActionResult> Edit(int? id)
         {
@@ -121,14 +116,13 @@
                                 .Where(x => x.Closed);
             if (payments.Any())
             {
-
-                return PartialView("_Content", "Извините, но оплата за данную задачу уже утверждена и заявка не может быть изменена!");
+                return View("_Content", "Извините, но оплата за данную задачу уже утверждена и заявка не может быть изменена!");
             }
 
             // Добавляются категории и предмет
             ViewBag.Categories = new SelectList(_db.Categories, "Id", "Name");
             ViewBag.Subjects = new SelectList(_db.Subjects, "Id", "Name");
-            return PartialView(request);
+            return View(request);
         }
 
         // POST: Request/Edit/5
@@ -148,42 +142,51 @@
                     var requestBase = _db.Requests.Find(request.Id);
                     if (requestBase.Author.Id == curId)
                     {
-                        using (new TransactionScope(TransactionScopeOption.Required,
-                                new TransactionOptions { IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted }))
+                        using (var transaction = _db.Database.BeginTransaction())
                         {
-                            // Проверим, если оплата по этой задаче уже проверена администрацией и закрыта - то увы, изменить ничего нельзя
-                            var payments = _db.Payments
-                                .Where(x => x.RequestId == request.Id)
-                                .Where(x => x.Closed);
-                            if (payments.Any())
+                            try
                             {
+                                // Проверим, если оплата по этой задаче уже проверена администрацией и закрыта - то увы, изменить ничего нельзя
+                                var payments = _db.Payments
+                                    .Where(x => x.RequestId == request.Id)
+                                    .Where(x => x.Closed);
+                                if (payments.Any())
+                                {
 
-                                return PartialView("_Content", "Извините, но оплата за данную задачу уже утверждена и заявка не может быть изменена!");
+                                    return PartialView("_Content", "Извините, но оплата за данную задачу уже утверждена и заявка не может быть изменена!");
+                                }
+
+                                if (error != null)
+                                {
+                                    requestBase.Document = _docService.CreateDocument(Server.MapPath("~/Files/RequestFiles/"), error);
+                                }
+
+                                requestBase.Name = request.Name;
+
+                                requestBase.Category = _db.Categories.Find(request.CategoryId);
+                                requestBase.CategoryId = requestBase.Category.Id;
+
+                                requestBase.Subject = _db.Subjects.Find(request.SubjectId);
+                                requestBase.SubjectId = requestBase.Subject.Id;
+
+                                requestBase.Deadline = request.Deadline;
+                                requestBase.Priority = request.Priority;
+                                requestBase.Description = request.Description;
+                                requestBase.Price = request.Price;
+
+                                _db.Entry(requestBase).State = EntityState.Modified;
+
+                                await _db.SaveChangesAsync();
+
+                                transaction.Commit();
                             }
-
-                            if (error != null)
+                            catch (Exception ex)
                             {
-                                requestBase.Document = _docService.CreateDocument(Server.MapPath("~/Files/RequestFiles/"), error);
+                                transaction.Rollback();
+                                return PartialView("_Content", ex.Message);
                             }
-
-                            requestBase.Name = request.Name;
-
-                            requestBase.Category = _db.Categories.Find(request.CategoryId);
-                            requestBase.CategoryId = requestBase.Category.Id;
-
-                            requestBase.Subject = _db.Subjects.Find(request.SubjectId);
-                            requestBase.SubjectId = requestBase.Subject.Id;
-
-                            requestBase.Deadline = request.Deadline;
-                            requestBase.Priority = request.Priority;
-                            requestBase.Description = request.Description;
-                            requestBase.Price = request.Price;
-
-                            _db.Entry(requestBase).State = EntityState.Modified;
-
                         }
-
-                        await _db.SaveChangesAsync();
+                        
                         return RedirectToAction("MyIndex");
                     }
                     else
@@ -199,10 +202,10 @@
 
             ViewBag.AuthorId = new SelectList(_db.Users, "Id", "Name");
             ViewBag.Requests = new SelectList(_db.Requests.Where(x => x.Author.Id == curId).Where(x => x.IsPaid == false), "Id", "Id");
+
             return View(request);
         }
         
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -216,48 +219,34 @@
         public ActionResult Create()
         {
             var curId = HttpContext.User.Identity.GetUserId();
-            // получаем текущего пользователя
             ApplicationUser user = _db.Users.FirstOrDefault(m => m.Id == curId);
+
             if (user != null)
             {
-                // Добавляются категории и предмет
                 ViewBag.Categories = new SelectList(_db.Categories, "Id", "Name");
                 ViewBag.Subjects = new SelectList(_db.Subjects, "Id", "Name");
 
                 return View();
             }
+
             return RedirectToAction("LogOff", "Account");
         }
-
-        // Создание новой заявки
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Request request, HttpPostedFileBase error)
-        {
-            var curId = HttpContext.User.Identity.GetUserId();
-            // получаем текущего пользователя
-            ApplicationUser user = _db.Users.FirstOrDefault(m => m.Id == curId);
-            if (user == null)
-            {
-                return RedirectToAction("LogOff", "Account");
-            }
+        {         
             if (ModelState.IsValid)
             {
-                //получаем время открытия
+                var curId = HttpContext.User.Identity.GetUserId();
+                ApplicationUser user = _db.Users.FirstOrDefault(m => m.Id == curId);
+                
                 DateTime current = DateTime.Now;
-                //Создаем запись о жизненном цикле заявки
                 Lifecycle newLifecycle = new Lifecycle() { Opened = current, IsDeleted = false, CreateDateTime = current};
-                request.Lifecycle = newLifecycle;
-                request.LifecycleId = newLifecycle.Id;
-
-                //Добавляем жизненный цикл заявки
-                _db.Lifecycles.Add(newLifecycle);
-
-                // указываем пользователя заявки
+                                
                 request.Author = user;
                 request.AuthorId = user.Id;
                 
-                // если получен файл
                 if (error != null)
                 {
                     request.Document = _docService.CreateDocument(Server.MapPath("~/Files/RequestFiles/"), error);
@@ -267,6 +256,7 @@
 
                 var cat = _db.Categories.Find(request.CategoryId);
                 request.Category = cat;
+
                 var sub = _db.Subjects.Find(request.SubjectId);
                 request.Subject = sub;
                 request.CreateDateTime = DateTime.Now;
@@ -278,19 +268,32 @@
                 request.IsPaid = false;
                 request.Status = (int)RequestStatus.Open;
 
-                // Добавляем заявку с возможно приложенными документами
-                _db.Requests.Add(request);
-                user.Requests.Add(request);
-                _db.Entry(user).State = EntityState.Modified;
+                // Добавляем заявку с возможно приложенными документамиusing (var transaction = _db.Database.BeginTransaction())
 
-                try
+                using (var transaction = _db.Database.BeginTransaction())
                 {
-                    _db.SaveChanges();
+                    try
+                    {
+                        //Добавляем жизненный цикл заявки
+                        _db.Lifecycles.Add(newLifecycle);
+                        request.Lifecycle = newLifecycle;
+                        request.LifecycleId = newLifecycle.Id;
+
+                        _db.Requests.Add(request);
+                        user.Requests.Add(request);
+                        _db.Entry(user).State = EntityState.Modified;
+
+                        _db.SaveChanges();
+
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        return PartialView("_Content", ex.Message);
+                    }
                 }
-                catch(Exception e)
-                {
-                    return PartialView("_Content",e.Message);
-                }
+                
 
                 return RedirectToAction("Index");
             }
@@ -318,7 +321,6 @@
 
             if (request != null)
             {
-                //получаем категорию
                 request.Category = _db.Categories.First(m => m.Id == request.CategoryId);
                 return PartialView("_Details", request);
             }
@@ -335,6 +337,7 @@
             {
                 return PartialView("_Lifecycle", lifecycle);
             }
+
             return View("Index");
         }
         
@@ -375,8 +378,8 @@
         {
             Request request = _db.Requests.Find(id);
             var curId = HttpContext.User.Identity.GetUserId();
-            // получаем текущего пользователя
             ApplicationUser user = _db.Users.First(m => m.Id == curId);
+
             if (request != null && request.Author.Id == user.Id)
             {
                 Lifecycle lifecycle = _db.Lifecycles.Find(request.LifecycleId);
@@ -384,10 +387,22 @@
                 request.IsDeleted = true;
                 request.DateOfDeleting=DateTime.Now;
 
-                _db.Entry(lifecycle).State = EntityState.Modified;
-                _db.Entry(request).State = EntityState.Modified;
+                using (var transaction = _db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        _db.Entry(lifecycle).State = EntityState.Modified;
+                        _db.Entry(request).State = EntityState.Modified;
 
-                _db.SaveChanges();
+                        _db.SaveChanges();
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw new Exception(ex.Message);
+                    }
+                }
             }
             Response.Redirect(Request.UrlReferrer.AbsoluteUri);
         }
@@ -469,8 +484,22 @@
             lifecycle.Distributed = DateTime.Now;
             _db.Entry(lifecycle).State = EntityState.Modified;
 
-            _db.Entry(req).State = EntityState.Modified;
-            _db.SaveChanges();
+            using (var transaction = _db.Database.BeginTransaction())
+            {
+                try
+                {
+                    _db.Entry(req).State = EntityState.Modified;
+                    _db.SaveChanges();
+
+                    transaction.Commit();
+                }
+                catch (Exception er)
+                {
+                    transaction.Rollback();
+                    return PartialView("_Content", er.Message);
+                }
+            }
+
 
             return RedirectToAction("Distribute");
         }
@@ -549,9 +578,24 @@
                     lifecycle.Closed = DateTime.Now;
                     lifecycle.Closed = null;
                 }
-                _db.Entry(lifecycle).State = EntityState.Modified;
-                _db.Entry(req).State = EntityState.Modified;
-                _db.SaveChanges();
+
+                using (var transaction = _db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        _db.Entry(lifecycle).State = EntityState.Modified;
+                        _db.Entry(req).State = EntityState.Modified;
+                        _db.SaveChanges();
+
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        return PartialView("_Content", ex.Message);
+                    }
+                }
+
             }
 
             return RedirectToAction("ChangeStatus");
@@ -614,9 +658,21 @@
                 {
                     req.Checked = true;
                 }
-                
-                _db.Entry(req).State = EntityState.Modified;
-                _db.SaveChanges();
+
+                using (var transaction = _db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        _db.Entry(req).State = EntityState.Modified;
+                        _db.SaveChanges();
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        return PartialView("_Content", ex.Message);
+                    }
+                }
             }
 
             return RedirectToAction("Distribute");
@@ -641,8 +697,20 @@
                 req.Solvers.Add(thisUser);
             }
 
-            _db.Entry(req).State = EntityState.Modified;
-            _db.SaveChanges();
+            using (var transaction = _db.Database.BeginTransaction())
+            {
+                try
+                {
+                    _db.Entry(req).State = EntityState.Modified;
+                    _db.SaveChanges();
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    return PartialView("_Content", ex.Message);
+                }
+            }
 
             return RedirectToAction("Index");
         }
@@ -705,10 +773,23 @@
             req.Status = (int)RequestStatus.Distributed;
             Lifecycle lifecycle = _db.Lifecycles.Find(req.LifecycleId);
             lifecycle.Distributed = DateTime.Now;
-            _db.Entry(lifecycle).State = EntityState.Modified;
 
-            _db.Entry(req).State = EntityState.Modified;
-            _db.SaveChanges();
+            using (var transaction = _db.Database.BeginTransaction())
+            {
+                try
+                {
+                    _db.Entry(lifecycle).State = EntityState.Modified;
+                    _db.Entry(req).State = EntityState.Modified;
+                    _db.SaveChanges();
+
+                    transaction.Commit();
+                }
+                catch (Exception error)
+                {
+                    transaction.Rollback();
+                    return PartialView("_Content", error.Message);
+                }
+            }            
 
             return RedirectToAction("MyIndex");
         }

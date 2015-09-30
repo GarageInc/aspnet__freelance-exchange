@@ -52,6 +52,11 @@ namespace WebApplication
                          "~/Scripts/helpdesk.js"
                          ));
 
+            // Плагин Noty 
+            bundles.Add(new ScriptBundle("~/bundles/noty").Include(
+                         "~/Scripts/noty/jquery.noty.js"
+                         ));
+
             // Только для таблиц
             bundles.Add(new StyleBundle("~/Scripts/bootstrap-table-master/css").Include(
                      "~/Scripts/bootstrap-table-master/src/bootstrap-table.css",
