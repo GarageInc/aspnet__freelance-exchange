@@ -1638,6 +1638,8 @@
     <Content Include="Views\Requirement\_GetAllRequirementConfirmations.cshtml" />
     <Content Include="Views\Requirement\_BlockRequirement.cshtml" />
     <Content Include="Views\Request\_Content.cshtml" />
+    <Content Include="Views\Account\_Content.cshtml" />
+    <Content Include="Views\Home\HowToPay.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\themes\" />

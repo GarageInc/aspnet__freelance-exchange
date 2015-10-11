@@ -33,7 +33,7 @@ namespace WebApplication.Controllers
             return View();
         }
 
-        public ActionResult RulesAndPayment()
+        public ActionResult HowToPay()
         {
             return View();
         }

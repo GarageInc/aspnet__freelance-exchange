@@ -1,10 +1,10 @@
 ﻿@model WebApplication.Models.Payment
 
 @{
-    ViewBag.Title = "Создать оплату за задачу";
+    ViewBag.Title = "Заявка на внесение средств на счет";
 }
 
-<h3>Создать оплату за задачу</h3>
+<h3>Заявка на внесение средств на счет</h3>
 
 
 @using (Html.BeginForm("AddingFunds", "Payment", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
@@ -13,7 +13,7 @@
     <fieldset>
         <div class="form-horizontal">
             <h4>Внесение на счет "руками", то есть - оплачено, сфоткано на телефон и загружено на сайт как подтверждение</h4>
-            <h5>Администрация проверит и подтвердит пополнение счета: ваш баланс изменится</h5>
+            <h5>Администрация проверит и подтвердит пополнение счета: ваш баланс изменится в течение 24х часов</h5>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 

@@ -219,7 +219,12 @@
                 var result = UserManager.Create(user, model.Password);
                 
                 // Пока что всех делаем администраторами, потом, конечно, это стоит убрать
-                UserManager.AddToRole(user.Id, "Administrator");
+                if (_db.Users.Any() == false)
+                    UserManager.AddToRole(user.Id, "Administrator");
+                else
+                {
+                    UserManager.AddToRole(user.Id, "User");
+                }
                 if (result.Succeeded)
                 {
                     SignInManager.SignIn(user, isPersistent:false, rememberBrowser:false);
@@ -574,7 +579,7 @@
         {
             //var result = Membership.FindUsersByEmail(Email).Count == 0;
 
-            var result = _db.Users.Where(x=>x.Email==Email).Count() == 0;
+            var result = !_db.Users.Any(x => x.Email==Email);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -942,7 +947,7 @@
 
             var com = _db.RecallMessages.Find(id);
 
-            if (!user.DownRecalls.Where(x => x.Id == id).Any())
+            if (!user.DownRecalls.Any(x => x.Id == id))
             {
                 com.Karma--;
 
@@ -1050,7 +1055,7 @@
             bool validated = true;
             if(user.IsBlocked)
             {
-                validated = !(user.BlockForDate > currentDate);
+                validated = !(currentDate < user.BlockForDate);
             }
             
             return validated;

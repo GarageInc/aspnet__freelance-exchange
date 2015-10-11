@@ -9,26 +9,23 @@
     <li><a href="#"><i class="icon-cogs"></i> Настройки</a></li>
 </ul>*@
 
-<div id="myCarousel" class="carousel slide" align="center">
+<div id="myCarousel" class="carousel slide" align="center" width="740">
     <div class="carousel-inner">
         <div class="item active">
-            <img src="../../Content/pictures/Carousel/bootstrap-mdo-sfmoma-01.jpg" />
+            <img src="../../Content/pictures/Carousel/1.jpg" width="740" height="450" class="img-rounded"/>
             <div class="carousel-caption">
-                <h4>Первый слайд</h4>
                 <p>Принимаясь за дело, соберись с духом.</p>
             </div>
         </div>
         <div class="item">
-            <img src="../../Content/pictures/Carousel/bootstrap-mdo-sfmoma-01.jpg" />
+            <img src="../../Content/pictures/Carousel/2.jpg" width="740" height="450" class="img-rounded" />
             <div class="carousel-caption">
-                <h4>Второй слайд</h4>
                 <p>Часами измеряется время, а временем жизнь человеческая; но чем, скажи, измеришь ты глубину Восточного океана?</p>
             </div>
         </div>
         <div class="item">
-            <img src="../../Content/pictures/Carousel/bootstrap-mdo-sfmoma-01.jpg" />
+            <img src="../../Content/pictures/Carousel/3.jpg" width="740" height="450" class="img-rounded" />
             <div class="carousel-caption">
-                <h4>Третий слайд</h4>
                 <p>Многие вещи нам непонятны не потому, что наши понятия слабы; но потому, что сии вещи не входят в круг наших понятий.</p>
             </div>
         </div>
@@ -37,16 +34,17 @@
     <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
 </div>
 
-<div class="jumbotron">
-    <h3>Интернет-сервис помощи студентам. Работайте в удобной и дружелюбной системе</h3>
-    <p class="lead">
-        Помощь тем, кто ничего не знает и тем, кто знает очень много по своему предмету.
+<div class="jumbotron" align="center">
+    <h3>Интернет-сервис помощи в решении сложных задач простыми и понятными методами. Работайте в удобной и дружелюбной системе!</h3>
+    <p class="lead" >
+        Если ты заказчик - твоё задание выполнят лучшие из лучших.
         <br/>
-        Онлайн и оффлайн помощь по решению задач
+         А если ты фрилансер и имеешь хороший опыт - то быстро наберешь постоянных клиентов и сможешь зарабатывать на своих талантах.
+
     </p>
     @if (User.Identity.IsAuthenticated)
     {
-    <p>@Html.ActionLink("Оставить заявку на задачу", "Create", "Request", new { area = "" }, new { @class = "buttonS" })</p>
+        <p align="center">@Html.ActionLink("Оставить заявку на задачу", "Create", "Request", new { area = "" }, new { @class = "buttonS" })</p>
     }
 </div>
 
@@ -54,18 +52,18 @@
     <div class="col-md-4">
         <h2>Цены</h2>
         <p>
-            Хотитет узнать, как формируется цена за задачу? Тогда - Вам сюда!
+            Хотитет узнать, как формируется цена за задачу?
         </p>            
         <p>@Html.ActionLink("Перейти->", "Price", "Home", new { area = "" }, new { @class = "buttonB" })</p>
     </div>
     <div class="col-md-4">
-        <h2>Как оплатить/Правила</h2>
+        <h2>Правила</h2>
         <p>Общие правила для всех: заказчиков и исполнителей</p>
-        <p>@Html.ActionLink("Перейти->", "RulesAndPayment", "Home", new { area = "" }, new { @class = "buttonS" })</p>
+        <p>@Html.ActionLink("Перейти->", "Rules", "Home", new { area = "" }, new { @class = "buttonS" })</p>
     </div>
     <div class="col-md-4">
         <h2>О нас</h2>
         <p>Контакты и способы связи с администрацией</p>
-        <p>@Html.ActionLink("Перейти->", "Contact", "Home", new { area = "" }, new { @class = "buttonB" })</p>
+        <p>@Html.ActionLink("Перейти->", "About", "Home", new { area = "" }, new { @class = "buttonB" })</p>
     </div>
 </div>
