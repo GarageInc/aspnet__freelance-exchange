@@ -1,3 +1,5 @@
 WebApplication/WebApplication/WebApplication/App_Data/Database.mdf
 *.mdf
 WebApplication/WebApplication/WebApplication/App_Data/Database_log.ldf
+*.mdf
+WebApplication/WebApplication/WebApplication/App_Data/Database_log.ldf
