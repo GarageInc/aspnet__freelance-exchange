@@ -201,30 +201,32 @@
             if (ModelState.IsValid)
             {
                 var curDate = DateTime.Now;
-                var user = new ApplicationUser {
+                var user = new ApplicationUser
+                {
                     UserName = model.Email,
                     Name = model.Name,
-                    Password =model.Password,
+                    Password = model.Password,
                     Email = model.Email,
                     LastVisition = curDate,
                     RegistrationDate = curDate,
-                    UserInfo ="user",
+                    UserInfo = "user",
                     DateOfBlocking = curDate,
                     BlockForDate = curDate,
                     IsBlocked = false,
-                    BlockReason="",
+                    BlockReason = "",
                     Balance = 0
                 };
-               
+
                 var result = UserManager.Create(user, model.Password);
-                
+
                 // Пока что всех делаем администраторами, потом, конечно, это стоит убрать
-                if (_db.Users.Any() == false)
+                if (_db.Users.Any() == false || true) { 
                     UserManager.AddToRole(user.Id, "Administrator");
-                else
-                {
+                }
+                else {
                     UserManager.AddToRole(user.Id, "User");
                 }
+
                 if (result.Succeeded)
                 {
                     SignInManager.SignIn(user, isPersistent:false, rememberBrowser:false);
